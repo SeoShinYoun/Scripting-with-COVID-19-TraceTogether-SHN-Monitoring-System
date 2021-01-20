@@ -9,6 +9,7 @@ namespace Prg_Assg_CASY
             Console.WriteLine("Hello World!");
             Console.WriteLine("Testing");
             Console.WriteLine("hi");
+            Console.WriteLine("hilko");
         }
     }
 }
