@@ -10,6 +10,7 @@ namespace Prg_Assg_CASY
             Console.WriteLine("Testing");
             Console.WriteLine("hi");
             Console.WriteLine("hilko");
+            Console.WriteLine(DateTime.Now.ToString("t"));
         }
     }
 }
