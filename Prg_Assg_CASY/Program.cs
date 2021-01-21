@@ -6,10 +6,7 @@ namespace Prg_Assg_CASY
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
-            Console.WriteLine("Testing");
-            Console.WriteLine("hi");
-            Console.WriteLine("hilko");
+
         }
     }
 }
