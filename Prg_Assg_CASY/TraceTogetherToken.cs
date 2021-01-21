@@ -55,10 +55,10 @@ namespace Prg_Assg_CASY
             
         }
 
-        public ReplaceToken(string sn, string cl)
-        {
+        //public ReplaceToken(string sn, string cl)
+        //{
 
-        }
+        //}
   
 
 

@@ -28,24 +28,20 @@ namespace Prg_Assg_CASY
             set { token = value; }
         }
 
-        public Resident() { }
-
-        public Resident(string ad, string n, DateTime lc)
+        public Resident(string ad, string n, DateTime lc):base(n)
         {
             Address = ad;
-            Name = n;
             LastLeftCountry = lc;
         }
 
-        /*public double CalculateSHNCharges()
+        public override double CalculateSHNCharges()
         {
-
-        }*/
+            throw new NotImplementedException();
+        }
 
         public override string ToString()
         {
-            return base.ToString() + "Name of resident: " + Name + "\nAddress of resident: " + Address + "\nDate last travelled Overseas: " + LastLeftCountry;
+            return base.ToString() + "Name of resident: " + Name + "\tAddress of resident: " + Address + "\nDate last travelled Overseas: " + LastLeftCountry;
         }
-
     }
 }

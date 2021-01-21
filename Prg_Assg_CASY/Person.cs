@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Prg_Assg_CASY
 {
-    class Person
+    abstract class Person
     {
         private string name;
         private List<SafeEntry> safeEntryList;
@@ -20,7 +20,7 @@ namespace Prg_Assg_CASY
 
         public Person(string n)
         {
-            name = n;
+            Name = n;
         }
 
         public void AddTravelEntry(TravelEntry TE)
@@ -33,10 +33,7 @@ namespace Prg_Assg_CASY
             safeEntryList.Add(SE);
         }
 
-        /*public double CalculateSHNCharges()
-        {
-
-        }*/
+        public abstract double CalculateSHNCharges();
 
         public override string ToString()
         {
