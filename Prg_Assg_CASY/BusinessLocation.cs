@@ -37,9 +37,9 @@ namespace Prg_Assg_CASY
 
         public BusinessLocation() { }
 
-        public BusinessLocation(string n, string c, int mc)
+        public BusinessLocation(string bn, string c, int mc)
         {
-            businessName = n;
+            businessName = bn;
             branchCode = c;
             maximumCapacity = mc;
         }
@@ -56,7 +56,7 @@ namespace Prg_Assg_CASY
 
         public override string ToString()
         {
-            return base.ToString();
+            return base.ToString() + "Name of Business: " + BusinessName + "Branch Code: " + BranchCode + "Maximum Capacity: " + MaximumCapacity;
         }
 
     }
