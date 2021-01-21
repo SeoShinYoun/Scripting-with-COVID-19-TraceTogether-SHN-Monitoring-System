@@ -46,8 +46,9 @@ namespace Prg_Assg_CASY
 
         public bool IsFull()
         {
-            if (VisitorsNow == MaximumCapacity)
+            if (VisitorsNow == MaximumCapacity) /* When the number of visitors is at the max capacity, the business would be 'full' */
             {
+                Console.WriteLine("Business location is at maximum capacity");
                 return true;
             }
             
