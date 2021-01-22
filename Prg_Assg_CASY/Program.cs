@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Net.Http;
@@ -15,7 +16,7 @@ namespace Prg_Assg_CASY
     {
         static void Main(string[] args)
         {
-            MainMenu();
+
             // Calling SHNFacility class API (Basic Feature 2)
             List<SHNFacility> shnfacilityList = new List<SHNFacility>();
             using (HttpClient client = new HttpClient())
@@ -32,22 +33,40 @@ namespace Prg_Assg_CASY
                     shnfacilityList = JsonConvert.DeserializeObject<List<SHNFacility>>(data);
                 }
             }
-        }
 
-        static void MainMenu()
-        {
-            while (true)
+
+            // Creation of the MainMenu for users to navigate through other functions 
+            List<Person> PersonList = new List<Person>();
+            Console.WriteLine("");
+            char opt = Convert.ToChar(Console.ReadLine());
+
+            //Read Person csv file 
+            using (StreamReader sr = new StreamReader("Person.csv"))
             {
-                Console.WriteLine("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-                Console.WriteLine("X                                               X");
-                Console.WriteLine("X         COVID-19 MONITORING SYSTEM            X");
-                Console.WriteLine("X                                               X");
-                Console.WriteLine("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-                Console.WriteLine("[1] General");
-                Console.WriteLine("[2] SafeEntry/TraceTogether");
-                Console.WriteLine("[3] Travel Entry");
+                string s = sr.ReadLine();
+                while ((s = sr.ReadLine()) != null)
+                {
+                    string[] attribute = s.Split(",");
+
+                    if (attribute[0] == "resident")
+                    {
+                        Resident r = new Resident(attribute[1], attribute[2], Convert.ToDateTime(attribute[3]));
+                        PersonList.Add(r);
+                        foreach (char c in attribute[8])
+                        {
+                            if (c == '-')
+                            {
+                                var  = Convert.ToDateTime(attribute[8]).Date; 
+
+
+                            }
+                        }
+
+                    }
+                }
             }
 
         }
+
     }
 }
