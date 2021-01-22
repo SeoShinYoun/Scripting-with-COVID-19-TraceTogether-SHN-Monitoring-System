@@ -2,6 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 
+//============================================================
+// Student Number : S10205100, S10203193
+// Student Name : Seo Shin Youn, Phua Cheng Ann
+// Module Group : T09 //============================================================
+
 namespace Prg_Assg_CASY
 {
     class TravelEntry
@@ -76,7 +81,9 @@ namespace Prg_Assg_CASY
                 duration = 14;
             }
             Console.WriteLine("The Length of SHN Duration is: " + duration + " Days");
-
+            ShnEndDate = EntryDate.AddDays(duration);
+            Console.WriteLine("The SHN End Date: " + ShnEndDate.ToString("dd/MM/yyyy"));
+            
         }
 
         public override string ToString()
