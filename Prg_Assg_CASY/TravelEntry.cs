@@ -62,6 +62,20 @@ namespace Prg_Assg_CASY
 
         public void CalculateSHNDuration()
         {
+            int duration;
+            if (LastCountyOfEmbarkation == "New Zealand" || LastCountyOfEmbarkation == "Vietnam")
+            {
+                duration = 1;
+            }
+            else if (LastCountyOfEmbarkation == "Macao SAR")
+            {
+                duration = 7;
+            }
+            else
+            {
+                duration = 14;
+            }
+            Console.WriteLine("The Length of SHN Duration is: " + duration + " Days");
 
         }
 

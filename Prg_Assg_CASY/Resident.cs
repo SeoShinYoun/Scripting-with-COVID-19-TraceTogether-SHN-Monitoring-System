@@ -36,7 +36,7 @@ namespace Prg_Assg_CASY
 
         public override double CalculateSHNCharges()
         {
-            throw new NotImplementedException();
+            
         }
 
         public override string ToString()
