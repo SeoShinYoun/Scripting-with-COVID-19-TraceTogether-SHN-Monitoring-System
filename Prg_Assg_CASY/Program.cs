@@ -15,7 +15,7 @@ namespace Prg_Assg_CASY
     {
         static void Main(string[] args)
         {
-
+            MainMenu();
             // Calling SHNFacility class API (Basic Feature 2)
             List<SHNFacility> shnfacilityList = new List<SHNFacility>();
             using (HttpClient client = new HttpClient())
@@ -36,7 +36,18 @@ namespace Prg_Assg_CASY
 
         static void MainMenu()
         {
-            Console.WriteLine("");
+            while (true)
+            {
+                Console.WriteLine("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+                Console.WriteLine("X                                               X");
+                Console.WriteLine("X         COVID-19 MONITORING SYSTEM            X");
+                Console.WriteLine("X                                               X");
+                Console.WriteLine("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+                Console.WriteLine("[1] General");
+                Console.WriteLine("[2] SafeEntry/TraceTogether");
+                Console.WriteLine("[3] Travel Entry");
+            }
+
         }
     }
 }
