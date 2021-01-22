@@ -9,7 +9,7 @@ using System.Text;
 
 namespace Prg_Assg_CASY
 {
-    class Resident:Person 
+    class Resident:Person
     {
         private string address;
         private DateTime lastLeftCountry;
@@ -33,7 +33,7 @@ namespace Prg_Assg_CASY
             set { token = value; }
         }
 
-        public Resident(string ad, string n, DateTime lc):base(n)
+        public Resident(string ad, string n, DateTime lc)/*:base(n)*/
         {
             Address = ad;
             LastLeftCountry = lc;
@@ -41,7 +41,7 @@ namespace Prg_Assg_CASY
 
         public override double CalculateSHNCharges()
         {
-            
+            return 0.0;
         }
 
         public override string ToString()
