@@ -34,5 +34,10 @@ namespace Prg_Assg_CASY
                 }
             }
         }
+
+        static void MainMenu()
+        {
+            Console.WriteLine("");
+        }
     }
 }
