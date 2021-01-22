@@ -33,11 +33,12 @@ namespace Prg_Assg_CASY
                     shnfacilityList = JsonConvert.DeserializeObject<List<SHNFacility>>(data);
                 }
             }
+
+            List<Person> PersonList = new List<Person>();
+            Console.WriteLine("");
+
+
         }
 
-        static void MainMenu()
-        {
-            Console.WriteLine("");
-        }
     }
 }
