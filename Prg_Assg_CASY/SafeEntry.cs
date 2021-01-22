@@ -38,7 +38,7 @@ namespace Prg_Assg_CASY
 
         public virtual void PerformCheckOut()
         {
-
+            CheckOut = DateTime.Now; 
         }
 
         public override string ToString()
