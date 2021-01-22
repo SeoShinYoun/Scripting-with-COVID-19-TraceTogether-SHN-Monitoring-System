@@ -71,7 +71,7 @@ namespace Prg_Assg_CASY
                     pList.Add(r);
                     if (attributes[6] != null) //When token serial number is present 
                     {
-                        r.Token = new TraceTogetherToken(attributes[6], attributes[7], DateTime.ParseExact(attributes[8], "d-MMM-yyyy", null)); // Name, address, Tokenexpiry date using ParseExact to convert the string in csv to a datetime in program 
+                        r.Token = new TraceTogetherToken(attributes[6], attributes[7], DateTime.ParseExact(attributes[8], "dd/MM/yyyy", null)); // Name, address, Tokenexpiry date using ParseExact to convert the string in csv to a datetime in program 
                     }
                     if (attributes[9] != null) //When Travel location is present 
                     {
