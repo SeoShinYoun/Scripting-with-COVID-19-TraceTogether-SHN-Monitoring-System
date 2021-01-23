@@ -223,13 +223,14 @@ namespace Prg_Assg_CASY
                     }
                     if (properties[9] != null)
                     {
-                        List<TravelEntry> TravelEntryList = new List<TravelEntry>();
                         DateTime dateC = DateTime.ParseExact(properties[11], "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
                         TravelEntry TE = new TravelEntry(properties[9], properties[10], dateC);
                         resident.AddTravelEntry(TE);
                         DateTime dateD = DateTime.ParseExact(properties[12], "dd/MM/yyyy", CultureInfo.InvariantCulture);
                         TE.ShnEndDate = dateD;
                         TE.IsPaid = Convert.ToBoolean(properties[13]);
+                        
+                       
                         if (properties[14] != null)
                         {
                             TE.AssignSHNFacility(SearchFacility(shnList, properties[14]));
