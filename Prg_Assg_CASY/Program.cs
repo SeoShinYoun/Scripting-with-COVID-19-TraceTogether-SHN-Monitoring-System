@@ -167,6 +167,20 @@ namespace Prg_Assg_CASY
 
             }
         }
+
+        static void SafeEntryMenu()
+        {
+            Console.WriteLine("***************************************************************");
+            Console.WriteLine("*                                                             *");
+            Console.WriteLine("*                          SafeEntry                          *");
+            Console.WriteLine("*                                                             *");
+            Console.WriteLine("***************************************************************");
+            Console.WriteLine("");
+            Console.WriteLine("==========Safe Entry==========");
+            Console.WriteLine("Please Enter your name: ");
+            Console.WriteLine("");
+        }
+
         //Reading of Person.csv file using System.IO
         static void IncludePerson(List<Person> pList)
         {
@@ -205,19 +219,6 @@ namespace Prg_Assg_CASY
             {
                 Console.WriteLine(b.MaximumCapacity);
             }
-        }
-
-        static void SafeEntryMenu()
-        {
-            Console.WriteLine("***************************************************************");
-            Console.WriteLine("*                                                             *");
-            Console.WriteLine("*                          SafeEntry                          *");
-            Console.WriteLine("*                                                             *");
-            Console.WriteLine("***************************************************************");
-            Console.WriteLine("");
-            Console.WriteLine("==========Safe Entry==========");
-            Console.WriteLine("Please Enter your name: ");
-            Console.WriteLine("");
         }
 
     }
