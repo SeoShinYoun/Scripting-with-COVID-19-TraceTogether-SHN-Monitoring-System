@@ -218,16 +218,32 @@ namespace Prg_Assg_CASY
                     pList.Add(resident);
                     if (properties[6] != null)
                     {
-                        
                         DateTime dateB = DateTime.ParseExact(properties[8], "dd-MMM-yy", CultureInfo.InvariantCulture);
                         resident.Token = new TraceTogetherToken(properties[6], properties[7], dateB);
                     }
                     if (properties[9] != null)
                     {
-                        DateTime dateC = DateTime.ParseExact(properties[11], "dd/MM/yyyy HH:mm tt", CultureInfo.InvariantCulture);
+                        DateTime dateC;
+                        if (DateTime.TryParseExact(properties[11], "dd/MM/yyyy HH:mm tt", CultureInfo.InvariantCulture, DateTimeStyles.None, out dateC))
+                        {
+                            dateC = DateTime.ParseExact(properties[11], "dd/MM/yyyy HH:mm tt", CultureInfo.InvariantCulture);
+                        }
+                        else if (DateTime.TryParseExact(properties[11], "dd/MM/yyyy hh:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out dateC))
+                        {
+                            dateC = DateTime.ParseExact(properties[11], "dd/MM/yyyy hh:mm", CultureInfo.InvariantCulture);
+                        }
                         TravelEntry TE = new TravelEntry(properties[9], properties[10], dateC);
                         resident.AddTravelEntry(TE);
-                        DateTime dateD = DateTime.ParseExact(properties[12], "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                        DateTime dateD;
+
+                        if (DateTime.TryParseExact(properties[12], "dd/MM/yyyy HH:mm tt", CultureInfo.InvariantCulture, DateTimeStyles.None, out dateD))
+                        {
+                            dateD = DateTime.ParseExact(properties[12], "dd/MM/yyyy HH:mm tt", CultureInfo.InvariantCulture);
+                        }
+                        else if(DateTime.TryParseExact(properties[12], "dd/MM/yyyy hh:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out dateC))
+                        {
+                            dateD = DateTime.ParseExact(properties[12], "dd/MM/yyyy hh:mm", CultureInfo.InvariantCulture);
+                        }
                         TE.ShnEndDate = dateD;
                         TE.IsPaid = Convert.ToBoolean(properties[13]);
 
@@ -282,7 +298,6 @@ namespace Prg_Assg_CASY
             return null;
         }
     }
-
 }
 //Reading of person csv file using system.IO 
         //static void IncludePerson(List<Person> pList, List<SHNFacility> shnList)
