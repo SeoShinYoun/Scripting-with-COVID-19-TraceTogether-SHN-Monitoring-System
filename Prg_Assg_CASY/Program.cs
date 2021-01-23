@@ -17,9 +17,7 @@ namespace Prg_Assg_CASY
     {
         static void Main(string[] args)
         {
-            // Required to Basic Feature 1 and 2 at the start of progra
-
-
+            // Required for Basic Feature 1 and 2 to be loaded at the start of the program
             // Basic Feature 2 - Calling SHNFacility class API 
             List<SHNFacility> shnfacilityList = new List<SHNFacility>();
             using (HttpClient client = new HttpClient())
@@ -36,12 +34,21 @@ namespace Prg_Assg_CASY
                     shnfacilityList = JsonConvert.DeserializeObject<List<SHNFacility>>(data);
                 }
             }
-            MainMenu(shnfacilityList);
+            
+            //Basic Feature 1 - Loading of Person and Business Location Data
+            //Creation of list to store csv file 
+            List<Person> personList = new List<Person>();
+            List<BusinessLocation> businessLocationList = new List<BusinessLocation>();
 
+            //IncludePerson(personList, shnfacilityList);
+            IncludeBusinessLocation(businessLocationList);
+            IncludePerson(personList, shnfacilityList);
+
+            MainMenu();
         }
 
         // Creation of the MainMenu for users to navigate through other functions 
-        static void MainMenu(List<SHNFacility> shnList)
+        static void MainMenu()
         {
 
             bool display = true;
@@ -76,7 +83,7 @@ namespace Prg_Assg_CASY
                 {
                     if (choice == 1)
                     {
-                        GeneralMenu(shnList);
+                        GeneralMenu();
                     }
                     else if (choice == 2)
                     {
@@ -101,7 +108,7 @@ namespace Prg_Assg_CASY
 
 
         }
-        static void GeneralMenu(List<SHNFacility> shnList)
+        static void GeneralMenu()
         {
             bool display = true;
             while (display == true)
@@ -115,11 +122,9 @@ namespace Prg_Assg_CASY
                     Console.WriteLine("*                                                             *");
                     Console.WriteLine("***************************************************************");
                     Console.WriteLine("======== Menu Options =======");
-                    Console.WriteLine("(1) Load Person and Business Location Data ");
-                    Console.WriteLine("(2) Load SHN Facility Data");
-                    Console.WriteLine("(3) List all Visitors");
-                    Console.WriteLine("(4) List Person Details");
-                    Console.WriteLine("(5) Back to Main Menu");
+                    Console.WriteLine("(1) List all Visitors");
+                    Console.WriteLine("(2) List Person Details");
+                    Console.WriteLine("(3) Back to Main Menu");
                     Console.WriteLine("=============================");
                     Console.Write("Options: ");
                     choice = Convert.ToInt32(Console.ReadLine());
@@ -132,17 +137,11 @@ namespace Prg_Assg_CASY
                     Console.WriteLine("Choose from either Options 1, 2, 3, 4 or 5...");
                     Console.WriteLine();
                 }
-                if (choice != 5)
+                if (choice != 3)
                 {
                     if (choice == 1)
                     {
-                        //Creation of list to store csv file 
-                        List<Person> personList = new List<Person>();
-                        List<BusinessLocation> businessLocationList = new List<BusinessLocation>();
-
-                        //IncludePerson(personList, shnfacilityList);
-                        IncludeBusinessLocation(businessLocationList);
-                        IncludePerson(personList, shnList);
+                        
                     }
                     else if (choice == 2)
                     {
@@ -152,10 +151,7 @@ namespace Prg_Assg_CASY
                     {
 
                     }
-                    else if (choice == 4)
-                    {
-
-                    }
+                 
                     else
                     {
 
@@ -166,7 +162,7 @@ namespace Prg_Assg_CASY
                     display = false;
                     Console.WriteLine("Returning back to Main Menu...");
                     Task.Delay(1000).Wait();
-                    MainMenu(shnList);
+                    MainMenu();
                 }
 
             }
@@ -181,7 +177,7 @@ namespace Prg_Assg_CASY
             Console.WriteLine("*                                                             *");
             Console.WriteLine("***************************************************************");
             Console.WriteLine("");
-            Console.WriteLine("==========Safe Entry==========");
+            Console.WriteLine("========== Menu Options ==========");
             /*Console.WriteLine("Please Enter your name: ");
             string SafeEntryName = Convert.ToString(Console.ReadLine());
             SearchName(personList, Name);*/
@@ -189,7 +185,13 @@ namespace Prg_Assg_CASY
 
         static void TravelEntryMenu()
         {
-
+            Console.WriteLine("***************************************************************");
+            Console.WriteLine("*                                                             *");
+            Console.WriteLine("*                         TravelEntry                         *");
+            Console.WriteLine("*                                                             *");
+            Console.WriteLine("***************************************************************");
+            Console.WriteLine("");
+            Console.WriteLine("========== Menu Options ==========");
         }
 
         //Reading of Person.csv file using System.IO
