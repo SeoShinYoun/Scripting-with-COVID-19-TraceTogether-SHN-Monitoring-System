@@ -31,11 +31,13 @@ namespace Prg_Assg_CASY
 
         public void AddTravelEntry(TravelEntry TE)
         {
+            TravelEntryList = new List<TravelEntry>();
             TravelEntryList.Add(TE);
         }
 
         public void AddSafeEntry(SafeEntry SE)
         {
+            SafeEntryList = new List<SafeEntry>();
             SafeEntryList.Add(SE);
         }
 
