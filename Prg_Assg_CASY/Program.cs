@@ -218,12 +218,14 @@ namespace Prg_Assg_CASY
                     pList.Add(resident);
                     if (properties[6] != null)
                     {
+                        
                         DateTime dateB = DateTime.ParseExact(properties[8], "dd-MMM-yy", CultureInfo.InvariantCulture);
                         resident.Token = new TraceTogetherToken(properties[6], properties[7], dateB);
                     }
                     if (properties[9] != null)
                     {
-                        DateTime dateC = DateTime.ParseExact(properties[11], "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
+                        
+                        DateTime dateC = DateTime.ParseExact(properties[11], "dd/MM/yyyy HH:mm tt", CultureInfo.InvariantCulture);
                         TravelEntry TE = new TravelEntry(properties[9], properties[10], dateC);
                         resident.AddTravelEntry(TE);
                         DateTime dateD = DateTime.ParseExact(properties[12], "dd/MM/yyyy", CultureInfo.InvariantCulture);
