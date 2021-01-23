@@ -223,14 +223,21 @@ namespace Prg_Assg_CASY
                     }
                     if (properties[9] != null)
                     {
-                        DateTime dateC = DateTime.ParseExact(properties[11], "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
+                        DateTime dateC = DateTime.ParseExact(properties[11], "dd/MM/yyyy HH:mm tt", CultureInfo.InvariantCulture);
                         TravelEntry TE = new TravelEntry(properties[9], properties[10], dateC);
                         resident.AddTravelEntry(TE);
                         DateTime dateD = DateTime.ParseExact(properties[12], "dd/MM/yyyy", CultureInfo.InvariantCulture);
                         TE.ShnEndDate = dateD;
                         TE.IsPaid = Convert.ToBoolean(properties[13]);
-                        
-                       
+
+                        if (DateTime.TryParseExact(matchText, "dd MMM yyyy", new CultureInfo("en-US"),
+                            DateTimeStyles.None, out parsedDate))
+                        {
+                            // Replace that specific text
+                            currentField = currentField.Replace(matchText,
+                                parsedDate.ToString("MM/dd/yyyy 00:00"));
+                        }
+
                         if (properties[14] != null)
                         {
                             TE.AssignSHNFacility(SearchFacility(shnList, properties[14]));
