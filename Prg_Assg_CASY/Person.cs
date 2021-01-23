@@ -45,7 +45,7 @@ namespace Prg_Assg_CASY
 
         public override string ToString()
         {
-            return base.ToString() + "\nName of person: " + Name; 
+            return "\nName of person: " + Name; 
         }
     }
 }

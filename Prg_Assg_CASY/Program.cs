@@ -45,32 +45,13 @@ namespace Prg_Assg_CASY
             IncludePerson(personList, shnfacilityList);
 
             // Load MainMenu page 
-            MainMenu();
-
-            //Load SafeEntry 
-        }
-
-        // Creation of the MainMenu for users to navigate through other functions 
-        static void MainMenu()
-        {
-
             bool display = true;
             while (display == true)
             {
                 int choice = 50; //Dummy value
                 try
                 {
-                    Console.WriteLine("***************************************************************");// Format of the Main Menu 
-                    Console.WriteLine("*                                                             *");
-                    Console.WriteLine("*                 COVID-19 Monitoring System                  *");
-                    Console.WriteLine("*                                                             *");
-                    Console.WriteLine("***************************************************************");
-                    Console.WriteLine("==========Main Menu==========");
-                    Console.WriteLine("(1) General "); // A GeneralMenu method is created to display a sepoerate menu 
-                    Console.WriteLine("(2) SafeEntry/TraceTogether"); // A SafeEntryMenu method is created to display a seperate menu 
-                    Console.WriteLine("(3) TravelEntry"); // A TravelntryMenu method is created to display a seperate menu 
-                    Console.WriteLine("(4) Exit");// Exit the application 
-                    Console.WriteLine("=============================");
+                    MainMenu();
                     Console.Write("Options: ");
                     choice = Convert.ToInt32(Console.ReadLine());
                     Console.WriteLine();
@@ -109,26 +90,14 @@ namespace Prg_Assg_CASY
                 }
             }
 
-
-        }
-        static void GeneralMenu()
-        {
-            bool display = true;
-            while (display == true)
+            //Load General Menu page 
+            bool displayGeneral = true;
+            while (displayGeneral == true)
             {
                 int choice = 50; //Dummy value
                 try
                 {
-                    Console.WriteLine("***************************************************************");
-                    Console.WriteLine("*                                                             *");
-                    Console.WriteLine("*                         General Menu                        *");
-                    Console.WriteLine("*                                                             *");
-                    Console.WriteLine("***************************************************************");
-                    Console.WriteLine("======== Menu Options =======");
-                    Console.WriteLine("(1) List all Visitors");
-                    Console.WriteLine("(2) List Person Details");
-                    Console.WriteLine("(3) Back to Main Menu");
-                    Console.WriteLine("=============================");
+                    GeneralMenu();
                     Console.Write("Options: ");
                     choice = Convert.ToInt32(Console.ReadLine());
                     Console.WriteLine();
@@ -148,13 +117,13 @@ namespace Prg_Assg_CASY
                     }
                     else if (choice == 2)
                     {
-                        
+
                     }
                     else if (choice == 3)
                     {
 
                     }
-                 
+
                     else
                     {
 
@@ -170,8 +139,37 @@ namespace Prg_Assg_CASY
 
             }
         }
-        
+    
+        // Creation of the MainMenu for users to navigate through other functions 
+        static void MainMenu()
+        {
+            Console.WriteLine("***************************************************************");// Format of the Main Menu 
+            Console.WriteLine("*                                                             *");
+            Console.WriteLine("*                 COVID-19 Monitoring System                  *");
+            Console.WriteLine("*                                                             *");
+            Console.WriteLine("***************************************************************");
+            Console.WriteLine("==========Main Menu==========");
+            Console.WriteLine("(1) General "); // A GeneralMenu method is created to display a sepoerate menu 
+            Console.WriteLine("(2) SafeEntry/TraceTogether"); // A SafeEntryMenu method is created to display a seperate menu 
+            Console.WriteLine("(3) TravelEntry"); // A TravelntryMenu method is created to display a seperate menu 
+            Console.WriteLine("(4) Exit");// Exit the application 
+            Console.WriteLine("=============================");
+        }
 
+        static void GeneralMenu()
+        {
+            Console.WriteLine("***************************************************************");
+            Console.WriteLine("*                                                             *");
+            Console.WriteLine("*                         General Menu                        *");
+            Console.WriteLine("*                                                             *");
+            Console.WriteLine("***************************************************************");
+            Console.WriteLine("======== Menu Options =======");
+            Console.WriteLine("(1) List all Visitors");
+            Console.WriteLine("(2) List Person Details");
+            Console.WriteLine("(3) Back to Main Menu");
+            Console.WriteLine("=============================");
+        }
+ 
         static void SafeEntryMenu() // Menu to allow user to navigate through the functions of SafeEntry
         { 
             Console.WriteLine("***************************************************************");
@@ -190,7 +188,7 @@ namespace Prg_Assg_CASY
             /*Console.WriteLine("Please Enter your name: ");
             string SafeEntryName = Convert.ToString(Console.ReadLine());
             SearchName(personList, Name);*/
-        }
+    }
 
         static void TravelEntryMenu()
         {
@@ -218,8 +216,17 @@ namespace Prg_Assg_CASY
                     pList.Add(resident);
                     if (properties[6] != null)
                     {
-                        DateTime dateB = DateTime.ParseExact(properties[8], "dd-MMM-yy", CultureInfo.InvariantCulture);
-                        resident.Token = new TraceTogetherToken(properties[6], properties[7], dateB);
+                        string date = properties[8];
+                        DateTime expirydate;
+                        if (DateTime.TryParseExact(date, "dd-MMM-yy", CultureInfo.InvariantCulture,
+                        DateTimeStyles.None, out expirydate))
+                        {
+                            expirydate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
+                            
+                        }
+                        //DateTime dateB = DateTime.ParseExact(properties[8], "dd-MMM-yy", CultureInfo.InvariantCulture);
+                        resident.Token = new TraceTogetherToken(properties[6], properties[7], expirydate);
+    
                     }
                     if (properties[9] != null)
                     {
@@ -245,7 +252,15 @@ namespace Prg_Assg_CASY
                             dateD = DateTime.ParseExact(properties[12], "dd/MM/yyyy hh:mm", CultureInfo.InvariantCulture);
                         }
                         TE.ShnEndDate = dateD;
-                        TE.IsPaid = Convert.ToBoolean(properties[13]);
+                        //TE.IsPaid = Convert.ToBoolean(properties[13]); // Need to change 
+                        if(properties[13] != null)
+                        {
+                            if (properties[13] == "TRUE")
+                            {
+                                TE.IsPaid = true;
+                            }
+                            TE.IsPaid = false;
+                        }
 
                         //if (DateTime.TryParseExact(matchText, "dd MMM yyyy", new CultureInfo("en-US"),
                         //    DateTimeStyles.None, out parsedDate))

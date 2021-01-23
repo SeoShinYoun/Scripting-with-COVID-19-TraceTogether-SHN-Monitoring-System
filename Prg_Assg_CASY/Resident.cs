@@ -47,7 +47,7 @@ namespace Prg_Assg_CASY
 
         public override string ToString()
         {
-            return base.ToString() + "Name of resident: " + Name + "\tAddress of resident: " + Address + "\nDate last travelled Overseas: " + LastLeftCountry;
+            return "\nName of resident: " + Name + "\nAddress of resident: " + Address + "\nDate last travelled Overseas: " + LastLeftCountry;
         }
     }
 }
