@@ -35,6 +35,9 @@ namespace Prg_Assg_CASY
                 }
             }
             MainMenu();
+            Console.WriteLine("Please Enter your name: ");
+            string SafeEntryName = Convert.ToString(Console.ReadLine());
+            /*SearchName(personList, Name);*/
         }
 
         // Creation of the MainMenu for users to navigate through other functions 
@@ -47,16 +50,16 @@ namespace Prg_Assg_CASY
                 int choice = 50; //Dummy value
                 try
                 {
-                    Console.WriteLine("***************************************************************");
+                    Console.WriteLine("***************************************************************");// Format of the Main Menu 
                     Console.WriteLine("*                                                             *");
                     Console.WriteLine("*                 COVID-19 Monitoring System                  *");
                     Console.WriteLine("*                                                             *");
                     Console.WriteLine("***************************************************************");
                     Console.WriteLine("==========Main Menu==========");
-                    Console.WriteLine("(1) General ");
-                    Console.WriteLine("(2) SafeEntry/TraceTogether");
-                    Console.WriteLine("(3) TravelEntry");
-                    Console.WriteLine("(4) Exit");
+                    Console.WriteLine("(1) General "); // A GeneralMenu method is created to display a sepoerate menu 
+                    Console.WriteLine("(2) SafeEntry/TraceTogether"); // A SafeEntryMenu method is created to display a seperate menu 
+                    Console.WriteLine("(3) TravelEntry"); // A TravelntryMenu method is created to display a seperate menu 
+                    Console.WriteLine("(4) Exit");// Exit the application 
                     Console.WriteLine("=============================");
                     Console.Write("Options: ");
                     choice = Convert.ToInt32(Console.ReadLine());
@@ -77,11 +80,12 @@ namespace Prg_Assg_CASY
                     }
                     else if (choice == 2)
                     {
+                        SafeEntryMenu();
 
                     }
                     else if (choice == 3)
                     {
-
+                        TravelEntryMenu();
                     }
                     else
                     {
@@ -142,7 +146,7 @@ namespace Prg_Assg_CASY
                     }
                     else if (choice == 2)
                     {
-
+                        
                     }
                     else if (choice == 3)
                     {
@@ -168,8 +172,8 @@ namespace Prg_Assg_CASY
             }
         }
 
-        static void SafeEntryMenu()
-        {
+        static void SafeEntryMenu() // Menu to allow user to navigate through the functions of SafeEntry
+        { 
             Console.WriteLine("***************************************************************");
             Console.WriteLine("*                                                             *");
             Console.WriteLine("*                          SafeEntry                          *");
@@ -177,8 +181,11 @@ namespace Prg_Assg_CASY
             Console.WriteLine("***************************************************************");
             Console.WriteLine("");
             Console.WriteLine("==========Safe Entry==========");
-            Console.WriteLine("Please Enter your name: ");
-            Console.WriteLine("");
+        } 
+
+        static void TravelEntryMenu()
+        {
+
         }
 
         //Reading of Person.csv file using System.IO
@@ -188,7 +195,7 @@ namespace Prg_Assg_CASY
             string[] csvLines = File.ReadAllLines("Person.csv");
             for (int i=1; i<csvLines.Length; i++)
             {
-                string[] properties = csvLines[i].Split(',');
+                string[] properties = csvLines[i].Split(','); 
                 if (properties[0] == "resident")
                 {
                     Person p = new Resident(properties[1], properties[2], Convert.ToDateTime(properties[3]));
