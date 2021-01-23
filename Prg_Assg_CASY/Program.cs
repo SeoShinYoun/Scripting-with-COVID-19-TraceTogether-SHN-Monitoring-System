@@ -230,13 +230,13 @@ namespace Prg_Assg_CASY
                         TE.ShnEndDate = dateD;
                         TE.IsPaid = Convert.ToBoolean(properties[13]);
 
-                        /*if (DateTime.TryParseExact(matchText, "dd MMM yyyy", new CultureInfo("en-US"),
+                        if (DateTime.TryParseExact(matchText, "dd MMM yyyy", new CultureInfo("en-US"),
                             DateTimeStyles.None, out parsedDate))
                         {
                             // Replace that specific text
                             currentField = currentField.Replace(matchText,
                                 parsedDate.ToString("MM/dd/yyyy 00:00"));
-                        }*/
+                        }
 
                         if (properties[14] != null)
                         {
