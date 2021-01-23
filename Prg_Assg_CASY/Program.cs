@@ -8,7 +8,8 @@ using Newtonsoft.Json;
 //============================================================
 // Student Number : S10205100, S10203193
 // Student Name : Seo Shin Youn, Phua Cheng Ann
-// Module Group : T09 //============================================================
+// Module Group : T09 
+//============================================================
 
 namespace Prg_Assg_CASY
 {
@@ -16,8 +17,8 @@ namespace Prg_Assg_CASY
     {
         static void Main(string[] args)
         {
-            MainMenu();
             // Calling SHNFacility class API (Basic Feature 2)
+            // Required to load data at the start of program
             List<SHNFacility> shnfacilityList = new List<SHNFacility>();
             using (HttpClient client = new HttpClient())
             {
@@ -33,23 +34,19 @@ namespace Prg_Assg_CASY
                     shnfacilityList = JsonConvert.DeserializeObject<List<SHNFacility>>(data);
                 }
             }
-
-            ////Creation of list to store csv file 
-            //List<Person> personList = new List<Person>();
-            //List<BusinessLocation> businessLocationList = new List<BusinessLocation>();
-            //IncludePerson(personList, shnfacilityList);
-            //IncludeBusinessLocation(businessLocationList);
+            MainMenu();
         }
 
         // Creation of the MainMenu for users to navigate through other functions 
         static void MainMenu()
         {
+
             bool display = true;
             while (display == true)
             {
+                int choice = 50; //Dummy value
                 try
                 {
-                    List<Person> PersonList = new List<Person>();
                     Console.WriteLine("***************************************************************");
                     Console.WriteLine("*                                                             *");
                     Console.WriteLine("*                 COVID-19 Monitoring System                  *");
@@ -57,28 +54,119 @@ namespace Prg_Assg_CASY
                     Console.WriteLine("***************************************************************");
                     Console.WriteLine("==========Main Menu==========");
                     Console.WriteLine("(1) General ");
-                    Console.WriteLine("(2) SafeEntry  ");
-                    Console.WriteLine("(3) TravelEntry ");
+                    Console.WriteLine("(2) SafeEntry/TraceTogether");
+                    Console.WriteLine("(3) TravelEntry");
                     Console.WriteLine("(4) Exit");
                     Console.WriteLine("=============================");
                     Console.Write("Options: ");
-                    int choice = Convert.ToInt32(Console.ReadLine());
+                    choice = Convert.ToInt32(Console.ReadLine());
                     Console.WriteLine();
                 }
-
                 catch (FormatException ex)
                 {
                     Console.Write("Exception details: ");
                     Console.WriteLine(ex.Message);
-                    Console.WriteLine(" Choose from either Option 1, 2, or 3...");
+                    Console.WriteLine("Choose from either Options 1, 2, 3, or 4...");
                     Console.WriteLine();
+                }
+                if (choice != 4)
+                {
+                    if (choice == 1)
+                    {
+                        GeneralMenu();
+                    }
+                    else if (choice == 2)
+                    {
+
+                    }
+                    else if (choice == 3)
+                    {
+
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid option selected!");
+                        Console.WriteLine("Choose from either Options 1, 2, 3, or 4...");
+                    }
+                }
+                else
+                {
+                    display = false;
+                    Console.WriteLine("Thank you! Bye...");
+                }
+            }
+
+
+        }
+        static void GeneralMenu()
+        {
+            bool display = true;
+            while (display == true)
+            {
+                int choice = 50; //Dummy value
+                try
+                {
+                    Console.WriteLine("***************************************************************");
+                    Console.WriteLine("*                                                             *");
+                    Console.WriteLine("*                         General Menu                        *");
+                    Console.WriteLine("*                                                             *");
+                    Console.WriteLine("***************************************************************");
+                    Console.WriteLine("======== Menu Options =======");
+                    Console.WriteLine("(1) Load Person and Business Location Data ");
+                    Console.WriteLine("(2) Load SHN Facility Data");
+                    Console.WriteLine("(3) List all Visitors");
+                    Console.WriteLine("(4) List Person Details");
+                    Console.WriteLine("(5) Back to Main Menu");
+                    Console.WriteLine("=============================");
+                    Console.Write("Options: ");
+                    choice = Convert.ToInt32(Console.ReadLine());
+                    Console.WriteLine();
+                }
+                catch (FormatException ex)
+                {
+                    Console.Write("Exception details: ");
+                    Console.WriteLine(ex.Message);
+                    Console.WriteLine("Choose from either Options 1, 2, 3, 4 or 5...");
+                    Console.WriteLine();
+                }
+                if (choice != 5)
+                {
+                    if (choice == 1)
+                    {
+                        //Creation of list to store csv file 
+                        List<Person> personList = new List<Person>();
+                        List<BusinessLocation> businessLocationList = new List<BusinessLocation>();
+
+                        //IncludePerson(personList, shnfacilityList);
+                        //IncludeBusinessLocation(businessLocationList);
+                    }
+                    else if (choice == 2)
+                    {
+
+                    }
+                    else if (choice == 3)
+                    {
+
+                    }
+                    else if (choice == 4)
+                    {
+
+                    }
+                    else
+                    {
+
+                    }
+                }
+                else
+                {
+                    display = false;
+                    Console.WriteLine("Returning back to Main Menu...");
+                    Task.Delay(1000).Wait();
+                    MainMenu();
                 }
 
             }
-            
-           
         }
-
         //Reading of BusinessLocation csv file using system.IO 
         static void IncludeBusinessLocation(List<BusinessLocation> bList)
         {
@@ -96,7 +184,23 @@ namespace Prg_Assg_CASY
             }
         }
 
-        //Reading of person csv file using system.IO 
+        static void SafeEntryMenu()
+        {
+            Console.WriteLine("***************************************************************");
+            Console.WriteLine("*                                                             *");
+            Console.WriteLine("*                          SafeEntry                          *");
+            Console.WriteLine("*                                                             *");
+            Console.WriteLine("***************************************************************");
+            Console.WriteLine("");
+            Console.WriteLine("==========Safe Entry==========");
+            Console.WriteLine("Please Enter your name: ");
+            Console.WriteLine("");
+        }
+
+    }
+
+}
+//Reading of person csv file using system.IO 
         //static void IncludePerson(List<Person> pList, List<SHNFacility> shnList)
         //{
         //    // reading person location csv file, from the second line onwards according to interpretation from csv file (without headings of attributes)
@@ -132,37 +236,20 @@ namespace Prg_Assg_CASY
 
         //        }
         //    }
-        }
-
-        //static void LoadSHNFacility()
-        //{
-
-        //}
-        //static SHNFacility SearchFacility(List<SHNFacility> shnList, string n)
-        //{
-        //    foreach (SHNFacility s in shnList)
-        //    {
-        //        if (n == s.FacilityName)
-        //        {
-        //            return s;
-        //        }
-        //    }
-        //    return null;
         //}
 
-        
+    //static void LoadSHNFacility()
+    //{
 
-        //static void SafeEntryMenu()
-        //{
-        //    Console.WriteLine("***************************************************************");
-        //    Console.WriteLine("*                                                             *");
-        //    Console.WriteLine("*                          SafeEntry                          *");
-        //    Console.WriteLine("*                                                             *");
-        //    Console.WriteLine("***************************************************************");
-        //    Console.WriteLine("");
-        //    Console.WriteLine("==========Safe Entry==========");
-        //    Console.WriteLine("Please Enter your name: ");
-        //    Console.WriteLine("");
-        //}
-    
-}
+    //}
+    //static SHNFacility SearchFacility(List<SHNFacility> shnList, string n)
+    //{
+    //    foreach (SHNFacility s in shnList)
+    //    {
+    //        if (n == s.FacilityName)
+    //        {
+    //            return s;
+    //        }
+    //    }
+    //    return null;
+    //}

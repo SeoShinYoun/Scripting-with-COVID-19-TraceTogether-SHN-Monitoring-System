@@ -5,8 +5,8 @@ using System.Text;
 //============================================================
 // Student Number : S10205100, S10203193
 // Student Name : Seo Shin Youn, Phua Cheng Ann
-// Module Group : T09 //============================================================
-
+// Module Group : T09 
+//============================================================
 namespace Prg_Assg_CASY
 {
     class Visitor:Person
