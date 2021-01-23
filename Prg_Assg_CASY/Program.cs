@@ -44,7 +44,10 @@ namespace Prg_Assg_CASY
             IncludeBusinessLocation(businessLocationList);
             IncludePerson(personList, shnfacilityList);
 
+            // Load MainMenu page 
             MainMenu();
+
+            //Load SafeEntry 
         }
 
         // Creation of the MainMenu for users to navigate through other functions 
@@ -178,6 +181,12 @@ namespace Prg_Assg_CASY
             Console.WriteLine("***************************************************************");
             Console.WriteLine("");
             Console.WriteLine("========== Menu Options ==========");
+            Console.WriteLine("(1) Assign/Replace your TraceTogetherToken ");
+            Console.WriteLine("(2) List all Business Locations");
+            Console.WriteLine("(3) Edit all Business Locations");
+            Console.WriteLine("(4) Check-In ");
+            Console.WriteLine("(5) Check-Out ");
+            Console.WriteLine("(6) Back to Main Menu ");
             /*Console.WriteLine("Please Enter your name: ");
             string SafeEntryName = Convert.ToString(Console.ReadLine());
             SearchName(personList, Name);*/
