@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Net.Http;
 using Newtonsoft.Json;
-
+using System.Globalization; // CultureInfo ParseExact
 //============================================================
 // Student Number : S10205100, S10203193
 // Student Name : Seo Shin Youn, Phua Cheng Ann
@@ -193,7 +193,7 @@ namespace Prg_Assg_CASY
             Console.WriteLine("");
             Console.WriteLine("========== Menu Options ==========");
         }
-
+        
         //Reading of Person.csv file using System.IO
         static void IncludePerson(List<Person> pList, List<SHNFacility> shnList)
         {
@@ -204,17 +204,21 @@ namespace Prg_Assg_CASY
                 string[] properties = csvLines[i].Split(','); 
                 if (properties[0] == "resident")
                 {
-                    Resident resident = new Resident(properties[1], properties[2], Convert.ToDateTime(properties[3]));
+                    DateTime dateA = DateTime.ParseExact(properties[3], "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                    Resident resident = new Resident(properties[1], properties[2], dateA);
                     pList.Add(resident);
                     if (properties[6] != null)
                     {
-                        resident.Token = new TraceTogetherToken(properties[6], properties[7], Convert.ToDateTime(properties[8]));
+                        DateTime dateB = DateTime.ParseExact(properties[8], "dd-MMM-yy", CultureInfo.InvariantCulture);
+                        resident.Token = new TraceTogetherToken(properties[6], properties[7], dateB);
                     }
                     if (properties[9] != null)
                     {
-                        TravelEntry TE = new TravelEntry(properties[9], properties[10], Convert.ToDateTime(properties[11]));
+                        DateTime dateC = DateTime.ParseExact(properties[11], "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
+                        TravelEntry TE = new TravelEntry(properties[9], properties[10], dateC);
                         resident.AddTravelEntry(TE);
-                        TE.ShnEndDate = Convert.ToDateTime(properties[12]);
+                        DateTime dateD = DateTime.ParseExact(properties[12], "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                        TE.ShnEndDate = dateD;
                         TE.IsPaid = Convert.ToBoolean(properties[13]);
                         if (properties[14] != null)
                         {
