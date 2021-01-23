@@ -138,7 +138,7 @@ namespace Prg_Assg_CASY
                         List<BusinessLocation> businessLocationList = new List<BusinessLocation>();
 
                         //IncludePerson(personList, shnfacilityList);
-                        //IncludeBusinessLocation(businessLocationList);
+                        IncludeBusinessLocation(businessLocationList);
                     }
                     else if (choice == 2)
                     {
@@ -167,6 +167,25 @@ namespace Prg_Assg_CASY
 
             }
         }
+        //Reading of Person.csv file using System.IO
+        static void IncludePerson(List<Person> pList)
+        {
+            // reading person csv file after headings
+            string[] csvLines = File.ReadAllLines("Person.csv");
+            for (int i=1; i<csvLines.Length; i++)
+            {
+                string[] properties = csvLines[i].Split(',');
+                if (properties[0] == "resident")
+                {
+                    Person p = new Resident(properties[1], properties[2], Convert.ToDateTime(properties[3]));
+                }
+                else if (properties[0] == "visitor")
+                {
+                    Person v = new Visitor(properties[1], properties[4], properties[5]);
+                }
+            }
+        }
+
         //Reading of BusinessLocation csv file using system.IO 
         static void IncludeBusinessLocation(List<BusinessLocation> bList)
         {
@@ -181,6 +200,10 @@ namespace Prg_Assg_CASY
                 int capacity = Convert.ToInt32(properties[2]);
                 BusinessLocation businessLocation = new BusinessLocation(businessName, branchCode, capacity);
                 bList.Add(businessLocation);
+            }
+            foreach (BusinessLocation b in bList)
+            {
+                Console.WriteLine(b.MaximumCapacity);
             }
         }
 

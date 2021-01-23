@@ -34,10 +34,10 @@ namespace Prg_Assg_CASY
             set { token = value; }
         }
 
-        public Resident(string ad, string n, DateTime lc)/*:base(n)*/
+        public Resident(string aName, string aAddress, DateTime aLastLeftCountry):base(aName)
         {
-            Address = ad;
-            LastLeftCountry = lc;
+            Address = aAddress;
+            LastLeftCountry = aLastLeftCountry;
         }
 
         public override double CalculateSHNCharges()

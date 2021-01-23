@@ -45,9 +45,5 @@ namespace Prg_Assg_CASY
         {
             return base.ToString() + "\nName of person: " + Name; 
         }
-
-
     }
-
-
 }
