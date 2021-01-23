@@ -223,6 +223,7 @@ namespace Prg_Assg_CASY
                     }
                     if (properties[9] != null)
                     {
+                        List<TravelEntry> TravelEntryList = new List<TravelEntry>();
                         DateTime dateC = DateTime.ParseExact(properties[11], "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
                         TravelEntry TE = new TravelEntry(properties[9], properties[10], dateC);
                         resident.AddTravelEntry(TE);
@@ -234,7 +235,6 @@ namespace Prg_Assg_CASY
                             TE.AssignSHNFacility(SearchFacility(shnList, properties[14]));
                         }
                     }
-
                 }
                 else if (properties[0] == "visitor")  // When the attribute under the heading "type" is a visitor
                 {
@@ -272,7 +272,6 @@ namespace Prg_Assg_CASY
             }
             return null;
         }
-
     }
 
 }
