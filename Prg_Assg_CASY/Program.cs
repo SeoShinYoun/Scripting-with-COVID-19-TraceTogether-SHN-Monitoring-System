@@ -35,9 +35,7 @@ namespace Prg_Assg_CASY
                 }
             }
             MainMenu();
-            Console.WriteLine("Please Enter your name: ");
-            string SafeEntryName = Convert.ToString(Console.ReadLine());
-            /*SearchName(personList, Name);*/
+
         }
 
         // Creation of the MainMenu for users to navigate through other functions 
@@ -181,7 +179,10 @@ namespace Prg_Assg_CASY
             Console.WriteLine("***************************************************************");
             Console.WriteLine("");
             Console.WriteLine("==========Safe Entry==========");
-        } 
+            /*Console.WriteLine("Please Enter your name: ");
+            string SafeEntryName = Convert.ToString(Console.ReadLine());
+            SearchName(personList, Name);*/
+        }
 
         static void TravelEntryMenu()
         {
