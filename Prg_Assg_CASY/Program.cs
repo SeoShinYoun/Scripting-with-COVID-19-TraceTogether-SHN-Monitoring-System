@@ -17,8 +17,10 @@ namespace Prg_Assg_CASY
     {
         static void Main(string[] args)
         {
-            // Calling SHNFacility class API (Basic Feature 2)
-            // Required to load data at the start of program
+            // Required to Basic Feature 1 and 2 at the start of progra
+
+
+            // Basic Feature 2 - Calling SHNFacility class API 
             List<SHNFacility> shnfacilityList = new List<SHNFacility>();
             using (HttpClient client = new HttpClient())
             {
@@ -34,12 +36,12 @@ namespace Prg_Assg_CASY
                     shnfacilityList = JsonConvert.DeserializeObject<List<SHNFacility>>(data);
                 }
             }
-            MainMenu();
+            MainMenu(shnfacilityList);
 
         }
 
         // Creation of the MainMenu for users to navigate through other functions 
-        static void MainMenu()
+        static void MainMenu(List<SHNFacility> shnList)
         {
 
             bool display = true;
@@ -74,12 +76,11 @@ namespace Prg_Assg_CASY
                 {
                     if (choice == 1)
                     {
-                        GeneralMenu();
+                        GeneralMenu(shnList);
                     }
                     else if (choice == 2)
                     {
                         SafeEntryMenu();
-
                     }
                     else if (choice == 3)
                     {
@@ -100,7 +101,7 @@ namespace Prg_Assg_CASY
 
 
         }
-        static void GeneralMenu()
+        static void GeneralMenu(List<SHNFacility> shnList)
         {
             bool display = true;
             while (display == true)
@@ -141,6 +142,7 @@ namespace Prg_Assg_CASY
 
                         //IncludePerson(personList, shnfacilityList);
                         IncludeBusinessLocation(businessLocationList);
+                        IncludePerson(personList, shnList);
                     }
                     else if (choice == 2)
                     {
@@ -164,11 +166,12 @@ namespace Prg_Assg_CASY
                     display = false;
                     Console.WriteLine("Returning back to Main Menu...");
                     Task.Delay(1000).Wait();
-                    MainMenu();
+                    MainMenu(shnList);
                 }
 
             }
         }
+        
 
         static void SafeEntryMenu() // Menu to allow user to navigate through the functions of SafeEntry
         { 
@@ -190,7 +193,7 @@ namespace Prg_Assg_CASY
         }
 
         //Reading of Person.csv file using System.IO
-        static void IncludePerson(List<Person> pList)
+        static void IncludePerson(List<Person> pList, List<SHNFacility> shnList)
         {
             // reading person csv file after headings
             string[] csvLines = File.ReadAllLines("Person.csv");
@@ -199,12 +202,33 @@ namespace Prg_Assg_CASY
                 string[] properties = csvLines[i].Split(','); 
                 if (properties[0] == "resident")
                 {
-                    Person p = new Resident(properties[1], properties[2], Convert.ToDateTime(properties[3]));
+                    Resident resident = new Resident(properties[1], properties[2], Convert.ToDateTime(properties[3]));
+                    pList.Add(resident);
+                    if (properties[6] != null)
+                    {
+                        resident.Token = new TraceTogetherToken(properties[6], properties[7], Convert.ToDateTime(properties[8]));
+                    }
+                    if (properties[9] != null)
+                    {
+                        TravelEntry TE = new TravelEntry(properties[9], properties[10], Convert.ToDateTime(properties[11]));
+                        resident.AddTravelEntry(TE);
+                        TE.ShnEndDate = Convert.ToDateTime(properties[12]);
+                        TE.IsPaid = Convert.ToBoolean(properties[13]);
+                        if (properties[14] != null)
+                        {
+                            TE.AssignSHNFacility(SearchFacility(shnList, properties[14]));
+                        }
+
+
+                    }
+
                 }
                 else if (properties[0] == "visitor")
                 {
-                    Person v = new Visitor(properties[1], properties[4], properties[5]);
+                    Visitor visitor = new Visitor(properties[1], properties[4], properties[5]);
+                    pList.Add(visitor);
                 }
+                
             }
         }
 
@@ -223,10 +247,17 @@ namespace Prg_Assg_CASY
                 BusinessLocation businessLocation = new BusinessLocation(businessName, branchCode, capacity);
                 bList.Add(businessLocation);
             }
-            foreach (BusinessLocation b in bList)
+        }
+        static SHNFacility SearchFacility(List<SHNFacility> shnList, string n)
+        {
+            foreach (SHNFacility s in shnList)
             {
-                Console.WriteLine(b.MaximumCapacity);
+                if (n == s.FacilityName)
+                {
+                    return s;
+                }
             }
+            return null;
         }
 
     }
@@ -274,14 +305,4 @@ namespace Prg_Assg_CASY
     //{
 
     //}
-    //static SHNFacility SearchFacility(List<SHNFacility> shnList, string n)
-    //{
-    //    foreach (SHNFacility s in shnList)
-    //    {
-    //        if (n == s.FacilityName)
-    //        {
-    //            return s;
-    //        }
-    //    }
-    //    return null;
-    //}
+    

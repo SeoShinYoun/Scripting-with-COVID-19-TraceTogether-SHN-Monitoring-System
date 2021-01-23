@@ -13,14 +13,14 @@ namespace Prg_Assg_CASY
     abstract class Person
     {
         private string name;
-        private List<SafeEntry> safeEntryList;
-        private List<TravelEntry> travelEntryList;
-
         public string Name
         {
             get { return name; }
             set { name = value; }
         }
+
+        public List<SafeEntry> SafeEntryList { get; set; }
+        public List<TravelEntry> TravelEntryList { get; set; }
 
         public Person() { }
 
@@ -31,12 +31,12 @@ namespace Prg_Assg_CASY
 
         public void AddTravelEntry(TravelEntry TE)
         {
-            travelEntryList.Add(TE);
+            TravelEntryList.Add(TE);
         }
 
         public void AddSafeEntry(SafeEntry SE)
         {
-            safeEntryList.Add(SE);
+            SafeEntryList.Add(SE);
         }
 
         public abstract double CalculateSHNCharges();
