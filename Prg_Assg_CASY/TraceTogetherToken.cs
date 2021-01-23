@@ -63,8 +63,15 @@ namespace Prg_Assg_CASY
 
         public void ReplaceToken(string sn, string cl)
         {
-            SerialNo = sn;
-            CollectionLocation = cl;
+            System.Random ran5 = new System.Random();
+            sn = "T" + ran5.Next(10000,99999); //Token Serial number where 5 diogits are generated randomly for the new token 
+
+            Console.WriteLine("Enter the Location where you would like to collect your new token: ");
+            CollectionLocation = Console.ReadLine();
+
+            ExpiryDate = DateTime.Now.AddMonths(6);
+
+            TraceTogetherToken tt = new TraceTogetherToken(SerialNo, CollectionLocation, ExpiryDate);
         }
     }
 }

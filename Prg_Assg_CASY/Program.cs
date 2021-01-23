@@ -43,7 +43,7 @@ namespace Prg_Assg_CASY
             //IncludePerson(personList, shnfacilityList);
             IncludeBusinessLocation(businessLocationList);
             IncludePerson(personList, shnfacilityList);
-
+//Loading of the different Menus (MainMenu, GeneralMenu, SafeEntry, TravelEntry) 
             // Load MainMenu page 
             bool display = true;
             while (display == true)
@@ -139,7 +139,7 @@ namespace Prg_Assg_CASY
 
             }
         }
-    
+//Creation of Menus  (MainMenu, GeneralMenu, SafeEntry, TravelEntry) 
         // Creation of the MainMenu for users to navigate through other functions 
         static void MainMenu()
         {
@@ -169,9 +169,9 @@ namespace Prg_Assg_CASY
             Console.WriteLine("(3) Back to Main Menu");
             Console.WriteLine("=============================");
         }
- 
+
         static void SafeEntryMenu() // Menu to allow user to navigate through the functions of SafeEntry
-        { 
+        {
             Console.WriteLine("***************************************************************");
             Console.WriteLine("*                                                             *");
             Console.WriteLine("*                          SafeEntry                          *");
@@ -188,6 +188,12 @@ namespace Prg_Assg_CASY
             /*Console.WriteLine("Please Enter your name: ");
             string SafeEntryName = Convert.ToString(Console.ReadLine());
             SearchName(personList, Name);*/
+        }
+
+        static void AssignToken()
+        {
+
+        }
     }
 
         static void TravelEntryMenu()
@@ -200,7 +206,15 @@ namespace Prg_Assg_CASY
             Console.WriteLine("");
             Console.WriteLine("========== Menu Options ==========");
         }
-        
+
+
+
+
+
+
+
+
+//Reading of CSV files         
         //Reading of Person.csv file using System.IO
         static void IncludePerson(List<Person> pList, List<SHNFacility> shnList)
         {
