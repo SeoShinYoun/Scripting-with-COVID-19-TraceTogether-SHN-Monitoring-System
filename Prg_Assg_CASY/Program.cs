@@ -178,6 +178,7 @@ namespace Prg_Assg_CASY
                 Console.WriteLine("(4) Check-In ");
                 Console.WriteLine("(5) Check-Out ");
                 Console.WriteLine("(6) Back to Main Menu ");
+                Console.WriteLine("==================================");
                 try
                 {
                     Console.Write("Options: ");
@@ -247,6 +248,7 @@ namespace Prg_Assg_CASY
                 Console.WriteLine("(3) Create TravelEntry Record");
                 Console.WriteLine("(4) Calculate SHN Charges");
                 Console.WriteLine("(5) Back to Main Menu");
+                Console.WriteLine("==================================");
                 try
                 {
                     Console.Write("Options: ");
