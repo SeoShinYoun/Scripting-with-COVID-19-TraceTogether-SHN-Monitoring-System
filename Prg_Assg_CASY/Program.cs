@@ -34,7 +34,7 @@ namespace Prg_Assg_CASY
                     shnfacilityList = JsonConvert.DeserializeObject<List<SHNFacility>>(data);
                 }
             }
-            
+
             //Basic Feature 1 - Loading of Person and Business Location Data
             //Creation of list to store csv file 
             List<Person> personList = new List<Person>();
@@ -46,9 +46,9 @@ namespace Prg_Assg_CASY
             //Loading of the different Menus (MainMenu, GeneralMenu, SafeEntry, TravelEntry) 
             // Load MainMenu page
             MainMenu(personList);
-            
+
         }
-//Creation of Menus  (MainMenu, GeneralMenu, SafeEntry, TravelEntry) 
+ //Creation of Menus  (MainMenu, GeneralMenu, SafeEntry, TravelEntry) 
         // Creation of the MainMenu for users to navigate through other functions 
         static void MainMenu(List<Person> personList)
         {
@@ -102,7 +102,7 @@ namespace Prg_Assg_CASY
                     Console.WriteLine("Thank you! Bye...");
                 }
             }
-            
+
         }
 
         static void GeneralMenu(List<Person> personList)
@@ -151,14 +151,16 @@ namespace Prg_Assg_CASY
                 {
                     displaygeneral = false;
                     MainMenu(personList);
+                    Task.Delay(1500).Wait();
                 }
 
             }
-           
+
         }
 
         static void SafeEntryMenu(List<Person> personList) // Menu to allow user to navigate through the functions of SafeEntry
         {
+            List<BusinessLocation> businessLocationList = new List<BusinessLocation>();
             bool displaySafeEntry = true;
             while (displaySafeEntry == true)
             {
@@ -172,7 +174,7 @@ namespace Prg_Assg_CASY
                 Console.WriteLine("========== Menu Options ==========");
                 Console.WriteLine("(1) Assign/Replace your TraceTogetherToken ");
                 Console.WriteLine("(2) List all Business Locations");
-                Console.WriteLine("(3) Edit all Business Locations");
+                Console.WriteLine("(3) Edit Business Location capacity");
                 Console.WriteLine("(4) Check-In ");
                 Console.WriteLine("(5) Check-Out ");
                 Console.WriteLine("(6) Back to Main Menu ");
@@ -194,11 +196,12 @@ namespace Prg_Assg_CASY
                 {
                     if (choice == 1)
                     {
-                        AssignToken(personList);
+                        AssignReplaceToken(personList);
                     }
                     else if (choice == 2)
                     {
-
+                        IncludeBusinessLocation(businessLocationList);
+                        DisplayAllBusinessLocation(businessLocationList);
                     }
                     else if (choice == 3)
                     {
@@ -216,10 +219,11 @@ namespace Prg_Assg_CASY
                 else
                 {
                     displaySafeEntry = false;
+                    Task.Delay(1500).Wait();
                     MainMenu(personList);
                 }
             }
-            
+
             /*Console.WriteLine("Please Enter your name: ");
             string SafeEntryName = Convert.ToString(Console.ReadLine());
             SearchName(personList, Name);*/
@@ -279,22 +283,23 @@ namespace Prg_Assg_CASY
                 else
                 {
                     displayTravelEntry = false;
+                    Task.Delay(1500).Wait();
                     MainMenu(personList);
                 }
 
             }
-           
+
         }
-    
+
 //Reading of CSV files         
         //Reading of Person.csv file using System.IO
         static void IncludePerson(List<Person> pList, List<SHNFacility> shnList)
         {
             // reading person csv file after headings, from the second line onwards according to interpretation from csv file (without headings of attributes)
             string[] csvLines = File.ReadAllLines("Person.csv");
-            for (int i=1; i<csvLines.Length; i++)
+            for (int i = 1; i < csvLines.Length; i++)
             {
-                string[] properties = csvLines[i].Split(','); 
+                string[] properties = csvLines[i].Split(',');
                 if (properties[0] == "resident")  // When the attribute under the heading "type" is a resident
                 {
                     DateTime dateA = DateTime.ParseExact(properties[3], "dd/MM/yyyy", CultureInfo.InvariantCulture);
@@ -308,11 +313,10 @@ namespace Prg_Assg_CASY
                         DateTimeStyles.None, out expirydate))
                         {
                             expirydate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
-                            
                         }
                         //DateTime dateB = DateTime.ParseExact(properties[8], "dd-MMM-yy", CultureInfo.InvariantCulture);
                         resident.Token = new TraceTogetherToken(properties[6], properties[7], expirydate);
-    
+
                     }
                     if (properties[9] != null)
                     {
@@ -333,13 +337,13 @@ namespace Prg_Assg_CASY
                         {
                             dateD = DateTime.ParseExact(properties[12], "dd/MM/yyyy HH:mm tt", CultureInfo.InvariantCulture);
                         }
-                        else if(DateTime.TryParseExact(properties[12], "dd/MM/yyyy hh:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out dateC))
+                        else if (DateTime.TryParseExact(properties[12], "dd/MM/yyyy hh:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out dateC))
                         {
                             dateD = DateTime.ParseExact(properties[12], "dd/MM/yyyy hh:mm", CultureInfo.InvariantCulture);
                         }
                         TE.ShnEndDate = dateD;
                         //TE.IsPaid = Convert.ToBoolean(properties[13]); // Need to change 
-                        if(properties[13] != null)
+                        if (properties[13] != null)
                         {
                             if (properties[13] == "TRUE")
                             {
@@ -349,7 +353,7 @@ namespace Prg_Assg_CASY
                             {
                                 TE.IsPaid = false;
                             }
-                            
+
                         }
 
                         //if (DateTime.TryParseExact(matchText, "dd MMM yyyy", new CultureInfo("en-US"),
@@ -371,7 +375,7 @@ namespace Prg_Assg_CASY
                     Visitor visitor = new Visitor(properties[1], properties[4], properties[5]);
                     pList.Add(visitor);
                 }
-                
+
             }
         }
 
@@ -407,9 +411,9 @@ namespace Prg_Assg_CASY
         static void DisplayAllVisitors(List<Person> personList)
         {
             Console.WriteLine("--------------------------- List of Visitors ---------------------------");
-            for (int i=0; i < personList.Count; i++)
+            for (int i = 0; i < personList.Count; i++)
             {
-               if (personList[i] is Visitor)
+                if (personList[i] is Visitor)
                 {
                     Console.WriteLine(personList[i]);
                 }
@@ -429,34 +433,69 @@ namespace Prg_Assg_CASY
                     Console.WriteLine(p);
                     isFound = true;
                     Task.Delay(1500).Wait();
-                    break;
                 }
             }
             if (isFound == false)
             {
-                Console.WriteLine("Name of Person '" + searchedName + "' could not be found. Please enter a Valid Name...");
+                Console.WriteLine("Name of person '" + searchedName + "' could not be found. Please enter a valid name...");
+                Task.Delay(1500).Wait();
             }
-            
         }
 // Methods for option 2 of MainMenu (SafeEntry Menu) 
-       // option 1 of SafeEntry menu to Assign / Replace TraceTogetherToken 
-        static void AssignToken(List<Person> personList)
+        // Option 1 of SafeEntry Menu to Assign / Replace TraceTogetherToken 
+        static void AssignReplaceToken(List<Person> personList)
         {
+            bool isFound = false;
             Console.WriteLine("Please Enter Your Name: ");
-            string searchedName = Console.ReadLine();
-            foreach (Resident r in personList)
+            var SEName = Console.ReadLine();
+
+            foreach (Person p in personList)
             {
-                if (r.Name.ToLower() == searchedName.ToLower())
+                //if (SEName.ToLower() == )
                 {
-                    Console.WriteLine(r);
+
                 }
             }
+        }
+        // Option 2 of SafeEntry Menu to Display all Business Locations 
+        static void DisplayAllBusinessLocation(List<BusinessLocation> businessLocationList)
+        {
+            Console.WriteLine("--------------------------- All Business Locations---------------------------");
+            for (int i = 0; i < businessLocationList.Count; i++)
+            {
+                Console.WriteLine(businessLocationList[i]);
+            }
+            Task.Delay(1500).Wait();
+        }
+
+        // Option 3 of SafeEntry Menu to Edit Business Location Capacity
+        static void EditBusinessCapacity(List<BusinessLocation> BusinessLocationList)
+        {
+
+        }
+
+        // option 4 of SafeEntry Menu to Check-In 
+        static void CheckIn(List<BusinessLocation> BusinessLocationList)
+        {
+
+        }
+
+        // option 5 of SafeEntry Menu to Check-Out
+        static void CheckOut(List<BusinessLocation> BusinessLocationList)
+        {
+
+        }
+
+// Methods for option 3 of MainMenu (TravelEntry Menu) 
+        // option 1 of TravelEntry Menu 
+        static void ListAllSHNFacility()
+        {
+
         }
     }
 }
 
-
-// Methods for option 3 of MainMenu (TravelEntry Menu) 
+        
 
 
 
