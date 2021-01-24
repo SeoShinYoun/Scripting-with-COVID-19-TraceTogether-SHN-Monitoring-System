@@ -47,7 +47,7 @@ namespace Prg_Assg_CASY
 
         public override string ToString()
         {
-            return "\nName of resident: " + Name + "\nAddress of resident: " + Address + "\nDate last travelled Overseas: " + LastLeftCountry;
+            return "\nName of resident: " + Name + "\nAddress of resident: " + Address + "\nDate last travelled Overseas: " + LastLeftCountry + "\n==================" + "\nTraceTogetherToken" + "\n==================" +  token.ToString();
         }
     }
 }

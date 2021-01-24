@@ -73,5 +73,10 @@ namespace Prg_Assg_CASY
 
             TraceTogetherToken tt = new TraceTogetherToken(SerialNo, CollectionLocation, ExpiryDate);
         }
+
+        public override string ToString()
+        {
+            return "\nSerial Number: " + SerialNo + "\nExpiry Date: " + ExpiryDate + "\nLocation last Collected: " + CollectionLocation; 
+        }
     }
 }
