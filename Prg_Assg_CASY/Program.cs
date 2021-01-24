@@ -194,7 +194,7 @@ namespace Prg_Assg_CASY
                 {
                     if (choice == 1)
                     {
-                        
+                        AssignToken(personList);
                     }
                     else if (choice == 2)
                     {
@@ -225,10 +225,6 @@ namespace Prg_Assg_CASY
             SearchName(personList, Name);*/
         }
 
-        static void AssignToken()
-        {
-
-        }
         static void TravelEntryMenu(List<Person> personList)
         {
             bool displayTravelEntry = true;
@@ -406,6 +402,8 @@ namespace Prg_Assg_CASY
             }
             return null;
         }
+ // Methods for option 1 of MainMenu (GeneralMenu) 
+        // option 1 of GeneralMenu to display all the visitors 
         static void DisplayAllVisitors(List<Person> personList)
         {
             Console.WriteLine("--------------------------- List of Visitors ---------------------------");
@@ -418,6 +416,7 @@ namespace Prg_Assg_CASY
             }
             Task.Delay(1500).Wait();
         }
+        // option 2 of GeneralMenu to ask for person to enter name to  diaplay person details 
         static void DisplayPersonDetails(List<Person> personList)
         {
             Console.Write("Enter Name of Person you are searching for: ");
@@ -434,8 +433,28 @@ namespace Prg_Assg_CASY
             }
             Console.WriteLine("Name of Person '" + searchedName + "' could not be found. Please enter a Valid Name...");
         }
+// Methods for option 2 of MainMenu (SafeEntry Menu) 
+       // option 1 of SafeEntry menu to Assign / Replace TraceTogetherToken 
+        static void AssignToken(List<Person> personList)
+        {
+            Console.WriteLine("Please Enter Your Name: ");
+            string searchedName = Console.ReadLine();
+            foreach (Resident r in personList)
+            {
+                if (r.Name.ToLower() == searchedName.ToLower())
+                {
+                    Console.WriteLine(r);
+                }
+            }
+        }
     }
 }
+
+
+// Methods for option 3 of MainMenu (TravelEntry Menu) 
+
+
+
 //Reading of person csv file using system.IO 
         //static void IncludePerson(List<Person> pList, List<SHNFacility> shnList)
         //{
