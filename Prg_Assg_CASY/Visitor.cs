@@ -38,7 +38,7 @@ namespace Prg_Assg_CASY
 
         public override string ToString()
         {
-            return base.ToString() + "Name of visitor: " + Name + "\tPassport Number: " + PassportNo + "\tNationality: " + Nationality;
+            return base.ToString() + "\tPassport Number: " + PassportNo + "\tNationality: " + Nationality;
         }
     }
 }

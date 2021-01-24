@@ -45,12 +45,12 @@ namespace Prg_Assg_CASY
 
             //Loading of the different Menus (MainMenu, GeneralMenu, SafeEntry, TravelEntry) 
             // Load MainMenu page
-            MainMenu();
+            MainMenu(personList);
             
         }
 //Creation of Menus  (MainMenu, GeneralMenu, SafeEntry, TravelEntry) 
         // Creation of the MainMenu for users to navigate through other functions 
-        static void MainMenu()
+        static void MainMenu(List<Person> personList)
         {
             bool display = true;
             while (display == true)
@@ -85,15 +85,15 @@ namespace Prg_Assg_CASY
                 {
                     if (choice == 1)
                     {
-                        GeneralMenu();
+                        GeneralMenu(personList);
                     }
                     else if (choice == 2)
                     {
-                        SafeEntryMenu();
+                        SafeEntryMenu(personList);
                     }
                     else if (choice == 3)
                     {
-                        TravelEntryMenu();
+                        TravelEntryMenu(personList);
                     }
                 }
                 else
@@ -105,7 +105,7 @@ namespace Prg_Assg_CASY
             
         }
 
-        static void GeneralMenu()
+        static void GeneralMenu(List<Person> personList)
         {
             bool displaygeneral = true;
             while (displaygeneral == true)
@@ -140,7 +140,7 @@ namespace Prg_Assg_CASY
                 {
                     if (choice == 1)
                     {
-
+                        DisplayAllVisitors(personList);
                     }
                     else if (choice == 2)
                     {
@@ -150,14 +150,14 @@ namespace Prg_Assg_CASY
                 else
                 {
                     displaygeneral = false;
-                    MainMenu();
+                    MainMenu(personList);
                 }
 
             }
            
         }
 
-        static void SafeEntryMenu() // Menu to allow user to navigate through the functions of SafeEntry
+        static void SafeEntryMenu(List<Person> personList) // Menu to allow user to navigate through the functions of SafeEntry
         {
             bool displaySafeEntry = true;
             while (displaySafeEntry == true)
@@ -194,7 +194,7 @@ namespace Prg_Assg_CASY
                 {
                     if (choice == 1)
                     {
-
+                        
                     }
                     else if (choice == 2)
                     {
@@ -216,7 +216,7 @@ namespace Prg_Assg_CASY
                 else
                 {
                     displaySafeEntry = false;
-                    MainMenu();
+                    MainMenu(personList);
                 }
             }
             
@@ -229,7 +229,7 @@ namespace Prg_Assg_CASY
         {
 
         }
-        static void TravelEntryMenu()
+        static void TravelEntryMenu(List<Person> personList)
         {
             bool displayTravelEntry = true;
             while (displayTravelEntry == true)
@@ -283,7 +283,7 @@ namespace Prg_Assg_CASY
                 else
                 {
                     displayTravelEntry = false;
-                    MainMenu();
+                    MainMenu(personList);
                 }
 
             }
@@ -406,6 +406,18 @@ namespace Prg_Assg_CASY
             }
             return null;
         }
+        static void DisplayAllVisitors(List<Person> personList)
+        {
+            Console.WriteLine("--------------------------- List of Visitors ---------------------------");
+            for (int i=0; i < personList.Count; i++)
+            {
+               if (personList[i] is Visitor)
+                {
+                    Console.WriteLine(personList[i]);
+                }
+            }
+            Task.Delay(1500).Wait();
+        }
     }
 }
 //Reading of person csv file using system.IO 
@@ -446,8 +458,5 @@ namespace Prg_Assg_CASY
         //    }
         //}
 
-    //static void LoadSHNFacility()
-    //{
 
-    //}
     

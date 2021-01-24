@@ -45,7 +45,7 @@ namespace Prg_Assg_CASY
 
         public override string ToString()
         {
-            return "\nName of person: " + Name; 
+            return "\nName: " + Name; 
         }
     }
 }
