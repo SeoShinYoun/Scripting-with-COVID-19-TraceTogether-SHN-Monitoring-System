@@ -316,7 +316,7 @@ namespace Prg_Assg_CASY
                         {
                             expirydate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
                         }
-                        //DateTime dateB = DateTime.ParseExact(properties[8], "dd-MMM-yy", CultureInfo.InvariantCulture);
+                        /*DateTime dateB = DateTime.ParseExact(properties[8], "dd-MMM-yy", CultureInfo.InvariantCulture);*/
                         resident.Token = new TraceTogetherToken(properties[6], properties[7], expirydate);
 
                     }
