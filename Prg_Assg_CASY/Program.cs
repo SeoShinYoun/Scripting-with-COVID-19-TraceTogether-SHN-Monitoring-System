@@ -144,7 +144,7 @@ namespace Prg_Assg_CASY
                     }
                     else if (choice == 2)
                     {
-
+                        DisplayPersonDetails(personList);
                     }
                 }
                 else
@@ -417,6 +417,22 @@ namespace Prg_Assg_CASY
                 }
             }
             Task.Delay(1500).Wait();
+        }
+        static void DisplayPersonDetails(List<Person> personList)
+        {
+            Console.Write("Enter Name of Person you are searching for: ");
+            string searchedName = Console.ReadLine();
+            foreach (Person p in personList)
+            {
+                if (p.Name.ToLower() == searchedName.ToLower())
+                {
+                    Console.WriteLine(p);
+                   
+                    Task.Delay(1500).Wait();
+                    break;
+                }
+            }
+            Console.WriteLine("Name of Person '" + searchedName + "' could not be found. Please enter a Valid Name...");
         }
     }
 }
