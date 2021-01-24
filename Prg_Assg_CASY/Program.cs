@@ -39,25 +39,43 @@ namespace Prg_Assg_CASY
             //Creation of list to store csv file 
             List<Person> personList = new List<Person>();
             List<BusinessLocation> businessLocationList = new List<BusinessLocation>();
-
             //IncludePerson(personList, shnfacilityList);
             IncludeBusinessLocation(businessLocationList);
             IncludePerson(personList, shnfacilityList);
-//Loading of the different Menus (MainMenu, GeneralMenu, SafeEntry, TravelEntry) 
-            // Load MainMenu page 
+
+            //Loading of the different Menus (MainMenu, GeneralMenu, SafeEntry, TravelEntry) 
+            // Load MainMenu page
+            MainMenu();
+            
+        }
+//Creation of Menus  (MainMenu, GeneralMenu, SafeEntry, TravelEntry) 
+        // Creation of the MainMenu for users to navigate through other functions 
+        static void MainMenu()
+        {
             bool display = true;
             while (display == true)
             {
-                int choice = 50; //Dummy value
+                int choice = 50; //dummy value
+                Console.WriteLine("***************************************************************");// Format of the Main Menu 
+                Console.WriteLine("*                                                             *");
+                Console.WriteLine("*                 COVID-19 Monitoring System                  *");
+                Console.WriteLine("*                                                             *");
+                Console.WriteLine("***************************************************************");
+                Console.WriteLine("==========Main Menu==========");
+                Console.WriteLine("(1) General "); // A GeneralMenu method is created to display a sepoerate menu 
+                Console.WriteLine("(2) SafeEntry/TraceTogether"); // A SafeEntryMenu method is created to display a seperate menu 
+                Console.WriteLine("(3) TravelEntry"); // A TravelntryMenu method is created to display a seperate menu 
+                Console.WriteLine("(4) Exit");// Exit the application 
+                Console.WriteLine("=============================");
                 try
                 {
-                    MainMenu();
                     Console.Write("Options: ");
                     choice = Convert.ToInt32(Console.ReadLine());
                     Console.WriteLine();
                 }
                 catch (FormatException ex)
                 {
+                    Console.WriteLine("Invalid option selected!");
                     Console.Write("Exception details: ");
                     Console.WriteLine(ex.Message);
                     Console.WriteLine("Choose from either Options 1, 2, 3, or 4...");
@@ -77,11 +95,6 @@ namespace Prg_Assg_CASY
                     {
                         TravelEntryMenu();
                     }
-                    else
-                    {
-                        Console.WriteLine("Invalid option selected!");
-                        Console.WriteLine("Choose from either Options 1, 2, 3, or 4...");
-                    }
                 }
                 else
                 {
@@ -89,21 +102,35 @@ namespace Prg_Assg_CASY
                     Console.WriteLine("Thank you! Bye...");
                 }
             }
+            
+        }
 
-            //Load General Menu page 
-            bool displayGeneral = true;
-            while (displayGeneral == true)
+        static void GeneralMenu()
+        {
+            bool displaygeneral = true;
+            while (displaygeneral == true)
             {
-                int choice = 50; //Dummy value
+                int choice = 50;// dummy value
+                Console.WriteLine();
+                Console.WriteLine("***************************************************************");
+                Console.WriteLine("*                                                             *");
+                Console.WriteLine("*                         General Menu                        *");
+                Console.WriteLine("*                                                             *");
+                Console.WriteLine("***************************************************************");
+                Console.WriteLine("======== Menu Options =======");
+                Console.WriteLine("(1) List all Visitors");
+                Console.WriteLine("(2) List Person Details");
+                Console.WriteLine("(3) Back to Main Menu");
+                Console.WriteLine("=============================");
                 try
                 {
-                    GeneralMenu();
                     Console.Write("Options: ");
                     choice = Convert.ToInt32(Console.ReadLine());
                     Console.WriteLine();
                 }
                 catch (FormatException ex)
                 {
+                    Console.WriteLine("Invalid option selected!");
                     Console.Write("Exception details: ");
                     Console.WriteLine(ex.Message);
                     Console.WriteLine("Choose from either Options 1, 2, 3, 4 or 5...");
@@ -113,7 +140,61 @@ namespace Prg_Assg_CASY
                 {
                     if (choice == 1)
                     {
-                        
+
+                    }
+                    else if (choice == 2)
+                    {
+
+                    }
+                }
+                else
+                {
+                    displaygeneral = false;
+                    MainMenu();
+                }
+
+            }
+           
+        }
+
+        static void SafeEntryMenu() // Menu to allow user to navigate through the functions of SafeEntry
+        {
+            bool displaySafeEntry = true;
+            while (displaySafeEntry == true)
+            {
+                int choice = 50; //dummy value
+                Console.WriteLine();
+                Console.WriteLine("***************************************************************");
+                Console.WriteLine("*                                                             *");
+                Console.WriteLine("*                          SafeEntry                          *");
+                Console.WriteLine("*                                                             *");
+                Console.WriteLine("***************************************************************");
+                Console.WriteLine("========== Menu Options ==========");
+                Console.WriteLine("(1) Assign/Replace your TraceTogetherToken ");
+                Console.WriteLine("(2) List all Business Locations");
+                Console.WriteLine("(3) Edit all Business Locations");
+                Console.WriteLine("(4) Check-In ");
+                Console.WriteLine("(5) Check-Out ");
+                Console.WriteLine("(6) Back to Main Menu ");
+                try
+                {
+                    Console.Write("Options: ");
+                    choice = Convert.ToInt32(Console.ReadLine());
+                    Console.WriteLine();
+                }
+                catch (FormatException ex)
+                {
+                    Console.WriteLine("Invalid option selected!");
+                    Console.Write("Exception details: ");
+                    Console.WriteLine(ex.Message);
+                    Console.WriteLine("Choose from either Options 1, 2, 3, 4, 5 or 6..");
+                    Console.WriteLine();
+                }
+                if (choice != 6)
+                {
+                    if (choice == 1)
+                    {
+
                     }
                     else if (choice == 2)
                     {
@@ -123,68 +204,22 @@ namespace Prg_Assg_CASY
                     {
 
                     }
+                    else if (choice == 4)
+                    {
 
-                    else
+                    }
+                    else if (choice == 5)
                     {
 
                     }
                 }
                 else
                 {
-                    display = false;
-                    Console.WriteLine("Returning back to Main Menu...");
-                    Task.Delay(1000).Wait();
+                    displaySafeEntry = false;
                     MainMenu();
                 }
-
             }
-        }
-//Creation of Menus  (MainMenu, GeneralMenu, SafeEntry, TravelEntry) 
-        // Creation of the MainMenu for users to navigate through other functions 
-        static void MainMenu()
-        {
-            Console.WriteLine("***************************************************************");// Format of the Main Menu 
-            Console.WriteLine("*                                                             *");
-            Console.WriteLine("*                 COVID-19 Monitoring System                  *");
-            Console.WriteLine("*                                                             *");
-            Console.WriteLine("***************************************************************");
-            Console.WriteLine("==========Main Menu==========");
-            Console.WriteLine("(1) General "); // A GeneralMenu method is created to display a sepoerate menu 
-            Console.WriteLine("(2) SafeEntry/TraceTogether"); // A SafeEntryMenu method is created to display a seperate menu 
-            Console.WriteLine("(3) TravelEntry"); // A TravelntryMenu method is created to display a seperate menu 
-            Console.WriteLine("(4) Exit");// Exit the application 
-            Console.WriteLine("=============================");
-        }
-
-        static void GeneralMenu()
-        {
-            Console.WriteLine("***************************************************************");
-            Console.WriteLine("*                                                             *");
-            Console.WriteLine("*                         General Menu                        *");
-            Console.WriteLine("*                                                             *");
-            Console.WriteLine("***************************************************************");
-            Console.WriteLine("======== Menu Options =======");
-            Console.WriteLine("(1) List all Visitors");
-            Console.WriteLine("(2) List Person Details");
-            Console.WriteLine("(3) Back to Main Menu");
-            Console.WriteLine("=============================");
-        }
-
-        static void SafeEntryMenu() // Menu to allow user to navigate through the functions of SafeEntry
-        {
-            Console.WriteLine("***************************************************************");
-            Console.WriteLine("*                                                             *");
-            Console.WriteLine("*                          SafeEntry                          *");
-            Console.WriteLine("*                                                             *");
-            Console.WriteLine("***************************************************************");
-            Console.WriteLine("");
-            Console.WriteLine("========== Menu Options ==========");
-            Console.WriteLine("(1) Assign/Replace your TraceTogetherToken ");
-            Console.WriteLine("(2) List all Business Locations");
-            Console.WriteLine("(3) Edit all Business Locations");
-            Console.WriteLine("(4) Check-In ");
-            Console.WriteLine("(5) Check-Out ");
-            Console.WriteLine("(6) Back to Main Menu ");
+            
             /*Console.WriteLine("Please Enter your name: ");
             string SafeEntryName = Convert.ToString(Console.ReadLine());
             SearchName(personList, Name);*/
@@ -194,26 +229,67 @@ namespace Prg_Assg_CASY
         {
 
         }
-    }
-
         static void TravelEntryMenu()
         {
-            Console.WriteLine("***************************************************************");
-            Console.WriteLine("*                                                             *");
-            Console.WriteLine("*                         TravelEntry                         *");
-            Console.WriteLine("*                                                             *");
-            Console.WriteLine("***************************************************************");
-            Console.WriteLine("");
-            Console.WriteLine("========== Menu Options ==========");
+            bool displayTravelEntry = true;
+            while (displayTravelEntry == true)
+            {
+                int choice = 50; //dummy value
+                Console.WriteLine();
+                Console.WriteLine("***************************************************************");
+                Console.WriteLine("*                                                             *");
+                Console.WriteLine("*                         TravelEntry                         *");
+                Console.WriteLine("*                                                             *");
+                Console.WriteLine("***************************************************************");
+                Console.WriteLine("========== Menu Options ==========");
+                Console.WriteLine("(1) List all SHN Facilities");
+                Console.WriteLine("(2) Create Visitor");
+                Console.WriteLine("(3) Create TravelEntry Record");
+                Console.WriteLine("(4) Calculate SHN Charges");
+                Console.WriteLine("(5) Back to Main Menu");
+                try
+                {
+                    Console.Write("Options: ");
+                    choice = Convert.ToInt32(Console.ReadLine());
+                    Console.WriteLine();
+                }
+                catch (FormatException ex)
+                {
+                    Console.WriteLine("Invalid option selected!");
+                    Console.Write("Exception details: ");
+                    Console.WriteLine(ex.Message);
+                    Console.WriteLine("Choose from either Options 1, 2, 3, 4, or 5..");
+                    Console.WriteLine();
+                }
+                if (choice != 5)
+                {
+                    if (choice == 1)
+                    {
+
+                    }
+                    else if (choice == 2)
+                    {
+
+                    }
+                    else if (choice == 3)
+                    {
+
+                    }
+                    else if (choice == 4)
+                    {
+
+                    }
+                }
+                else
+                {
+                    displayTravelEntry = false;
+                    MainMenu();
+                }
+
+            }
+           
         }
-
-
-
-
-
-
-
-
+    
 //Reading of CSV files         
         //Reading of Person.csv file using System.IO
         static void IncludePerson(List<Person> pList, List<SHNFacility> shnList)
@@ -273,7 +349,11 @@ namespace Prg_Assg_CASY
                             {
                                 TE.IsPaid = true;
                             }
-                            TE.IsPaid = false;
+                            else
+                            {
+                                TE.IsPaid = false;
+                            }
+                            
                         }
 
                         //if (DateTime.TryParseExact(matchText, "dd MMM yyyy", new CultureInfo("en-US"),
