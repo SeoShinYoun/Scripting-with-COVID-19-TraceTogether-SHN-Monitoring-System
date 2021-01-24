@@ -419,6 +419,7 @@ namespace Prg_Assg_CASY
         // option 2 of GeneralMenu to ask for person to enter name to  diaplay person details 
         static void DisplayPersonDetails(List<Person> personList)
         {
+            bool isFound = false;
             Console.Write("Enter Name of Person you are searching for: ");
             string searchedName = Console.ReadLine();
             foreach (Person p in personList)
@@ -426,12 +427,16 @@ namespace Prg_Assg_CASY
                 if (p.Name.ToLower() == searchedName.ToLower())
                 {
                     Console.WriteLine(p);
-                   
+                    isFound = true;
                     Task.Delay(1500).Wait();
                     break;
                 }
             }
-            Console.WriteLine("Name of Person '" + searchedName + "' could not be found. Please enter a Valid Name...");
+            if (isFound == false)
+            {
+                Console.WriteLine("Name of Person '" + searchedName + "' could not be found. Please enter a Valid Name...");
+            }
+            
         }
 // Methods for option 2 of MainMenu (SafeEntry Menu) 
        // option 1 of SafeEntry menu to Assign / Replace TraceTogetherToken 
