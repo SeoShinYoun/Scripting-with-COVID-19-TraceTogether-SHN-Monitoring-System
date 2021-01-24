@@ -420,6 +420,7 @@ namespace Prg_Assg_CASY
         }
         static void DisplayPersonDetails(List<Person> personList)
         {
+            bool isFound = false;
             Console.Write("Enter Name of Person you are searching for: ");
             string searchedName = Console.ReadLine();
             foreach (Person p in personList)
@@ -427,12 +428,16 @@ namespace Prg_Assg_CASY
                 if (p.Name.ToLower() == searchedName.ToLower())
                 {
                     Console.WriteLine(p);
-                   
+                    isFound = true;
                     Task.Delay(1500).Wait();
                     break;
                 }
             }
-            Console.WriteLine("Name of Person '" + searchedName + "' could not be found. Please enter a Valid Name...");
+            if (isFound == false)
+            {
+                Console.WriteLine("Name of Person '" + searchedName + "' could not be found. Please enter a Valid Name...");
+            }
+            
         }
     }
 }
