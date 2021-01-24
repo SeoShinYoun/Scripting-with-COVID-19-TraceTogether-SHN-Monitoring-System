@@ -466,6 +466,7 @@ namespace Prg_Assg_CASY
             for (int i = 0; i < businessLocationList.Count; i++)
             {
                 Console.WriteLine(businessLocationList[i]);
+                Console.WriteLine("");               
             }
             Task.Delay(1500).Wait();
         }
