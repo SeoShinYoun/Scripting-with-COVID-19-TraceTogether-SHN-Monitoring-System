@@ -426,23 +426,24 @@ namespace Prg_Assg_CASY
         static void DisplayPersonDetails(List<Person> personList)
         {
             bool isFound = false;
-            Console.Write("Enter Name of Person you are searching for: ");
+            Console.Write("Enter Name of person you are searching for: "); // Asking for user's input for name to be checked. 
             string searchedName = Console.ReadLine();
             foreach (Person p in personList)
             {
-                if (p.Name.ToLower() == searchedName.ToLower())
+                if (p.Name.ToLower() == searchedName.ToLower()) // When correct Name is being input by the user 
                 {
                     Console.WriteLine(p);
                     isFound = true;
-                    if (p is Resident)
+                    if (p is Resident) //When Person found in list is a resident 
                     {
                         if (string.IsNullOrEmpty(((Resident)p).Token.SerialNo))
                         {
-                            Console.WriteLine("No Trace Together Token Data Found...");
+                            Console.WriteLine("No Trace Together Token Data Found..."); // When Resident do not have a TraceTogetherToken 
                         }
                         else
                         {
-                            Console.WriteLine(((Resident)p).Token.ToString());
+                            Console.WriteLine("");
+                            Console.WriteLine(((Resident)p).Token.ToString()); // When Resident has a TraceTogetherToken 
                         }
                     }
                     Task.Delay(1500).Wait();
@@ -450,25 +451,100 @@ namespace Prg_Assg_CASY
             }
             if (isFound == false)
             {
-                Console.WriteLine("Name of person '" + searchedName + "' could not be found. Please enter a valid name...");
+                Console.WriteLine("Name of person '" + searchedName + "' could not be found. Please enter a valid name..."); // When an invalid name was being input by the user 
                 Task.Delay(1500).Wait();
             }
         }
-// Methods for option 2 of MainMenu (SafeEntry Menu) 
+ // Methods for option 2 of MainMenu (SafeEntry Menu) 
         // Option 1 of SafeEntry Menu to Assign / Replace TraceTogetherToken 
+        static void ReplaceTokenMenu(List<Person> personList)
+        {
+
+        }
         static void AssignReplaceToken(List<Person> personList)
         {
             bool isFound = false;
-            Console.WriteLine("Please Enter Your Name: ");
-            var SEName = Console.ReadLine();
-
+            Console.WriteLine("Enter your name: ");
+            string SEName = Console.ReadLine();
             foreach (Person p in personList)
             {
-                //if (SEName.ToLower() == )
+                if (p.Name.ToLower() == SEName.ToLower()) // When correct Name is being input by the user 
                 {
+                    isFound = true;
+                    Resident resident = (Resident)p;
+                    if (p is Resident) //When Person found in list is a resident 
+                    {
+                        if (string.IsNullOrEmpty(((Resident)p).Token.SerialNo))
+                        {
+                            Console.WriteLine("===============================================");
+                            Console.WriteLine("There was no Trace Together Token Data Found..."); // When Resident do not have a TraceTogetherToken 
+                            Console.WriteLine("===============================================");
+                            Console.WriteLine("Would you like to be assigned a token? ");
+                            Console.WriteLine("(1) Yes");
+                            Console.WriteLine("(2) No");
+                            Console.WriteLine("Option: ");
+                            string option = Console.ReadLine();
+                            while (true)
+                            {
+                                if (option is "1")
+                                {
+                                    resident.Token.ReplaceToken(resident.Token.SerialNo, resident.Token.CollectionLocation);
+                                }
+                                else if (option is "2")
+                                {
+                                    SafeEntryMenu(personList);
+                                }
+                            }
 
+                        }
+                        else
+                        {
+                            while (true)
+                            {
+                                Console.WriteLine("====================================================");
+                                Console.WriteLine("Hi " + SEName +" ! Your Trace Together Token Data was Found!");
+                                Console.WriteLine("====================================================");
+                                Console.WriteLine(((Resident)p).Token.ToString()); // When Resident has a TraceTogetherToken
+                                Console.WriteLine("====================================================");
+                                Console.WriteLine("(1) Check for eligibilty to replace token");
+                                Console.WriteLine("(2) Replace Token");
+                                Console.WriteLine("(3) Go Back");
+                                Console.WriteLine("Option: ");
+                                string ReplaceOption = Console.ReadLine();
+                                if (ReplaceOption is "1")
+                                {
+                                    resident.Token.IsEligibleForReplacement();
+
+                                }
+                                else if (ReplaceOption is "2")
+                                {
+                                    if (resident.Token.IsEligibleForReplacement()== true)
+                                    {
+                                        resident.Token.ReplaceToken(resident.Token.SerialNo, resident.Token.CollectionLocation);
+                                    }
+                                    else
+                                    {
+                                        SafeEntryMenu(personList);
+                                    }
+                                }
+                                else
+                                {
+                                    SafeEntryMenu(personList);
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Sorry" + SEName + "You are not a Resident in Singapore. You will not have or be assigned a Trace Together Token. ");
+                    }
                 }
             }
+            if (isFound == false)
+            {
+                Console.WriteLine("Name of person '" + SEName + "' could not be found. Please enter a valid name..."); // When an invalid name was being input by the user 
+                Task.Delay(1500).Wait();
+            }          
         }
         // Option 2 of SafeEntry Menu to Display all Business Locations 
         static void DisplayAllBusinessLocation(List<BusinessLocation> businessLocationList)
