@@ -40,7 +40,7 @@ namespace Prg_Assg_CASY
             LastLeftCountry = aLastLeftCountry;
         }
 
-        public override double CalculateSHNCharges()
+        /*public override double CalculateSHNCharges()
         {
             double charge;
             foreach(TravelEntry TE in TravelEntryList)
@@ -59,7 +59,7 @@ namespace Prg_Assg_CASY
                 }
                 return charge *=  1.07;
             }
-        }
+        }*/
 
         public override string ToString()
         {

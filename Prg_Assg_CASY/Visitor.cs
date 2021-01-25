@@ -31,7 +31,7 @@ namespace Prg_Assg_CASY
             Nationality = aNationality;
         }
 
-        public override double CalculateSHNCharges()
+        /*public override double CalculateSHNCharges()
         {
             foreach (TravelEntry TE in TravelEntryList)
             {
@@ -47,7 +47,7 @@ namespace Prg_Assg_CASY
                 }
                 return charge *= 1.07;
             }
-        }
+        }*/
 
         public override string ToString()
         {
