@@ -647,7 +647,7 @@ namespace Prg_Assg_CASY
                     }
                     Console.WriteLine("");
                     Console.WriteLine("=========================================");
-                    Console.WriteLine("Business Location to Check Out: ");
+                    Console.WriteLine("Business Location(s) to Check Out: ");
                     int SEBLOption = Convert.ToInt32(Console.ReadLine()); // To store the users choice of shop from 1 to 4 
                     SEBLOption = SEBLOption - 1; // To get index of the business locations 
                     Task.Delay(1500).Wait();
