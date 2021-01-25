@@ -33,7 +33,20 @@ namespace Prg_Assg_CASY
 
         public override double CalculateSHNCharges()
         {
-            throw new NotImplementedException();
+            foreach (TravelEntry TE in TravelEntryList)
+            {
+                double charge;
+                if (TE.LastCountyOfEmbarkation == "Vietnam" || TE.LastCountyOfEmbarkation == "New Zealand" || TE.LastCountyOfEmbarkation == "MACAO SAR")
+                {
+                    charge = 80;
+                }
+                else
+                {
+                    charge = 2000;
+                    
+                }
+                return charge *= 1.07;
+            }
         }
 
         public override string ToString()
