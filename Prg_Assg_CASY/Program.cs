@@ -436,6 +436,7 @@ namespace Prg_Assg_CASY
                     isFound = true;
                     if (p is Resident) //When Person found in list is a resident 
                     {
+                        Console.WriteLine();
                         if (string.IsNullOrEmpty(((Resident)p).Token.SerialNo))
                         {
                             Console.WriteLine("No Trace Together Token Data Found..."); // When Resident do not have a TraceTogetherToken 
