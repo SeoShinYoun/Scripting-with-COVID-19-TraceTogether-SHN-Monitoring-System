@@ -660,11 +660,8 @@ namespace Prg_Assg_CASY
                         Console.WriteLine("checked out at {0}", s.CheckOut);
                         Console.WriteLine("-----------------------------------------");
                     }
-
-
                 }
             }
-
             if (isFound == false)
             {
                 Console.WriteLine("Name of person '" + SEName + "' could not be found. Please enter a valid name..."); // When an invalid name was being input by the user 
