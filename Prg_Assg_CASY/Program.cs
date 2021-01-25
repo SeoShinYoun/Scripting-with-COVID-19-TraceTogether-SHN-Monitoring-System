@@ -436,6 +436,7 @@ namespace Prg_Assg_CASY
                     isFound = true;
                     if (p is Resident)
                     {
+                        Console.WriteLine();
                         if (string.IsNullOrEmpty(((Resident)p).Token.SerialNo))
                         {
                             Console.WriteLine("No Trace Together Token Data Found...");
