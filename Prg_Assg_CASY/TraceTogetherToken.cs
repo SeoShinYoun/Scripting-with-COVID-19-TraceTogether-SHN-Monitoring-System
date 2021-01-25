@@ -63,7 +63,7 @@ namespace Prg_Assg_CASY
         public void ReplaceToken(string sn, string cl)
         {
             System.Random ran5 = new System.Random();
-            sn = "T" + ran5.Next(10000,99999); //Token Serial number where 5 diogits are generated randomly for the new token 
+            int newSN = ran5.Next(10000,99999); //Token Serial number where 5 diogits are generated randomly for the new token 
 
             Console.WriteLine("Enter the Location where you would like to collect your new token: ");
             CollectionLocation = Console.ReadLine();
@@ -75,7 +75,7 @@ namespace Prg_Assg_CASY
 
         public override string ToString()
         {
-            return "\nSerial Number: " + SerialNo + "\nExpiry Date: " + ExpiryDate + "\nLocation last Collected: " + CollectionLocation; 
+            return "Serial Number: " + SerialNo + "\nExpiry Date: " + ExpiryDate + "\nLocation last Collected: " + CollectionLocation; 
         }
     }
 }
