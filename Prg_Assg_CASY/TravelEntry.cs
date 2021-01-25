@@ -84,7 +84,6 @@ namespace Prg_Assg_CASY
             Console.WriteLine("The Length of SHN Duration is: " + duration + " Days");
             ShnEndDate = EntryDate.AddDays(duration);
             Console.WriteLine("The SHN End Date: " + ShnEndDate.ToString("dd/MM/yyyy"));
-            
         }
 
         public override string ToString()

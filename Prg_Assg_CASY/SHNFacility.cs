@@ -70,16 +70,16 @@ namespace Prg_Assg_CASY
             double cost = 50 ; // Base Fare and for further calculations
             if (entryMode == "Air")
             {
-                cost = cost * DistFromAirCheckpoint * 0.22;
+                cost = cost + DistFromAirCheckpoint * 0.22;
                
             }
             else if (entryMode == "Sea")
             {
-                cost = cost * DistFromSeaCheckpoint * 0.22;
+                cost = cost + DistFromSeaCheckpoint * 0.22;
             }
             else if (entryMode == "Land")
             {
-                cost = cost * DistFromLandCheckpoint * 0.22;
+                cost = cost + DistFromLandCheckpoint * 0.22;
             }
             else
             {
