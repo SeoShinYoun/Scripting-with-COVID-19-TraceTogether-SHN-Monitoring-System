@@ -45,12 +45,12 @@ namespace Prg_Assg_CASY
 
             //Loading of the different Menus (MainMenu, GeneralMenu, SafeEntry, TravelEntry) 
             // Load MainMenu page
-            MainMenu(personList);
+            MainMenu(personList,businessLocationList);
 
         }
  //Creation of Menus  (MainMenu, GeneralMenu, SafeEntry, TravelEntry) 
         // Creation of the MainMenu for users to navigate through other functions 
-        static void MainMenu(List<Person> personList)
+        static void MainMenu(List<Person> personList, List<BusinessLocation> businessLocationList)
         {
             bool display = true;
             while (display == true)
@@ -85,15 +85,15 @@ namespace Prg_Assg_CASY
                 {
                     if (choice == 1)
                     {
-                        GeneralMenu(personList);
+                        GeneralMenu(personList, businessLocationList);
                     }
                     else if (choice == 2)
                     {
-                        SafeEntryMenu(personList);
+                        SafeEntryMenu(personList,businessLocationList);
                     }
                     else if (choice == 3)
                     {
-                        TravelEntryMenu(personList);
+                        TravelEntryMenu(personList,businessLocationList);
                     }
                 }
                 else
@@ -105,7 +105,7 @@ namespace Prg_Assg_CASY
 
         }
 
-        static void GeneralMenu(List<Person> personList)
+        static void GeneralMenu(List<Person> personList, List<BusinessLocation> businessLocationList)
         {
             bool displaygeneral = true;
             while (displaygeneral == true)
@@ -150,7 +150,7 @@ namespace Prg_Assg_CASY
                 else
                 {
                     displaygeneral = false;
-                    MainMenu(personList);
+                    MainMenu(personList, businessLocationList);
                     Task.Delay(1500).Wait();
                 }
 
@@ -158,9 +158,8 @@ namespace Prg_Assg_CASY
 
         }
 
-        static void SafeEntryMenu(List<Person> personList) // Menu to allow user to navigate through the functions of SafeEntry
+        static void SafeEntryMenu(List<Person> personList, List<BusinessLocation> businessLocationList) // Menu to allow user to navigate through the functions of SafeEntry
         {
-            List<BusinessLocation> businessLocationList = new List<BusinessLocation>();
             bool displaySafeEntry = true;
             while (displaySafeEntry == true)
             {
@@ -197,31 +196,30 @@ namespace Prg_Assg_CASY
                 {
                     if (choice == 1)
                     {
-                        AssignReplaceToken(personList);
+                        AssignReplaceToken(personList,businessLocationList);
                     }
                     else if (choice == 2)
                     {
-                        IncludeBusinessLocation(businessLocationList);
                         DisplayAllBusinessLocation(businessLocationList);
                     }
                     else if (choice == 3)
                     {
-
+                        EditBusinessCapacity(businessLocationList);
                     }
                     else if (choice == 4)
                     {
-
+                        CheckIn(personList, businessLocationList);
                     }
                     else if (choice == 5)
                     {
-
+                        CheckOut(personList, businessLocationList);
                     }
                 }
                 else
                 {
                     displaySafeEntry = false;
                     Task.Delay(1500).Wait();
-                    MainMenu(personList);
+                    MainMenu(personList,businessLocationList);
                 }
             }
 
@@ -230,7 +228,7 @@ namespace Prg_Assg_CASY
             SearchName(personList, Name);*/
         }
 
-        static void TravelEntryMenu(List<Person> personList)
+        static void TravelEntryMenu(List<Person> personList, List<BusinessLocation> businessLocationList)
         {
             bool displayTravelEntry = true;
             while (displayTravelEntry == true)
@@ -286,7 +284,7 @@ namespace Prg_Assg_CASY
                 {
                     displayTravelEntry = false;
                     Task.Delay(1500).Wait();
-                    MainMenu(personList);
+                    MainMenu(personList,businessLocationList);
                 }
 
             }
@@ -437,7 +435,7 @@ namespace Prg_Assg_CASY
                     if (p is Resident) //When Person found in list is a resident 
                     {
                         Console.WriteLine();
-                        if (string.IsNullOrEmpty(((Resident)p).Token.SerialNo))
+                        if (string.IsNullOrEmpty(((Resident)p).Token.SerialNo)) 
                         {
                             Console.WriteLine("No Trace Together Token Data Found..."); // When Resident do not have a TraceTogetherToken 
                         }
@@ -458,19 +456,14 @@ namespace Prg_Assg_CASY
         }
  // Methods for option 2 of MainMenu (SafeEntry Menu) 
         // Option 1 of SafeEntry Menu to Assign / Replace TraceTogetherToken 
-        static void ReplaceTokenMenu(List<Person> personList)
-        {
-
-        }
-        static void AssignReplaceToken(List<Person> personList)
+        static void AssignReplaceToken(List<Person> personList, List<BusinessLocation> businessLocationList)
         {
             bool isFound = false;
             Console.WriteLine("Enter your name: ");
-            string SEName = Console.ReadLine();
+            string ttName = Console.ReadLine();
             foreach (Person r in personList)
             {
-                //Resident resident = (Resident)p;
-                if (r.Name.ToLower() == SEName.ToLower()) // When correct Name is being input by the user 
+                if (r.Name.ToLower() == ttName.ToLower()) // When correct Name is being input by the user 
                 {
                     isFound = true;
                     if (r is Resident) //When Person found in list is a resident 
@@ -491,11 +484,11 @@ namespace Prg_Assg_CASY
                                 if (option is "1")
                                 {
                                     resident.Token.ReplaceToken(resident.Token.SerialNo, resident.Token.CollectionLocation); //To make a new token for the resident 
-                                    MainMenu(personList); // Navigate the user back to the Main Menu 
+                                    MainMenu(personList, businessLocationList); // Navigate the user back to the Main Menu 
                                 }
                                 else if (option is "2")
                                 {
-                                    SafeEntryMenu(personList); // To go back to the Safe Entry Menu 
+                                    SafeEntryMenu(personList,businessLocationList); // To go back to the Safe Entry Menu 
                                 }
                             }
                         }
@@ -504,7 +497,7 @@ namespace Prg_Assg_CASY
                             while (true)
                             {
                                 Console.WriteLine("====================================================");
-                                Console.WriteLine("Hi " + SEName +" ! Your Trace Together Token Data was Found!");
+                                Console.WriteLine("Hi " + ttName +" ! Your Trace Together Token Data was Found!");
                                 Console.WriteLine("====================================================");
                                 Console.WriteLine(((Resident)r).Token.ToString()); // When Resident has a TraceTogetherToken
                                 Console.WriteLine("====================================================");
@@ -520,33 +513,33 @@ namespace Prg_Assg_CASY
                                 }
                                 else if (ReplaceOption is "2")
                                 {
-                                    if (resident.Token.IsEligibleForReplacement()== true)
+                                    if (resident.Token.IsEligibleForReplacement() == true)
                                     {
 
                                         resident.Token.ReplaceToken(resident.Token.SerialNo, resident.Token.CollectionLocation);
-                                        MainMenu(personList);
+                                        MainMenu(personList,businessLocationList);
                                     }
                                     else
                                     {
-                                        SafeEntryMenu(personList);
+                                        SafeEntryMenu(personList,businessLocationList);
                                     }
                                 }
                                 else
                                 {
-                                    SafeEntryMenu(personList);
+                                    SafeEntryMenu(personList,businessLocationList);
                                 }
                             }
                         }
                     }
                     else
                     {
-                        Console.WriteLine("Sorry " + SEName + " You are not a Resident in Singapore. You will not have or be assigned a Trace Together Token. "); // A visitor is not entitled to 
+                        Console.WriteLine("Sorry " + ttName + " You are not a Resident in Singapore. You will not have or be assigned a Trace Together Token. "); // A visitor is not entitled to 
                     }
                 }
             }
             if (isFound == false)
             {
-                Console.WriteLine("Name of person '" + SEName + "' could not be found. Please enter a valid name..."); // When an invalid name is being input by the user 
+                Console.WriteLine("Name of person '" + ttName + "' could not be found. Please enter a valid name..."); // When an invalid name is being input by the user 
                 Task.Delay(1500).Wait();
             }          
         }
@@ -557,6 +550,7 @@ namespace Prg_Assg_CASY
             Console.WriteLine("--------------------------- All Business Locations---------------------------");
             for (int i = 0; i < businessLocationList.Count; i++)
             {
+                Console.WriteLine(i + 1 + ".................................");
                 Console.WriteLine(businessLocationList[i]);
                 Console.WriteLine("");
             }
@@ -564,21 +558,118 @@ namespace Prg_Assg_CASY
         }
 
         // Option 3 of SafeEntry Menu to Edit Business Location Capacity
-        static void EditBusinessCapacity(List<BusinessLocation> BusinessLocationList)
+        static void EditBusinessCapacity(List<BusinessLocation> businessLocationList)
         {
-            Console.WriteLine("");
+            Console.WriteLine("--------------------------- All Business Locations---------------------------");
+            for (int i = 0; i < businessLocationList.Count; i++)
+            {
+                Console.WriteLine(i + 1 + ".................................");
+                Console.WriteLine(businessLocationList[i]);
+                Console.WriteLine("");               
+            }
+            Console.WriteLine("=========================================");
+            Console.WriteLine("Business Location edit option: ");
+            int BLOption = Convert.ToInt32(Console.ReadLine()); // To store the users choice of shop from 1 to 4 
+            BLOption = BLOption - 1; // To get index of the business locations 
+            Console.WriteLine("Edit New maximum capacity: ");
+            int BLMaxCapacity = Convert.ToInt32(Console.ReadLine()); // To store users option of new maximum capacity 
+            businessLocationList[BLOption].MaximumCapacity = BLMaxCapacity; // To change the business location max capacity 
+            Console.WriteLine(businessLocationList[BLOption].ToString()); // To update the new business location max capacity 
         }
 
         // option 4 of SafeEntry Menu to Check-In 
-        static void CheckIn(List<BusinessLocation> BusinessLocationList)
+        static void CheckIn(List<Person> personList, List<BusinessLocation> businessLocationList)
         {
+            bool isFound = false;
+            Console.WriteLine("Enter your name: ");
+            string SEName = Console.ReadLine();
+            foreach (Person p in personList)
+            {
+                if (p.Name.ToLower() == SEName.ToLower()) // When correct Name is being input by the user 
+                {
+                    isFound = true;
+                    Console.WriteLine("--------------------------- All Business Locations---------------------------");
+                    for (int i = 0; i < businessLocationList.Count; i++)
+                    {
+                        Console.WriteLine(i + 1 + ".................................");
+                        Console.WriteLine(businessLocationList[i]);
+                        Console.WriteLine("");
+                    }
+                    Console.WriteLine("=========================================");
+                    Console.WriteLine("Business Location to Check In: ");
+                    int SEBLOption = Convert.ToInt32(Console.ReadLine()); // To store the users choice of shop from 1 to 4 
+                    SEBLOption = SEBLOption - 1; // To get index of the business locations 
+                    Task.Delay(1500).Wait();
+                    if (businessLocationList[SEBLOption].VisitorsNow < businessLocationList[SEBLOption].MaximumCapacity)
+                    {
+                        SafeEntry CheckIn = new SafeEntry(DateTime.Now, businessLocationList[SEBLOption]);
+                        businessLocationList[SEBLOption].VisitorsNow = businessLocationList[SEBLOption].VisitorsNow + 1;
+                        p.AddSafeEntry(CheckIn);
+                        Console.WriteLine("=============== Checked-In ==============");
+                        Console.WriteLine(CheckIn);
+                        Console.WriteLine("-----------------------------------------");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Business Location has reached Maximum Capacity. Try again in a while! ");
+                    }
+                }
 
+            }
+            if (isFound == false)
+            {
+                Console.WriteLine("Name of person '" + SEName + "' could not be found. Please enter a valid name..."); // When an invalid name was being input by the user 
+                Task.Delay(1500).Wait();
+            }
+            
         }
 
         // option 5 of SafeEntry Menu to Check-Out
-        static void CheckOut(List<BusinessLocation> BusinessLocationList)
+        static void CheckOut(List<Person> personList , List<BusinessLocation> businessLocationList)
         {
+            bool isFound = false;
+            Console.WriteLine("Enter your name: ");
+            string SEName = Console.ReadLine();
+            foreach (Person p in personList)
+            {
+                if (p.Name.ToLower() == SEName.ToLower()) // When correct Name is being input by the user 
+                {
+                    isFound = true;
+                    //DisplayAllBusinessLocation(businessLocationList);
+                    foreach (SafeEntry s in p.SafeEntryList)
+                    {
+                        for (int i = 0; i < p.SafeEntryList.Count; i++)
+                        {
+                            Console.WriteLine("-------------------- Business Location Not checked out --------------------");
+                            Console.WriteLine(i + 1 + ")");
+                            Console.WriteLine(s.ToString());
+                        }
+                    }
+                    Console.WriteLine("");
+                    Console.WriteLine("=========================================");
+                    Console.WriteLine("Business Location to Check Out: ");
+                    int SEBLOption = Convert.ToInt32(Console.ReadLine()); // To store the users choice of shop from 1 to 4 
+                    SEBLOption = SEBLOption - 1; // To get index of the business locations 
+                    Task.Delay(1500).Wait();
+                    foreach (SafeEntry s in p.SafeEntryList)
+                    {
+                        businessLocationList[SEBLOption].VisitorsNow = businessLocationList[SEBLOption].VisitorsNow - 1;
+                        Console.WriteLine("\nNumber of Visitors Now: "+ businessLocationList[SEBLOption].VisitorsNow);
+                        Console.WriteLine("=============== Checked-Out ==============");
+                        s.PerformCheckOut();
+                        Console.WriteLine("checked out at {0}", s.CheckOut);
+                        Console.WriteLine("-----------------------------------------");
+                    }
 
+
+                }
+            }
+
+            if (isFound == false)
+            {
+                Console.WriteLine("Name of person '" + SEName + "' could not be found. Please enter a valid name..."); // When an invalid name was being input by the user 
+                Task.Delay(1500).Wait();
+            }
         }
 
 

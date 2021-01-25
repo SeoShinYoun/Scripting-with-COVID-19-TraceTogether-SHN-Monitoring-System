@@ -49,7 +49,7 @@ namespace Prg_Assg_CASY
 
         public override string ToString()
         {
-            return base.ToString() + "Location: " + Location + "\nCheck in time: " + CheckIn + "\ncheck out time: " + CheckOut;
+            return Location + "\n-----------------------------------------" +  "\nCheck in time: " + CheckIn;
         }
     }
 }

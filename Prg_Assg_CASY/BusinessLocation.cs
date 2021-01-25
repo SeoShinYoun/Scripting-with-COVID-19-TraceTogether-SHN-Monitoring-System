@@ -63,7 +63,7 @@ namespace Prg_Assg_CASY
 
         public override string ToString()
         {
-            return "Name of Business: " + BusinessName + "\nBranch Code: " + BranchCode + "\nMaximum Capacity: " + MaximumCapacity;
+            return "Name of Business: " + BusinessName + "\nBranch Code: " + BranchCode + "\nMaximum Capacity: " + MaximumCapacity + "\nNumber of Visitors Now: " + VisitorsNow;
         }
 
     }
