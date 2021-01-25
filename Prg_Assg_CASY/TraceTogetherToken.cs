@@ -58,7 +58,6 @@ namespace Prg_Assg_CASY
                 Console.WriteLine("You are eligble for a replacement of your Trace Together Token!");
                 return true;
             }
-            
         }
 
         public void ReplaceToken(string sn, string cl)

@@ -434,6 +434,17 @@ namespace Prg_Assg_CASY
                 {
                     Console.WriteLine(p);
                     isFound = true;
+                    if (p is Resident)
+                    {
+                        if (string.IsNullOrEmpty(((Resident)p).Token.SerialNo))
+                        {
+                            Console.WriteLine("No Trace Together Token Data Found...");
+                        }
+                        else
+                        {
+                            Console.WriteLine(((Resident)p).Token.ToString());
+                        }
+                    }
                     Task.Delay(1500).Wait();
                 }
             }
