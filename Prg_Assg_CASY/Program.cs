@@ -466,18 +466,19 @@ namespace Prg_Assg_CASY
             bool isFound = false;
             Console.WriteLine("Enter your name: ");
             string SEName = Console.ReadLine();
-            foreach (Person p in personList)
+            foreach (Person r in personList)
             {
-                if (p.Name.ToLower() == SEName.ToLower()) // When correct Name is being input by the user 
+                //Resident resident = (Resident)p;
+                if (r.Name.ToLower() == SEName.ToLower()) // When correct Name is being input by the user 
                 {
                     isFound = true;
-                    Resident resident = (Resident)p;
-                    if (p is Resident) //When Person found in list is a resident 
+                    if (r is Resident) //When Person found in list is a resident 
                     {
-                        if (string.IsNullOrEmpty(((Resident)p).Token.SerialNo))
+                        Resident resident = (Resident)r;
+                        if (string.IsNullOrEmpty(((Resident)r).Token.SerialNo))// When Resident do not have a TraceTogetherToken 
                         {
                             Console.WriteLine("===============================================");
-                            Console.WriteLine("There was no Trace Together Token Data Found..."); // When Resident do not have a TraceTogetherToken 
+                            Console.WriteLine("There was no Trace Together Token Data Found..."); 
                             Console.WriteLine("===============================================");
                             Console.WriteLine("Would you like to be assigned a token? ");
                             Console.WriteLine("(1) Yes");
@@ -488,14 +489,14 @@ namespace Prg_Assg_CASY
                             {
                                 if (option is "1")
                                 {
-                                    resident.Token.ReplaceToken(resident.Token.SerialNo, resident.Token.CollectionLocation);
+                                    resident.Token.ReplaceToken(resident.Token.SerialNo, resident.Token.CollectionLocation); //To make a new token for the resident 
+                                    MainMenu(personList); // Navigate the user back to the Main Menu 
                                 }
                                 else if (option is "2")
                                 {
-                                    SafeEntryMenu(personList);
+                                    SafeEntryMenu(personList); // To go back to the Safe Entry Menu 
                                 }
                             }
-
                         }
                         else
                         {
@@ -504,7 +505,7 @@ namespace Prg_Assg_CASY
                                 Console.WriteLine("====================================================");
                                 Console.WriteLine("Hi " + SEName +" ! Your Trace Together Token Data was Found!");
                                 Console.WriteLine("====================================================");
-                                Console.WriteLine(((Resident)p).Token.ToString()); // When Resident has a TraceTogetherToken
+                                Console.WriteLine(((Resident)r).Token.ToString()); // When Resident has a TraceTogetherToken
                                 Console.WriteLine("====================================================");
                                 Console.WriteLine("(1) Check for eligibilty to replace token");
                                 Console.WriteLine("(2) Replace Token");
@@ -520,7 +521,9 @@ namespace Prg_Assg_CASY
                                 {
                                     if (resident.Token.IsEligibleForReplacement()== true)
                                     {
+
                                         resident.Token.ReplaceToken(resident.Token.SerialNo, resident.Token.CollectionLocation);
+                                        MainMenu(personList);
                                     }
                                     else
                                     {
@@ -536,16 +539,17 @@ namespace Prg_Assg_CASY
                     }
                     else
                     {
-                        Console.WriteLine("Sorry" + SEName + "You are not a Resident in Singapore. You will not have or be assigned a Trace Together Token. ");
+                        Console.WriteLine("Sorry " + SEName + " You are not a Resident in Singapore. You will not have or be assigned a Trace Together Token. "); // A visitor is not entitled to 
                     }
                 }
             }
             if (isFound == false)
             {
-                Console.WriteLine("Name of person '" + SEName + "' could not be found. Please enter a valid name..."); // When an invalid name was being input by the user 
+                Console.WriteLine("Name of person '" + SEName + "' could not be found. Please enter a valid name..."); // When an invalid name is being input by the user 
                 Task.Delay(1500).Wait();
             }          
         }
+        
         // Option 2 of SafeEntry Menu to Display all Business Locations 
         static void DisplayAllBusinessLocation(List<BusinessLocation> businessLocationList)
         {
@@ -561,7 +565,7 @@ namespace Prg_Assg_CASY
         // Option 3 of SafeEntry Menu to Edit Business Location Capacity
         static void EditBusinessCapacity(List<BusinessLocation> BusinessLocationList)
         {
-
+            Console.WriteLine("");
         }
 
         // option 4 of SafeEntry Menu to Check-In 
@@ -575,6 +579,9 @@ namespace Prg_Assg_CASY
         {
 
         }
+
+
+
 
 // Methods for option 3 of MainMenu (TravelEntry Menu) 
         // option 1 of TravelEntry Menu 

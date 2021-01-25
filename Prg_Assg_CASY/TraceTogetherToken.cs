@@ -50,12 +50,16 @@ namespace Prg_Assg_CASY
 
             if (currentDate < diffOfOneMonth) /* If The current date is 'less than' which is not one month from the expiration date, the user would not be eligible for a trace together token replacement*/
             {
-                Console.WriteLine("You are not eligible for a replacement of your Trace Together Token!");
+                Console.WriteLine("--------------------------------------------------------------------");
+                Console.WriteLine("You are NOT eligible for a replacement of your Trace Together Token!");
+                Console.WriteLine("--------------------------------------------------------------------");
                 return false;
             }
             else /* Else if the current date is one month from the expiration date, the user would hence be available for the replacement of the Trace Together Token*/
             {
+                Console.WriteLine("---------------------------------------------------------------");
                 Console.WriteLine("You are eligble for a replacement of your Trace Together Token!");
+                Console.WriteLine("---------------------------------------------------------------");
                 return true;
             }
         }
@@ -64,13 +68,19 @@ namespace Prg_Assg_CASY
         {
             System.Random ran5 = new System.Random();
             int newSN = ran5.Next(10000,99999); //Token Serial number where 5 diogits are generated randomly for the new token 
-
+            SerialNo = "T" + newSN;
             Console.WriteLine("Enter the Location where you would like to collect your new token: ");
             CollectionLocation = Console.ReadLine();
 
             ExpiryDate = DateTime.Now.AddMonths(6);
 
             TraceTogetherToken tt = new TraceTogetherToken(SerialNo, CollectionLocation, ExpiryDate);
+            Console.WriteLine("");
+            Console.WriteLine("======================================================");
+            Console.WriteLine("Here are the details of your new Trace Together Token!");
+            Console.WriteLine("======================================================");
+            Console.WriteLine(tt.ToString());
+            Console.WriteLine("");
         }
 
         public override string ToString()
