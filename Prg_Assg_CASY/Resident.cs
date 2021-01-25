@@ -40,9 +40,9 @@ namespace Prg_Assg_CASY
             LastLeftCountry = aLastLeftCountry;
         }
 
-        /*public override double CalculateSHNCharges()
+        public override double CalculateSHNCharges()
         {
-            double charge;
+            /*double charge;
             foreach(TravelEntry TE in TravelEntryList)
             {
                 if (TE.LastCountyOfEmbarkation == "Vietnam" || TE.LastCountyOfEmbarkation == "New Zealand")
@@ -58,12 +58,13 @@ namespace Prg_Assg_CASY
                     charge = (200 + 20 + 1000)*1.07;
                 }
                 return charge *=  1.07;
-            }
-        }*/
+            }*/
+            return 0.0;
+        }
 
         public override string ToString()
         {
-            return "\nName of resident: " + Name + "\nAddress of resident: " + Address + "\nDate last travelled Overseas: " + LastLeftCountry;
+            return "Name of resident: " + Name + "\nAddress of resident: " + Address + "\nDate last travelled Overseas: " + LastLeftCountry;
         }
     }
 }

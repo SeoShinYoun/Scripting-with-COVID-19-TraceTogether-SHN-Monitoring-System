@@ -31,9 +31,9 @@ namespace Prg_Assg_CASY
             Nationality = aNationality;
         }
 
-        /*public override double CalculateSHNCharges()
+        public override double CalculateSHNCharges()
         {
-            foreach (TravelEntry TE in TravelEntryList)
+            /*foreach (TravelEntry TE in TravelEntryList)
             {
                 double charge;
                 if (TE.LastCountyOfEmbarkation == "Vietnam" || TE.LastCountyOfEmbarkation == "New Zealand" || TE.LastCountyOfEmbarkation == "MACAO SAR")
@@ -46,8 +46,10 @@ namespace Prg_Assg_CASY
                     
                 }
                 return charge *= 1.07;
-            }
-        }*/
+
+            }*/
+            return 0.0;
+        }
 
         public override string ToString()
         {

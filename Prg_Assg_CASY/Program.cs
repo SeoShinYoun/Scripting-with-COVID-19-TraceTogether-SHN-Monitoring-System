@@ -20,7 +20,7 @@ namespace Prg_Assg_CASY
             // Required for Basic Feature 1 and 2 to be loaded at the start of the program
             // Basic Feature 2 - Calling SHNFacility class API 
             List<SHNFacility> shnfacilityList = new List<SHNFacility>();
-            using (HttpClient client = new HttpClient())
+            /*using (HttpClient client = new HttpClient())
             {
                 client.BaseAddress = new Uri("https://covidmonitoringapiprg2.azurewebsites.net");
                 Task<HttpResponseMessage> responseTask = client.GetAsync("/facility");
@@ -33,7 +33,7 @@ namespace Prg_Assg_CASY
                     string data = readTask.Result;
                     shnfacilityList = JsonConvert.DeserializeObject<List<SHNFacility>>(data);
                 }
-            }
+            }*/
 
             //Basic Feature 1 - Loading of Person and Business Location Data
             //Creation of list to store csv file 
@@ -430,6 +430,8 @@ namespace Prg_Assg_CASY
             {
                 if (p.Name.ToLower() == searchedName.ToLower()) // When correct Name is being input by the user 
                 {
+                    Console.WriteLine("");
+                    Console.WriteLine("-------------------- Detail of Person --------------------");
                     Console.WriteLine(p);
                     isFound = true;
                     if (p is Resident) //When Person found in list is a resident 
@@ -441,7 +443,7 @@ namespace Prg_Assg_CASY
                         }
                         else
                         {
-                            Console.WriteLine("");
+                            Console.WriteLine("------------ Trace Together Token information ------------");
                             Console.WriteLine(((Resident)p).Token.ToString()); // When Resident has a TraceTogetherToken 
                         }
                     }
@@ -605,6 +607,7 @@ namespace Prg_Assg_CASY
                         SafeEntry CheckIn = new SafeEntry(DateTime.Now, businessLocationList[SEBLOption]);
                         businessLocationList[SEBLOption].VisitorsNow = businessLocationList[SEBLOption].VisitorsNow + 1;
                         p.AddSafeEntry(CheckIn);
+                        p.SafeEntryList.Add(CheckIn);
                         Console.WriteLine("=============== Checked-In ==============");
                         Console.WriteLine(CheckIn);
                         Console.WriteLine("-----------------------------------------");
@@ -636,14 +639,12 @@ namespace Prg_Assg_CASY
                 {
                     isFound = true;
                     //DisplayAllBusinessLocation(businessLocationList);
+                    Console.WriteLine("------------------- Business Location(s) Not checked out -------------------");
+                    Console.WriteLine("Choose options for the following [(1) ABC Spectacle Shop | (2) Cheap Goods Shop | (3) Big Shopping Centre | (4) Bubble Tea Shop]");
                     foreach (SafeEntry s in p.SafeEntryList)
                     {
-                        for (int i = 0; i < p.SafeEntryList.Count; i++)
-                        {
-                            Console.WriteLine("-------------------- Business Location Not checked out --------------------");
-                            Console.WriteLine(i + 1 + ")");
-                            Console.WriteLine(s.ToString());
-                        }
+                        Console.WriteLine(p.SafeEntryList.Count);
+                        
                     }
                     Console.WriteLine("");
                     Console.WriteLine("=========================================");
