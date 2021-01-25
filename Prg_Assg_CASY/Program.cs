@@ -641,10 +641,9 @@ namespace Prg_Assg_CASY
                     //DisplayAllBusinessLocation(businessLocationList);
                     Console.WriteLine("------------------- Business Location(s) Not checked out -------------------");
                     Console.WriteLine("Choose options for the following [(1) ABC Spectacle Shop | (2) Cheap Goods Shop | (3) Big Shopping Centre | (4) Bubble Tea Shop]");
-                    foreach (SafeEntry s in p.SafeEntryList)
+                    for (int i = 0; i <= p.SafeEntryList.Count; i++ )
                     {
-                        Console.WriteLine(p.SafeEntryList.Count);
-                        
+                        Console.WriteLine();
                     }
                     Console.WriteLine("");
                     Console.WriteLine("=========================================");
