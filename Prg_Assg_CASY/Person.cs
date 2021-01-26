@@ -22,22 +22,26 @@ namespace Prg_Assg_CASY
         public List<SafeEntry> SafeEntryList { get; set; }
         public List<TravelEntry> TravelEntryList { get; set; }
 
-        public Person() { }
+        public Person()
+        {
+            SafeEntryList = new List<SafeEntry>();
+            TravelEntryList = new List<TravelEntry>();
+        }
 
         public Person(string n)
         {
             Name = n;
+            SafeEntryList = new List<SafeEntry>();
+            TravelEntryList = new List<TravelEntry>();
         }
 
         public void AddTravelEntry(TravelEntry TE)
         {
-            TravelEntryList = new List<TravelEntry>();
             TravelEntryList.Add(TE);
         }
 
         public void AddSafeEntry(SafeEntry SE)
         {
-            SafeEntryList = new List<SafeEntry>();
             SafeEntryList.Add(SE);
         }
 
