@@ -258,8 +258,6 @@ namespace Prg_Assg_CASY
                     Console.WriteLine("Invalid option selected!");
                     Console.Write("Exception details: ");
                     Console.WriteLine(ex.Message);
-                    Console.WriteLine("Choose from either Options 1, 2, 3, 4, or 5..");
-                    Console.WriteLine();
                 }
                 if (choice != 5)
                 {
@@ -278,6 +276,10 @@ namespace Prg_Assg_CASY
                     else if (choice == 4)
                     {
 
+                    }
+                    else
+                    {
+                        Console.WriteLine("Choose from either Options 1, 2, 3, 4, or 5...");
                     }
                 }
                 else
@@ -310,9 +312,20 @@ namespace Prg_Assg_CASY
             string name = Console.ReadLine();
             Console.Write("Please Enter Your Passport Number: ");
             string passportNo = Console.ReadLine();
-            Console.WriteLine("Please Enter Your Nationality: ");
+            Console.Write("Please Enter Your Nationality: ");
             string nationality = Console.ReadLine();
             Visitor visitor = new Visitor(name, passportNo, nationality);
+            if (visitor != null)
+            {
+                Console.WriteLine();
+                Console.WriteLine("Visitor Object Successfully Created!");
+                Console.WriteLine(visitor);
+                Task.Delay(2000).Wait();
+            }
+            else
+            {
+                Console.WriteLine("Visitor Object Could Not Be Created...");
+            }
         }
 
         //Reading of CSV files         
