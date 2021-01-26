@@ -471,7 +471,7 @@ namespace Prg_Assg_CASY
                     if (r is Resident) //When Person found in list is a resident 
                     {
                         Resident resident = (Resident)r;
-                        if (string.IsNullOrEmpty(((Resident)r).Token.SerialNo))// When Resident do not have a TraceTogetherToken 
+                        if (string.IsNullOrEmpty(((Resident)r).Token.SerialNo))// When resident does not have an existing Trace Together Token 
                         {
                             Console.WriteLine("===============================================");
                             Console.WriteLine("There was no Trace Together Token Data Found..."); 
@@ -480,66 +480,68 @@ namespace Prg_Assg_CASY
                             Console.WriteLine("(1) Yes");
                             Console.WriteLine("(2) No");
                             Console.WriteLine("Option: ");
-                            string option = Console.ReadLine();
+                            string option = Console.ReadLine(); // store option of either (1) Yes or (2) NO 
                             while (true)
                             {
-                                if (option is "1")
+                                if (option is "1") //When user chooses option (1) Yes 
                                 {
                                     resident.Token.ReplaceToken(resident.Token.SerialNo, resident.Token.CollectionLocation); //To make a new token for the resident 
-                                    MainMenu(personList, businessLocationList); // Navigate the user back to the Main Menu 
+                                    SafeEntryMenu(personList, businessLocationList);// Navigate the user back to the SafeEntry Menu after token is being assigned
+                                    //MainMenu(personList, businessLocationList); // Navigate the user back to the Main Menu after token is being assigned 
                                 }
-                                else if (option is "2")
+                                else if (option is "2") //When User Chooses option (2) No 
                                 {
                                     SafeEntryMenu(personList,businessLocationList); // To go back to the Safe Entry Menu 
                                 }
                             }
                         }
-                        else
+                        else // When resident already has an existing Trace Togethger Token 
                         {
-                            while (true)
+                            while (true) 
                             {
                                 Console.WriteLine("====================================================");
                                 Console.WriteLine("Hi " + ttName +" ! Your Trace Together Token Data was Found!");
                                 Console.WriteLine("====================================================");
-                                Console.WriteLine(((Resident)r).Token.ToString()); // When Resident has a TraceTogetherToken
+                                Console.WriteLine(((Resident)r).Token.ToString()); // Print out existing Trace together Token details (Old Trace together Token detail) 
                                 Console.WriteLine("====================================================");
                                 Console.WriteLine("(1) Check for eligibilty to replace token");
                                 Console.WriteLine("(2) Replace Token");
                                 Console.WriteLine("(3) Go Back");
                                 Console.WriteLine("Option: ");
-                                string ReplaceOption = Console.ReadLine();
-                                if (ReplaceOption is "1")
+                                string ReplaceOption = Console.ReadLine();  // store option of either (1) Check for eligibility to replace token or (2) Replace Token or (3) Go Back
+                                if (ReplaceOption is "1") // When user chooses to (1) check for eligibility of their token
                                 {
                                     resident.Token.IsEligibleForReplacement();
 
                                 }
-                                else if (ReplaceOption is "2")
+                                else if (ReplaceOption is "2")// When user chooses to (2) replace token 
                                 {
-                                    if (resident.Token.IsEligibleForReplacement() == true)
+                                    if (resident.Token.IsEligibleForReplacement() == true) // When resident with existing token is elligible to replace their Trace Together token
                                     {
 
                                         resident.Token.ReplaceToken(resident.Token.SerialNo, resident.Token.CollectionLocation);
-                                        MainMenu(personList,businessLocationList);
+                                        SafeEntryMenu(personList, businessLocationList);// Navigate the user back to the SafeEntry Menu after new token is assigned 
+                                        //MainMenu(personList,businessLocationList);// Brings user back to the Safe Entry menu 
                                     }
-                                    else
+                                    else // When resident with existing token is unable to replace the Trace Together Token 
                                     {
-                                        SafeEntryMenu(personList,businessLocationList);
+                                        SafeEntryMenu(personList,businessLocationList); //Navigate the user back to the SafeEntry Menu after message to tell user that their token cannot be replaced is desplayed
                                     }
                                 }
-                                else
+                                else //When user chooses (3) Go Back
                                 {
                                     SafeEntryMenu(personList,businessLocationList);
                                 }
                             }
                         }
                     }
-                    else
+                    else // When user is not a resident and is a Visitor 
                     {
                         Console.WriteLine("Sorry " + ttName + " You are not a Resident in Singapore. You will not have or be assigned a Trace Together Token. "); // A visitor is not entitled to 
                     }
                 }
             }
-            if (isFound == false)
+            if (isFound == false)// When user types in the wrong name 
             {
                 Console.WriteLine("Name of person '" + ttName + "' could not be found. Please enter a valid name..."); // When an invalid name is being input by the user 
                 Task.Delay(1500).Wait();
@@ -553,7 +555,7 @@ namespace Prg_Assg_CASY
             for (int i = 0; i < businessLocationList.Count; i++)
             {
                 Console.WriteLine(i + 1 + ".................................");
-                Console.WriteLine(businessLocationList[i]);
+                Console.WriteLine(businessLocationList[i]); // To List all of the business locations 
                 Console.WriteLine("");
             }
             Task.Delay(1500).Wait();
@@ -594,7 +596,7 @@ namespace Prg_Assg_CASY
                     for (int i = 0; i < businessLocationList.Count; i++)
                     {
                         Console.WriteLine(i + 1 + ".................................");
-                        Console.WriteLine(businessLocationList[i]);
+                        Console.WriteLine(businessLocationList[i]);// To list business locatiopns for user to choose from 
                         Console.WriteLine("");
                     }
                     Console.WriteLine("=========================================");
@@ -602,11 +604,11 @@ namespace Prg_Assg_CASY
                     int SEBLOption = Convert.ToInt32(Console.ReadLine()); // To store the users choice of shop from 1 to 4 
                     SEBLOption = SEBLOption - 1; // To get index of the business locations 
                     Task.Delay(1500).Wait();
-                    if (businessLocationList[SEBLOption].VisitorsNow < businessLocationList[SEBLOption].MaximumCapacity)
+                    if (businessLocationList[SEBLOption].VisitorsNow < businessLocationList[SEBLOption].MaximumCapacity) // When the number of visitors in the loaction is not at amximum 
                     {
                         SafeEntry CheckIn = new SafeEntry(DateTime.Now, businessLocationList[SEBLOption]);
-                        businessLocationList[SEBLOption].VisitorsNow = businessLocationList[SEBLOption].VisitorsNow + 1;
-                        p.AddSafeEntry(CheckIn);
+                        businessLocationList[SEBLOption].VisitorsNow = businessLocationList[SEBLOption].VisitorsNow + 1; // Visitor now would add 1 
+                        p.AddSafeEntry(CheckIn); 
                         p.SafeEntryList.Add(CheckIn);
                         Console.WriteLine("=============== Checked-In ==============");
                         Console.WriteLine(CheckIn);
@@ -614,7 +616,7 @@ namespace Prg_Assg_CASY
                     }
                     else
                     {
-                        Console.WriteLine("Business Location has reached Maximum Capacity. Try again in a while! ");
+                        Console.WriteLine("Business Location has reached Maximum Capacity. Try again in a while! "); // Whem the number of visitors at the locatiopn is at maximum 
                     }
                 }
 
