@@ -54,11 +54,10 @@ namespace Prg_Assg_CASY
         //Constuctors
         public SHNFacility() { }
 
-        public SHNFacility(string aFacilityName, string aFacilityCapacity, string aFacilityVacancy, double aDistFromAirCheckpoint, double aDistFromSeaCheckpoint, double aDistFromLandCheckpoint)
+        public SHNFacility(string aFacilityName, string aFacilityCapacity, double aDistFromAirCheckpoint, double aDistFromSeaCheckpoint, double aDistFromLandCheckpoint)
         {
             FacilityName = aFacilityName;
             FacilityCapacity = aFacilityCapacity;
-            FacilityVacancy = aFacilityVacancy;
             DistFromAirCheckpoint = aDistFromAirCheckpoint;
             DistFromSeaCheckpoint = aDistFromSeaCheckpoint;
             DistFromLandCheckpoint = aDistFromLandCheckpoint;
@@ -83,7 +82,7 @@ namespace Prg_Assg_CASY
             }
             else
             {
-                Console.WriteLine("Entry Mode was cannot be determined");
+                Console.WriteLine("Entry Mode cannot be determined...");
             }
             DateTime aDate = DateTime.Now;
             //Condition checks for entry that falls between 6am to 8.59am

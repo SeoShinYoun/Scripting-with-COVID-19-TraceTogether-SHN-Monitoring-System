@@ -88,7 +88,10 @@ namespace Prg_Assg_CASY
 
         public override string ToString()
         {
-            return base.ToString();
+            return "Last Country of Embarkation: " + LastCountyOfEmbarkation 
+                + "\tEntry Mode: " + EntryMode + "\tEntry Date" + EntryDate + 
+                "\tSHN End Date: " + shnEndDate + "\tSHN Stay: " + shnStay +
+                "\tIs Paid: " + isPaid;
         }
     }
 }
