@@ -20,7 +20,7 @@ namespace Prg_Assg_CASY
             // Required for Basic Feature 1 and 2 to be loaded at the start of the program
             // Basic Feature 2 - Calling SHNFacility class API 
             List<SHNFacility> shnfacilityList = new List<SHNFacility>();
-            /*using (HttpClient client = new HttpClient())
+            using (HttpClient client = new HttpClient())
             {
                 client.BaseAddress = new Uri("https://covidmonitoringapiprg2.azurewebsites.net");
                 Task<HttpResponseMessage> responseTask = client.GetAsync("/facility");
@@ -33,7 +33,7 @@ namespace Prg_Assg_CASY
                     string data = readTask.Result;
                     shnfacilityList = JsonConvert.DeserializeObject<List<SHNFacility>>(data);
                 }
-            }*/
+            }
 
             //Basic Feature 1 - Loading of Person and Business Location Data
             //Creation of list to store csv file 
@@ -431,7 +431,7 @@ namespace Prg_Assg_CASY
                 if (p.Name.ToLower() == searchedName.ToLower()) // When correct Name is being input by the user 
                 {
                     Console.WriteLine("");
-                    Console.WriteLine("-------------------- Detail of Person --------------------");
+                    Console.WriteLine("-------------------------- Detail of Person --------------------------");
                     Console.WriteLine(p);
                     isFound = true;
                     if (p is Resident) //When Person found in list is a resident 
