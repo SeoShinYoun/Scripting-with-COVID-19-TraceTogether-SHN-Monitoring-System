@@ -212,7 +212,7 @@ namespace Prg_Assg_CASY
                     }
                     else if (choice == 5)
                     {
-                        CheckOut(personList, businessLocationList);
+                        CheckOut(personList, businessLocationList, shnFacilityList);
                     }
                 }
                 else
@@ -306,7 +306,13 @@ namespace Prg_Assg_CASY
         // Method for Option 2 of TravelEntry Menu
         static void CreateVisitor()
         {
-            Console.WriteLine("Please Enter Your Name: ")
+            Console.Write("Please Enter Your Name: ");
+            string name = Console.ReadLine();
+            Console.Write("Please Enter Your Passport Number: ");
+            string passportNo = Console.ReadLine();
+            Console.WriteLine("Please Enter Your Nationality: ");
+            string nationality = Console.ReadLine();
+            Visitor visitor = new Visitor(name, passportNo, nationality);
         }
 
         //Reading of CSV files         
@@ -647,7 +653,7 @@ namespace Prg_Assg_CASY
         }
 
         // option 5 of SafeEntry Menu to Check-Out
-        static void CheckOut(List<Person> personList , List<BusinessLocation> businessLocationList)
+        static void CheckOut(List<Person> personList , List<BusinessLocation> businessLocationList, List<SHNFacility> shnFacilityList)
         {
             bool isFound = false;
             Console.WriteLine("Enter your name: ");
@@ -682,7 +688,7 @@ namespace Prg_Assg_CASY
                             Console.WriteLine("=============== Checked-Out ==============");
                             Console.WriteLine(businessLocationList[SEBLOption].ToString()); // To tell users the new information of the business and to confirm that the number of vistors is deducted
                             Console.WriteLine("==========================================");
-                            SafeEntryMenu(personList, businessLocationList); // Navigate user back to the SafeEntry Menu after updated business location is displayed 
+                            SafeEntryMenu(personList, businessLocationList, shnFacilityList); // Navigate user back to the SafeEntry Menu after updated business location is displayed 
                         }
                     }
                 }
