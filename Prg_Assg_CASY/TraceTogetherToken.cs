@@ -68,18 +68,18 @@ namespace Prg_Assg_CASY
         {
             System.Random ran5 = new System.Random();
             int newSN = ran5.Next(10000,99999); //Token Serial number where 5 diogits are generated randomly for the new token 
-            SerialNo = "T" + newSN;
+            SerialNo = "T" + newSN; // To create the new token number 
             Console.WriteLine("Enter the Location where you would like to collect your new token: ");
-            CollectionLocation = Console.ReadLine();
+            CollectionLocation = Console.ReadLine(); // To store the location where the user would like to collect their new token 
 
-            ExpiryDate = DateTime.Now.AddMonths(6);
+            ExpiryDate = DateTime.Now.AddMonths(6); // To create the new expiry date to be given to the new token 
 
-            TraceTogetherToken tt = new TraceTogetherToken(SerialNo, CollectionLocation, ExpiryDate);
+            TraceTogetherToken tt = new TraceTogetherToken(SerialNo, CollectionLocation, ExpiryDate); // A new string is made to store the new information of the token and to update the token details as a new token 
             Console.WriteLine("");
             Console.WriteLine("======================================================");
             Console.WriteLine("Here are the details of your new Trace Together Token!");
             Console.WriteLine("======================================================");
-            Console.WriteLine(tt.ToString());
+            Console.WriteLine(tt.ToString());// To print out the new data of the token 
             Console.WriteLine("");
         }
 
