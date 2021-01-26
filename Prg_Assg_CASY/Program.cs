@@ -604,7 +604,7 @@ namespace Prg_Assg_CASY
                     int SEBLOption = Convert.ToInt32(Console.ReadLine()); // To store the users choice of shop from 1 to 4 
                     SEBLOption = SEBLOption - 1; // To get index of the business locations 
                     Task.Delay(1500).Wait();
-                    if (businessLocationList[SEBLOption].VisitorsNow < businessLocationList[SEBLOption].MaximumCapacity) // When the number of visitors in the loaction is not at amximum 
+                    if (businessLocationList[SEBLOption].VisitorsNow < businessLocationList[SEBLOption].MaximumCapacity)// When the number of visitors in the loaction is not at amximum 
                     {
                         SafeEntry CheckIn = new SafeEntry(DateTime.Now, businessLocationList[SEBLOption]);
                         businessLocationList[SEBLOption].VisitorsNow = businessLocationList[SEBLOption].VisitorsNow + 1; // Visitor now would add 1 
@@ -641,26 +641,34 @@ namespace Prg_Assg_CASY
                 {
                     isFound = true;
                     //DisplayAllBusinessLocation(businessLocationList);
-                    Console.WriteLine("------------------- Business Location(s) Not checked out -------------------");
-                    Console.WriteLine("Choose options for the following [(1) ABC Spectacle Shop | (2) Cheap Goods Shop | (3) Big Shopping Centre | (4) Bubble Tea Shop]");
-                    for (int i = 0; i <= p.SafeEntryList.Count; i++ )
+                    if (p.SafeEntryList == null)
                     {
-                        Console.WriteLine();
+                        Console.WriteLine("");
+                        Console.WriteLine("===================================");
+                        Console.WriteLine("No Location available to check out.");
+                        Console.WriteLine("===================================");
+                        Task.Delay(1500).Wait();
+                        SafeEntryMenu(personList, businessLocationList);
                     }
-                    Console.WriteLine("");
-                    Console.WriteLine("=========================================");
-                    Console.WriteLine("Business Location(s) to Check Out: ");
-                    int SEBLOption = Convert.ToInt32(Console.ReadLine()); // To store the users choice of shop from 1 to 4 
-                    SEBLOption = SEBLOption - 1; // To get index of the business locations 
-                    Task.Delay(1500).Wait();
-                    foreach (SafeEntry s in p.SafeEntryList)
+                    Console.WriteLine("------------------- Business Location(s) Not checked out -------------------");
+                    for (int i = 0; i < p.SafeEntryList.Count; i++)
                     {
-                        businessLocationList[SEBLOption].VisitorsNow = businessLocationList[SEBLOption].VisitorsNow - 1;
-                        Console.WriteLine("\nNumber of Visitors Now: "+ businessLocationList[SEBLOption].VisitorsNow);
-                        Console.WriteLine("=============== Checked-Out ==============");
-                        s.PerformCheckOut();
-                        Console.WriteLine("checked out at {0}", s.CheckOut);
-                        Console.WriteLine("-----------------------------------------");
+                        if (p.SafeEntryList[i].CheckIn != null)
+                        {
+                            Console.WriteLine(i + 1 + ".................................");
+                            Console.WriteLine(p.SafeEntryList[i]);
+                            Console.WriteLine("");
+                            Console.WriteLine("=========================================");
+                            Console.WriteLine("Business Location(s) to Check Out: ");
+                            int SEBLOption = Convert.ToInt32(Console.ReadLine()) -1 ; // To store the users choice of shop from 1 to 4 
+                            p.SafeEntryList[SEBLOption].PerformCheckOut();
+                            businessLocationList[SEBLOption].VisitorsNow = businessLocationList[SEBLOption].VisitorsNow - 1;
+                            Console.WriteLine("");
+                            Console.WriteLine("=============== Checked-Out ==============");
+                            Console.WriteLine(businessLocationList[SEBLOption].ToString());
+                            Console.WriteLine("==========================================");
+                            SafeEntryMenu(personList, businessLocationList);
+                        }
                     }
                 }
             }
@@ -669,6 +677,7 @@ namespace Prg_Assg_CASY
                 Console.WriteLine("Name of person '" + SEName + "' could not be found. Please enter a valid name..."); // When an invalid name was being input by the user 
                 Task.Delay(1500).Wait();
             }
+
         }
 
 
