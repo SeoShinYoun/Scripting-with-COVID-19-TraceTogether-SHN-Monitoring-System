@@ -45,12 +45,12 @@ namespace Prg_Assg_CASY
 
             //Loading of the different Menus (MainMenu, GeneralMenu, SafeEntry, TravelEntry) 
             // Load MainMenu page
-            MainMenu(personList,businessLocationList);
+            MainMenu(personList,businessLocationList, shnfacilityList);
 
         }
  //Creation of Menus  (MainMenu, GeneralMenu, SafeEntry, TravelEntry) 
         // Creation of the MainMenu for users to navigate through other functions 
-        static void MainMenu(List<Person> personList, List<BusinessLocation> businessLocationList)
+        static void MainMenu(List<Person> personList, List<BusinessLocation> businessLocationList, List<SHNFacility> shnFacilityList) 
         {
             bool display = true;
             while (display == true)
@@ -85,15 +85,15 @@ namespace Prg_Assg_CASY
                 {
                     if (choice == 1)
                     {
-                        GeneralMenu(personList, businessLocationList);
+                        GeneralMenu(personList, businessLocationList, shnFacilityList);
                     }
                     else if (choice == 2)
                     {
-                        SafeEntryMenu(personList,businessLocationList);
+                        SafeEntryMenu(personList,businessLocationList, shnFacilityList);
                     }
                     else if (choice == 3)
                     {
-                        TravelEntryMenu(personList,businessLocationList);
+                        TravelEntryMenu(personList,businessLocationList, shnFacilityList);
                     }
                 }
                 else
@@ -105,7 +105,7 @@ namespace Prg_Assg_CASY
 
         }
 
-        static void GeneralMenu(List<Person> personList, List<BusinessLocation> businessLocationList)
+        static void GeneralMenu(List<Person> personList, List<BusinessLocation> businessLocationList, List<SHNFacility> shnFacilityList)
         {
             bool displaygeneral = true;
             while (displaygeneral == true)
@@ -150,7 +150,7 @@ namespace Prg_Assg_CASY
                 else
                 {
                     displaygeneral = false;
-                    MainMenu(personList, businessLocationList);
+                    MainMenu(personList, businessLocationList, shnFacilityList);
                     Task.Delay(1500).Wait();
                 }
 
@@ -158,7 +158,7 @@ namespace Prg_Assg_CASY
 
         }
 
-        static void SafeEntryMenu(List<Person> personList, List<BusinessLocation> businessLocationList) // Menu to allow user to navigate through the functions of SafeEntry
+        static void SafeEntryMenu(List<Person> personList, List<BusinessLocation> businessLocationList, List<SHNFacility> shnFacilityList) // Menu to allow user to navigate through the functions of SafeEntry
         {
             bool displaySafeEntry = true;
             while (displaySafeEntry == true)
@@ -196,7 +196,7 @@ namespace Prg_Assg_CASY
                 {
                     if (choice == 1)
                     {
-                        AssignReplaceToken(personList,businessLocationList);
+                        AssignReplaceToken(personList,businessLocationList, shnFacilityList);
                     }
                     else if (choice == 2)
                     {
@@ -212,14 +212,14 @@ namespace Prg_Assg_CASY
                     }
                     else if (choice == 5)
                     {
-                        CheckOut(personList, businessLocationList);
+                        CheckOut(personList, businessLocationList, shnFacilityList);
                     }
                 }
                 else
                 {
                     displaySafeEntry = false;
                     Task.Delay(1500).Wait();
-                    MainMenu(personList,businessLocationList);
+                    MainMenu(personList,businessLocationList, shnFacilityList);
                 }
             }
 
@@ -228,7 +228,7 @@ namespace Prg_Assg_CASY
             SearchName(personList, Name);*/
         }
 
-        static void TravelEntryMenu(List<Person> personList, List<BusinessLocation> businessLocationList)
+        static void TravelEntryMenu(List<Person> personList, List<BusinessLocation> businessLocationList, List<SHNFacility> shnFacilityList)
         {
             bool displayTravelEntry = true;
             while (displayTravelEntry == true)
@@ -258,40 +258,157 @@ namespace Prg_Assg_CASY
                     Console.WriteLine("Invalid option selected!");
                     Console.Write("Exception details: ");
                     Console.WriteLine(ex.Message);
-                    Console.WriteLine("Choose from either Options 1, 2, 3, 4, or 5..");
-                    Console.WriteLine();
                 }
                 if (choice != 5)
                 {
                     if (choice == 1)
                     {
-
+                        ListAllSHNFacility(shnFacilityList);
                     }
                     else if (choice == 2)
                     {
-
+                        CreateVisitor();
                     }
                     else if (choice == 3)
                     {
-
+                        CreateTravelEntryRecord(personList, shnFacilityList);
                     }
                     else if (choice == 4)
                     {
 
+                    }
+                    else
+                    {
+                        Console.WriteLine("Choose from either Options 1, 2, 3, 4, or 5...");
                     }
                 }
                 else
                 {
                     displayTravelEntry = false;
                     Task.Delay(1500).Wait();
-                    MainMenu(personList,businessLocationList);
+                    MainMenu(personList,businessLocationList, shnFacilityList);
                 }
 
             }
 
         }
+        // Method for Option 1 of TravelEntry Menu 
+        static void ListAllSHNFacility(List<SHNFacility> shnFacilityList)
+        {
+            Console.WriteLine("{0,-15}   {1,-8}   {2,-28}   {3,-28}   {4,-29}", "Facility Name", "Capacity", "Distance From Air Checkpoint", "From Sea Checkpoint", "From Land Checkpoint");
+            foreach (SHNFacility facility in shnFacilityList)
+            {
+                Console.WriteLine("{0,-15}   {1,-8}   {2,-28}   {3,-28}   {4,-29}", facility.FacilityName,
+                    facility.FacilityCapacity, facility.DistFromAirCheckpoint, facility.DistFromSeaCheckpoint, facility.DistFromLandCheckpoint);
+            }
+            
+           
+        }
+        // Method for Option 2 of TravelEntry Menu
+        static void CreateVisitor()
+        {
+            Console.Write("Please Enter Your Name: ");
+            string name = Console.ReadLine();
+            Console.Write("Please Enter Your Passport Number: ");
+            string passportNo = Console.ReadLine();
+            Console.Write("Please Enter Your Nationality: ");
+            string nationality = Console.ReadLine();
+            Visitor visitor = new Visitor(name, passportNo, nationality);
+            if (visitor != null)
+            {
+                Console.WriteLine();
+                Console.WriteLine("Visitor Object Successfully Created!");
+                Console.WriteLine(visitor);
+                Task.Delay(2000).Wait();
+            }
+            else
+            {
+                Console.WriteLine("Visitor Object Could Not Be Created...");
+            }
+        }
 
-//Reading of CSV files         
+        // Method for Option 3 of TravelEntry Menu
+        static void CreateTravelEntryRecord(List<Person> personList, List<SHNFacility> shnFacilityList)
+        {
+            Console.Write("Enter Name To Be Searched: ");
+            string searchedName = Console.ReadLine();
+            bool isFound = false;
+            for (int i = 0; i<personList.Count; i++)
+            {
+                if (personList[i].Name.ToLower() == searchedName.ToLower())
+                {
+                    Console.WriteLine("Successfully Found Name To Be Searched!");
+                    isFound = true;
+                    Console.WriteLine();
+                    Console.Write("Enter " + personList[i].Name +"'s Last Country of Embarkation: ");
+                    string lastCountryOfEmbarkation = Console.ReadLine();
+                    lastCountryOfEmbarkation = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(lastCountryOfEmbarkation);
+                    Console.Write("Enter " + personList[i].Name + "'s Mode of Entry: ");
+                    string entryMode = Console.ReadLine();
+                    entryMode = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(entryMode);
+                    while (entryMode != "Air" && entryMode != "Land" && entryMode != "Sea")
+                    {
+                        Console.WriteLine();
+                        Console.WriteLine("Please enter a valid Mode of Entry... Choose From Either: Land, Air, or Sea...");
+                        Console.Write("Enter " + personList[i].Name + "'s Mode of Entry: ");
+                        entryMode = Console.ReadLine();
+                        entryMode = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(entryMode);
+                    }
+                    TravelEntry TE = new TravelEntry(lastCountryOfEmbarkation, entryMode, DateTime.Now);
+                    TE.CalculateSHNDuration();
+                    if ((lastCountryOfEmbarkation.ToLower() != "New Zealand") && (lastCountryOfEmbarkation != "Vietnam") && (lastCountryOfEmbarkation.ToLower() != "macao sar"))
+                    {
+                        Console.WriteLine("====================================");
+                        for (int x = 0; x < shnFacilityList.Count; x++)
+                        {
+                            Console.WriteLine("Option " + Convert.ToInt32(x+1) + ":");
+                            Console.WriteLine(shnFacilityList[x]);
+                            Console.WriteLine("====================================");
+                        }
+                        while (true)
+                        {
+                            int choice = 50;//dummy value
+                            try
+                            {
+                                Console.Write("From the Options above...\nPlease Select A SHN Facility To Be Assigned To: ");
+                                choice = Convert.ToInt32(Console.ReadLine()) - 1;
+                            }   
+                            catch (FormatException ex)
+                            {
+                                Console.WriteLine();
+                                Console.WriteLine("Invalid option selected!");
+                                Console.Write("Exception details: ");
+                                Console.WriteLine(ex.Message);
+                            }
+                            if (choice >= 1 && choice <= shnFacilityList.Count)
+                            {
+                                TE.AssignSHNFacility(shnFacilityList[choice]);
+                                shnFacilityList[choice].FacilityVacancy = shnFacilityList[choice].FacilityVacancy - 1;
+                                
+                                break;
+                            }
+                            else
+                            {
+                                Console.WriteLine("Invalid option selected. Select a given numbered option...");
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("The person identified is not required to serve SHN...");
+                    }
+                    personList[i].AddTravelEntry(TE);
+                    Console.WriteLine("Travel Entry Successfully Recorded for " + personList[i].Name + ".");
+                }
+            }
+            if (isFound == false)
+            {
+                Console.WriteLine("Searched Name could not be found...");
+            }
+
+        }
+
+        //Reading of CSV files         
         //Reading of Person.csv file using System.IO
         static void IncludePerson(List<Person> pList, List<SHNFacility> shnList)
         {
@@ -330,7 +447,6 @@ namespace Prg_Assg_CASY
                             dateC = DateTime.ParseExact(properties[11], "dd/MM/yyyy hh:mm", CultureInfo.InvariantCulture);
                         }
                         TravelEntry TE = new TravelEntry(properties[9], properties[10], dateC);
-                        resident.AddTravelEntry(TE);
                         DateTime dateD;
 
                         if (DateTime.TryParseExact(properties[12], "dd/MM/yyyy HH:mm tt", CultureInfo.InvariantCulture, DateTimeStyles.None, out dateD))
@@ -368,6 +484,7 @@ namespace Prg_Assg_CASY
                         {
                             TE.AssignSHNFacility(SearchFacility(shnList, properties[14]));
                         }
+                        resident.AddTravelEntry(TE);
                     }
                 }
                 else if (properties[0] == "visitor")  // When the attribute under the heading "type" is a visitor
@@ -458,7 +575,7 @@ namespace Prg_Assg_CASY
         }
  // Methods for option 2 of MainMenu (SafeEntry Menu) 
         // Option 1 of SafeEntry Menu to Assign / Replace TraceTogetherToken 
-        static void AssignReplaceToken(List<Person> personList, List<BusinessLocation> businessLocationList)
+        static void AssignReplaceToken(List<Person> personList, List<BusinessLocation> businessLocationList, List<SHNFacility> shnFacilityList)
         {
             bool isFound = false;
             Console.WriteLine("Enter your name: ");
@@ -486,12 +603,12 @@ namespace Prg_Assg_CASY
                                 if (option is "1") //When user chooses option (1) Yes 
                                 {
                                     resident.Token.ReplaceToken(resident.Token.SerialNo, resident.Token.CollectionLocation); //To make a new token for the resident 
-                                    SafeEntryMenu(personList, businessLocationList);// Navigate the user back to the SafeEntry Menu after token is being assigned
+                                    SafeEntryMenu(personList, businessLocationList, shnFacilityList);// Navigate the user back to the SafeEntry Menu after token is being assigned
                                     //MainMenu(personList, businessLocationList); // Navigate the user back to the Main Menu after token is being assigned 
                                 }
                                 else if (option is "2") //When User Chooses option (2) No 
                                 {
-                                    SafeEntryMenu(personList,businessLocationList); // To go back to the Safe Entry Menu 
+                                    SafeEntryMenu(personList,businessLocationList, shnFacilityList); // To go back to the Safe Entry Menu 
                                 }
                             }
                         }
@@ -519,18 +636,18 @@ namespace Prg_Assg_CASY
                                     if (resident.Token.IsEligibleForReplacement() == true) // When resident with existing token is elligible to replace their Trace Together token
                                     {
 
-                                        resident.Token.ReplaceToken(resident.Token.SerialNo, resident.Token.CollectionLocation); // To reeplace the resident token where both serial number and collection location will be updated 
-                                        SafeEntryMenu(personList, businessLocationList);// Navigate the user back to the SafeEntry Menu after new token is assigned 
+                                        resident.Token.ReplaceToken(resident.Token.SerialNo, resident.Token.CollectionLocation);
+                                        SafeEntryMenu(personList, businessLocationList, shnFacilityList);// Navigate the user back to the SafeEntry Menu after new token is assigned 
                                         //MainMenu(personList,businessLocationList);// Brings user back to the Safe Entry menu 
                                     }
                                     else // When resident with existing token is unable to replace the Trace Together Token 
                                     {
-                                        SafeEntryMenu(personList,businessLocationList); //Navigate the user back to the SafeEntry Menu after message to tell user that their token cannot be replaced is desplayed
+                                        SafeEntryMenu(personList,businessLocationList, shnFacilityList); //Navigate the user back to the SafeEntry Menu after message to tell user that their token cannot be replaced is desplayed
                                     }
                                 }
                                 else //When user chooses (3) Go Back
                                 {
-                                    SafeEntryMenu(personList,businessLocationList); // To navigate user back to the Safe Entry Menu 
+                                    SafeEntryMenu(personList,businessLocationList, shnFacilityList);
                                 }
                             }
                         }
@@ -631,7 +748,7 @@ namespace Prg_Assg_CASY
         }
 
         // option 5 of SafeEntry Menu to Check-Out
-        static void CheckOut(List<Person> personList , List<BusinessLocation> businessLocationList)
+        static void CheckOut(List<Person> personList , List<BusinessLocation> businessLocationList, List<SHNFacility> shnFacilityList)
         {
             bool isFound = false;
             Console.WriteLine("Enter your name: ");
@@ -666,7 +783,7 @@ namespace Prg_Assg_CASY
                             Console.WriteLine("=============== Checked-Out ==============");
                             Console.WriteLine(businessLocationList[SEBLOption].ToString()); // To tell users the new information of the business and to confirm that the number of vistors is deducted
                             Console.WriteLine("==========================================");
-                            SafeEntryMenu(personList, businessLocationList); // Navigate user back to the SafeEntry Menu after updated business location is displayed 
+                            SafeEntryMenu(personList, businessLocationList, shnFacilityList); // Navigate user back to the SafeEntry Menu after updated business location is displayed 
                         }
                     }
                 }
@@ -676,17 +793,6 @@ namespace Prg_Assg_CASY
                 Console.WriteLine("Name of person '" + SEName + "' could not be found. Please enter a valid name..."); 
                 Task.Delay(1500).Wait();
             }
-
-        }
-
-
-
-
-// Methods for option 3 of MainMenu (TravelEntry Menu) 
-        // option 1 of TravelEntry Menu 
-        static void ListAllSHNFacility()
-        {
-
         }
     }
 }

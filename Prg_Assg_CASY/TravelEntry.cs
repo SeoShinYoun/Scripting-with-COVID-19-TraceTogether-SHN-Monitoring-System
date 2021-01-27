@@ -63,7 +63,7 @@ namespace Prg_Assg_CASY
         
         public void AssignSHNFacility(SHNFacility facility)
         {
-            
+            ShnStay = facility;
         }
 
         public void CalculateSHNDuration()
@@ -71,7 +71,7 @@ namespace Prg_Assg_CASY
             int duration;
             if (LastCountyOfEmbarkation == "New Zealand" || LastCountyOfEmbarkation == "Vietnam")
             {
-                duration = 1;
+                duration = 0;
             }
             else if (LastCountyOfEmbarkation == "Macao SAR")
             {
