@@ -294,17 +294,16 @@ namespace Prg_Assg_CASY
         }
         // Method for Option 1 of TravelEntry Menu 
         static void ListAllSHNFacility(List<SHNFacility> shnFacilityList)
-        {       
-            Console.WriteLine("{0:15}\t{1,8}\t{2,28}\t{3,19}\t{4,20}", "Facility Name",
-                    "Capacity", "Distance From Air Checkpoint",
-                    "From Sea Checkpoint", "From Land Checkpoint");
+        {
+            Console.WriteLine("{0,-15}   {1,-8}   {2,-28}   {3,-28}   {4,-29}", "Facility Name", "Capacity", "Distance From Air Checkpoint", "From Sea Checkpoint", "From Land Checkpoint");
             foreach (SHNFacility facility in shnFacilityList)
             {
-                Console.WriteLine("{0:15}\t{1,8}\t{2,28}\t{3,19}\t{4,20}", facility.FacilityName,
+                Console.WriteLine("{0,-15}   {1,-8}   {2,-28}   {3,-28}   {4,-29}", facility.FacilityName,
                     facility.FacilityCapacity, facility.DistFromAirCheckpoint, facility.DistFromSeaCheckpoint, facility.DistFromLandCheckpoint);
             }
+            
+           
         }
-
         // Method for Option 2 of TravelEntry Menu
         static void CreateVisitor()
         {
@@ -343,11 +342,21 @@ namespace Prg_Assg_CASY
                     Console.WriteLine();
                     Console.Write("Enter " + personList[i].Name +"'s Last Country of Embarkation: ");
                     string lastCountryOfEmbarkation = Console.ReadLine();
+                    lastCountryOfEmbarkation = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(lastCountryOfEmbarkation);
                     Console.Write("Enter " + personList[i].Name + "'s Mode of Entry: ");
                     string entryMode = Console.ReadLine();
+                    entryMode = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(entryMode);
+                    while (entryMode != "Air" && entryMode != "Land" && entryMode != "Sea")
+                    {
+                        Console.WriteLine();
+                        Console.WriteLine("Please enter a valid Mode of Entry... Choose From Either: Land, Air, or Sea...");
+                        Console.Write("Enter " + personList[i].Name + "'s Mode of Entry: ");
+                        entryMode = Console.ReadLine();
+                        entryMode = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(entryMode);
+                    }
                     TravelEntry TE = new TravelEntry(lastCountryOfEmbarkation, entryMode, DateTime.Now);
                     TE.CalculateSHNDuration();
-                    if ((lastCountryOfEmbarkation != "New Zealand") && (lastCountryOfEmbarkation != "Vietnam") && (lastCountryOfEmbarkation != "Macao SAR"))
+                    if ((lastCountryOfEmbarkation.ToLower() != "New Zealand") && (lastCountryOfEmbarkation != "Vietnam") && (lastCountryOfEmbarkation.ToLower() != "macao sar"))
                     {
                         Console.WriteLine("====================================");
                         for (int x = 0; x < shnFacilityList.Count; x++)
@@ -356,16 +365,40 @@ namespace Prg_Assg_CASY
                             Console.WriteLine(shnFacilityList[x]);
                             Console.WriteLine("====================================");
                         }
-                        Console.Write("From the Options above...\nPlease Select A SHN Facility To Be Assigned To: ");
-                        int choice = Convert.ToInt32(Console.ReadLine());
-                        TE.AssignSHNFacility(shnFacilityList[choice]);
-                        shnFacilityList[choice].FacilityVacancy = shnFacilityList[choice].FacilityVacancy - 1;
-                        personList[i].AddTravelEntry(TE);
+                        while (true)
+                        {
+                            int choice = 50;//dummy value
+                            try
+                            {
+                                Console.Write("From the Options above...\nPlease Select A SHN Facility To Be Assigned To: ");
+                                choice = Convert.ToInt32(Console.ReadLine()) - 1;
+                            }   
+                            catch (FormatException ex)
+                            {
+                                Console.WriteLine();
+                                Console.WriteLine("Invalid option selected!");
+                                Console.Write("Exception details: ");
+                                Console.WriteLine(ex.Message);
+                            }
+                            if (choice >= 1 && choice <= shnFacilityList.Count)
+                            {
+                                TE.AssignSHNFacility(shnFacilityList[choice]);
+                                shnFacilityList[choice].FacilityVacancy = shnFacilityList[choice].FacilityVacancy - 1;
+                                
+                                break;
+                            }
+                            else
+                            {
+                                Console.WriteLine("Invalid option selected. Select a given numbered option...");
+                            }
+                        }
                     }
                     else
                     {
                         Console.WriteLine("The person identified is not required to serve SHN...");
                     }
+                    personList[i].AddTravelEntry(TE);
+                    Console.WriteLine("Travel Entry Successfully Recorded for " + personList[i].Name + ".");
                 }
             }
             if (isFound == false)
@@ -414,7 +447,6 @@ namespace Prg_Assg_CASY
                             dateC = DateTime.ParseExact(properties[11], "dd/MM/yyyy hh:mm", CultureInfo.InvariantCulture);
                         }
                         TravelEntry TE = new TravelEntry(properties[9], properties[10], dateC);
-                        resident.AddTravelEntry(TE);
                         DateTime dateD;
 
                         if (DateTime.TryParseExact(properties[12], "dd/MM/yyyy HH:mm tt", CultureInfo.InvariantCulture, DateTimeStyles.None, out dateD))
@@ -452,6 +484,7 @@ namespace Prg_Assg_CASY
                         {
                             TE.AssignSHNFacility(SearchFacility(shnList, properties[14]));
                         }
+                        resident.AddTravelEntry(TE);
                     }
                 }
                 else if (properties[0] == "visitor")  // When the attribute under the heading "type" is a visitor

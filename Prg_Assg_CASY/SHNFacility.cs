@@ -126,7 +126,7 @@ namespace Prg_Assg_CASY
 
         public override string ToString()
         {
-            return "Facility Name: " + FacilityName + "\nCapacity: " + FacilityCapacity +
+            return "Facility Name: " + FacilityName + "\nFacility Capacity: " + FacilityCapacity +
                 "\nFacility Vacancy: " + FacilityVacancy + "\nDistance From Air Checkpoint: " + DistFromAirCheckpoint +
                 "\nDistance From Sea Checkpoint: " + DistFromSeaCheckpoint + "\nDistance From Land Checkpoint: " + DistFromLandCheckpoint;
         }
