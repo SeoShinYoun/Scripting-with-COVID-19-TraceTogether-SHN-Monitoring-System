@@ -14,8 +14,8 @@ namespace Prg_Assg_CASY
     {
         //Fields
         private string facilityName;
-        private string facilityCapacity;
-        private string facilityVacancy;
+        private int facilityCapacity;
+        private int facilityVacancy;
         private double distFromAirCheckpoint;
         private double distFromSeaCheckpoint;
         private double distFromLandCheckpoint;
@@ -26,12 +26,12 @@ namespace Prg_Assg_CASY
             get { return facilityName; }
             set { facilityName = value; }
         }
-        public string FacilityCapacity
+        public int FacilityCapacity
         {
             get { return facilityCapacity; }
             set { facilityCapacity = value; }
         }
-        public string FacilityVacancy
+        public int FacilityVacancy
         {
             get { return facilityVacancy; }
             set { facilityVacancy = value; }
@@ -54,7 +54,7 @@ namespace Prg_Assg_CASY
         //Constuctors
         public SHNFacility() { }
 
-        public SHNFacility(string aFacilityName, string aFacilityCapacity, double aDistFromAirCheckpoint, double aDistFromSeaCheckpoint, double aDistFromLandCheckpoint)
+        public SHNFacility(string aFacilityName, int aFacilityCapacity, double aDistFromAirCheckpoint, double aDistFromSeaCheckpoint, double aDistFromLandCheckpoint)
         {
             FacilityName = aFacilityName;
             FacilityCapacity = aFacilityCapacity;
@@ -114,9 +114,8 @@ namespace Prg_Assg_CASY
 
         public bool IsAvailable()
         {
-            if ((Convert.ToInt32(FacilityCapacity) - Convert.ToInt32(FacilityVacancy)) < Convert.ToInt32(FacilityCapacity))
+            if (facilityVacancy >= 1)
             {
-                Console.WriteLine("The Facility - " + FacilityName + " is available.");
                 return true;
             }
             else
@@ -127,9 +126,9 @@ namespace Prg_Assg_CASY
 
         public override string ToString()
         {
-            return "Facility Name: " + FacilityName + "\tFacility Capacity: " + FacilityCapacity +
-                "\tFacility Vacancy: " + FacilityVacancy + "\tDistance by Air: " + DistFromAirCheckpoint +
-                "\tDistance by Sea: " + DistFromSeaCheckpoint + "\tDistance by Land: " + DistFromLandCheckpoint;
+            return "Facility Name: " + FacilityName + "\nCapacity: " + FacilityCapacity +
+                "\nFacility Vacancy: " + FacilityVacancy + "\nDistance From Air Checkpoint: " + DistFromAirCheckpoint +
+                "\nDistance From Sea Checkpoint: " + DistFromSeaCheckpoint + "\nDistance From Land Checkpoint: " + DistFromLandCheckpoint;
         }
     }
 }

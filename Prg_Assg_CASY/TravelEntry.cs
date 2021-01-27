@@ -63,7 +63,7 @@ namespace Prg_Assg_CASY
         
         public void AssignSHNFacility(SHNFacility facility)
         {
-            
+            ShnStay = facility;
         }
 
         public void CalculateSHNDuration()

@@ -271,7 +271,7 @@ namespace Prg_Assg_CASY
                     }
                     else if (choice == 3)
                     {
-                        CreateTravelEntryRecord(personList);
+                        CreateTravelEntryRecord(personList, shnFacilityList);
                     }
                     else if (choice == 4)
                     {
@@ -329,7 +329,7 @@ namespace Prg_Assg_CASY
         }
 
         // Method for Option 3 of TravelEntry Menu
-        static void CreateTravelEntryRecord(List<Person> personList)
+        static void CreateTravelEntryRecord(List<Person> personList, List<SHNFacility> shnFacilityList)
         {
             Console.Write("Enter Name To Be Searched: ");
             string searchedName = Console.ReadLine();
@@ -347,6 +347,25 @@ namespace Prg_Assg_CASY
                     string entryMode = Console.ReadLine();
                     TravelEntry TE = new TravelEntry(lastCountryOfEmbarkation, entryMode, DateTime.Now);
                     TE.CalculateSHNDuration();
+                    if ((lastCountryOfEmbarkation != "New Zealand") && (lastCountryOfEmbarkation != "Vietnam") && (lastCountryOfEmbarkation != "Macao SAR"))
+                    {
+                        Console.WriteLine("====================================");
+                        for (int x = 0; x < shnFacilityList.Count; x++)
+                        {
+                            Console.WriteLine("Option " + Convert.ToInt32(x+1) + ":");
+                            Console.WriteLine(shnFacilityList[x]);
+                            Console.WriteLine("====================================");
+                        }
+                        Console.Write("From the Options above...\nPlease Select A SHN Facility To Be Assigned To: ");
+                        int choice = Convert.ToInt32(Console.ReadLine());
+                        TE.AssignSHNFacility(shnFacilityList[choice]);
+                        shnFacilityList[choice].FacilityVacancy = shnFacilityList[choice].FacilityVacancy - 1;
+                        personList[i].AddTravelEntry(TE);
+                    }
+                    else
+                    {
+                        Console.WriteLine("The person identified is not required to serve SHN...");
+                    }
                 }
             }
             if (isFound == false)
