@@ -615,7 +615,9 @@ namespace Prg_Assg_CASY
                     }
                     else // Whem the number of visitors at the locatiopn is at maximum 
                     {
-                        Console.WriteLine("Business Location has reached Maximum Capacity. Try again in a while! "); 
+                        Console.WriteLine("----------------------------------------------------------------------");
+                        Console.WriteLine("Business Location has reached Maximum Capacity. Try again in a while! ");
+                        Console.WriteLine("----------------------------------------------------------------------");
                     }
                 }
 
