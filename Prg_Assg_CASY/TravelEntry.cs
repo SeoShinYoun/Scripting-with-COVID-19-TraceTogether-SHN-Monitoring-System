@@ -71,7 +71,7 @@ namespace Prg_Assg_CASY
             int duration;
             if (LastCountyOfEmbarkation == "New Zealand" || LastCountyOfEmbarkation == "Vietnam")
             {
-                duration = 1;
+                duration = 0;
             }
             else if (LastCountyOfEmbarkation == "Macao SAR")
             {

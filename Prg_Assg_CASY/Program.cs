@@ -271,7 +271,7 @@ namespace Prg_Assg_CASY
                     }
                     else if (choice == 3)
                     {
-
+                        CreateTravelEntryRecord(personList);
                     }
                     else if (choice == 4)
                     {
@@ -294,7 +294,7 @@ namespace Prg_Assg_CASY
         }
         // Method for Option 1 of TravelEntry Menu 
         static void ListAllSHNFacility(List<SHNFacility> shnFacilityList)
-        {
+        {       
             Console.WriteLine("{0:15}\t{1,8}\t{2,28}\t{3,19}\t{4,20}", "Facility Name",
                     "Capacity", "Distance From Air Checkpoint",
                     "From Sea Checkpoint", "From Land Checkpoint");
@@ -326,6 +326,34 @@ namespace Prg_Assg_CASY
             {
                 Console.WriteLine("Visitor Object Could Not Be Created...");
             }
+        }
+
+        // Method for Option 3 of TravelEntry Menu
+        static void CreateTravelEntryRecord(List<Person> personList)
+        {
+            Console.Write("Enter Name To Be Searched: ");
+            string searchedName = Console.ReadLine();
+            bool isFound = false;
+            for (int i = 0; i<personList.Count; i++)
+            {
+                if (personList[i].Name.ToLower() == searchedName.ToLower())
+                {
+                    Console.WriteLine("Successfully Found Name To Be Searched!");
+                    isFound = true;
+                    Console.WriteLine();
+                    Console.Write("Enter " + personList[i].Name +"'s Last Country of Embarkation: ");
+                    string lastCountryOfEmbarkation = Console.ReadLine();
+                    Console.Write("Enter " + personList[i].Name + "'s Mode of Entry: ");
+                    string entryMode = Console.ReadLine();
+                    TravelEntry TE = new TravelEntry(lastCountryOfEmbarkation, entryMode, DateTime.Now);
+                    TE.CalculateSHNDuration();
+                }
+            }
+            if (isFound == false)
+            {
+                Console.WriteLine("Searched Name could not be found...");
+            }
+
         }
 
         //Reading of CSV files         
