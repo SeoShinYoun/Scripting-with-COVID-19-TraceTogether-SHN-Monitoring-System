@@ -157,7 +157,58 @@ namespace Prg_Assg_CASY
             }
 
         }
-// Saafe Entry Menu and Methods 
+
+        // Methods for option 1 of MainMenu (GeneralMenu) 
+        // option 1 of GeneralMenu to display all the visitors 
+        static void DisplayAllVisitors(List<Person> personList)
+        {
+            Console.WriteLine("--------------------------- List of Visitors ---------------------------");
+            for (int i = 0; i < personList.Count; i++)
+            {
+                if (personList[i] is Visitor)
+                {
+                    Console.WriteLine(personList[i]);
+                }
+            }
+            Task.Delay(1500).Wait();
+        }
+        // option 2 of GeneralMenu to ask for person to enter name to  diaplay person details 
+        static void DisplayPersonDetails(List<Person> personList)
+        {
+            bool isFound = false;
+            Console.Write("Enter Name of person you are searching for: "); // Asking for user's input for name to be checked. 
+            string searchedName = Console.ReadLine();
+            foreach (Person p in personList)
+            {
+                if (p.Name.ToLower() == searchedName.ToLower()) // When correct Name is being input by the user 
+                {
+                    Console.WriteLine("");
+                    Console.WriteLine("-------------------------- Detail of Person --------------------------");
+                    Console.WriteLine(p);
+                    isFound = true;
+                    if (p is Resident) //When Person found in list is a resident 
+                    {
+                        Console.WriteLine();
+                        if (string.IsNullOrEmpty(((Resident)p).Token.SerialNo))
+                        {
+                            Console.WriteLine("No Trace Together Token Data Found..."); // When Resident do not have a TraceTogetherToken 
+                        }
+                        else
+                        {
+                            Console.WriteLine("------------ Trace Together Token information ------------");
+                            Console.WriteLine(((Resident)p).Token.ToString()); // When Resident has a TraceTogetherToken 
+                        }
+                    }
+                    Task.Delay(1500).Wait();
+                }
+            }
+            if (isFound == false)
+            {
+                Console.WriteLine("Name of person '" + searchedName + "' could not be found. Please enter a valid name..."); // When an invalid name was being input by the user 
+                Task.Delay(1500).Wait();
+            }
+        }
+        // Saafe Entry Menu and Methods 
         static void SafeEntryMenu(List<Person> personList, List<BusinessLocation> businessLocationList, List<SHNFacility> shnFacilityList) // Menu to allow user to navigate through the functions of SafeEntry
         {
             bool displaySafeEntry = true;
@@ -629,7 +680,7 @@ namespace Prg_Assg_CASY
 
         }
 
-        //Reading of CSV files         
+ //Reading of CSV files         
         //Reading of Person.csv file using System.IO
         static void IncludePerson(List<Person> pList, List<SHNFacility> shnList)
         {
@@ -743,56 +794,6 @@ namespace Prg_Assg_CASY
                 }
             }
             return null;
-        }
- // Methods for option 1 of MainMenu (GeneralMenu) 
-        // option 1 of GeneralMenu to display all the visitors 
-        static void DisplayAllVisitors(List<Person> personList)
-        {
-            Console.WriteLine("--------------------------- List of Visitors ---------------------------");
-            for (int i = 0; i < personList.Count; i++)
-            {
-                if (personList[i] is Visitor)
-                {
-                    Console.WriteLine(personList[i]);
-                }
-            }
-            Task.Delay(1500).Wait();
-        }
-        // option 2 of GeneralMenu to ask for person to enter name to  diaplay person details 
-        static void DisplayPersonDetails(List<Person> personList)
-        {
-            bool isFound = false;
-            Console.Write("Enter Name of person you are searching for: "); // Asking for user's input for name to be checked. 
-            string searchedName = Console.ReadLine();
-            foreach (Person p in personList)
-            {
-                if (p.Name.ToLower() == searchedName.ToLower()) // When correct Name is being input by the user 
-                {
-                    Console.WriteLine("");
-                    Console.WriteLine("-------------------------- Detail of Person --------------------------");
-                    Console.WriteLine(p);
-                    isFound = true;
-                    if (p is Resident) //When Person found in list is a resident 
-                    {
-                        Console.WriteLine();
-                        if (string.IsNullOrEmpty(((Resident)p).Token.SerialNo)) 
-                        {
-                            Console.WriteLine("No Trace Together Token Data Found..."); // When Resident do not have a TraceTogetherToken 
-                        }
-                        else
-                        {
-                            Console.WriteLine("------------ Trace Together Token information ------------");
-                            Console.WriteLine(((Resident)p).Token.ToString()); // When Resident has a TraceTogetherToken 
-                        }
-                    }
-                    Task.Delay(1500).Wait();
-                }
-            }
-            if (isFound == false)
-            {
-                Console.WriteLine("Name of person '" + searchedName + "' could not be found. Please enter a valid name..."); // When an invalid name was being input by the user 
-                Task.Delay(1500).Wait();
-            }
         }
  
     }
