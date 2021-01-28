@@ -155,9 +155,7 @@ namespace Prg_Assg_CASY
                     MainMenu(personList, businessLocationList, shnFacilityList);
                     Task.Delay(1500).Wait();
                 }
-
             }
-
         }
 
         // Methods for option 1 of MainMenu (GeneralMenu) 
@@ -187,10 +185,25 @@ namespace Prg_Assg_CASY
                     Console.WriteLine("");
                     Console.WriteLine("-------------------------- Detail of Person --------------------------");
                     Console.WriteLine(p);
+                    Console.WriteLine();
+                    Console.WriteLine("------------------------Travel Entry Details--------------------------");
+                    foreach(TravelEntry TE in p.TravelEntryList)
+                    {
+                        if (string.IsNullOrEmpty(TE.LastCountyOfEmbarkation))
+                        {
+                            Console.WriteLine("No Travel Entry Record Found...");
+                        }
+                        else
+                        {
+                            Console.WriteLine(TE);
+                        }
+                        //Console.WriteLine(TE.LastCountyOfEmbarkation, TE.EntryMode, TE.EntryDate, TE.)
+                    }
                     isFound = true;
                     if (p is Resident) //When Person found in list is a resident 
                     {
                         Console.WriteLine();
+                        Console.WriteLine("----------------------TraceTogether Token Details---------------------");
                         if (string.IsNullOrEmpty(((Resident)p).Token.SerialNo))
                         {
                             Console.WriteLine("No Trace Together Token Data Found..."); // When Resident do not have a TraceTogetherToken 
@@ -826,8 +839,6 @@ namespace Prg_Assg_CASY
                 }
             }
             return null;
-        }
- 
         }
     }
 }
