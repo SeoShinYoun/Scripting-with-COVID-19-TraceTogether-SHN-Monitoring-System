@@ -46,7 +46,6 @@ namespace Prg_Assg_CASY
                     
                 }
                 return charge *= 1.07;
-
             }*/
             return 0.0;
         }

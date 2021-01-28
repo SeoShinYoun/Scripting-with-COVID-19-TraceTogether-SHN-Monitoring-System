@@ -34,7 +34,10 @@ namespace Prg_Assg_CASY
                     shnfacilityList = JsonConvert.DeserializeObject<List<SHNFacility>>(data);
                 }
             }
-
+            foreach(SHNFacility facility in shnfacilityList)
+            {
+                facility.FacilityVacancy = facility.FacilityCapacity;
+            }
             //Basic Feature 1 - Loading of Person and Business Location Data
             //Creation of list to store csv file 
             List<Person> personList = new List<Person>();
@@ -46,9 +49,9 @@ namespace Prg_Assg_CASY
             //Loading of the different Menus (MainMenu, GeneralMenu, SafeEntry, TravelEntry) 
             // Load MainMenu page
             MainMenu(personList,businessLocationList, shnfacilityList);
-
         }
- //Creation of Menus  (MainMenu, GeneralMenu, SafeEntry, TravelEntry) 
+
+    //Creation of Menus  (MainMenu, GeneralMenu, SafeEntry, TravelEntry) 
         // Creation of the MainMenu for users to navigate through other functions 
         static void MainMenu(List<Person> personList, List<BusinessLocation> businessLocationList, List<SHNFacility> shnFacilityList) 
         {
@@ -102,7 +105,6 @@ namespace Prg_Assg_CASY
                     Console.WriteLine("Thank you! Bye...");
                 }
             }
-
         }
 
         static void GeneralMenu(List<Person> personList, List<BusinessLocation> businessLocationList, List<SHNFacility> shnFacilityList)
@@ -153,9 +155,7 @@ namespace Prg_Assg_CASY
                     MainMenu(personList, businessLocationList, shnFacilityList);
                     Task.Delay(1500).Wait();
                 }
-
             }
-
         }
  
         // option 1 of GeneralMenu to display all the visitors 
@@ -184,10 +184,26 @@ namespace Prg_Assg_CASY
                     Console.WriteLine("");
                     Console.WriteLine("-------------------------- Detail of Person --------------------------");
                     Console.WriteLine(p);
+                    Console.WriteLine();
+                    Console.WriteLine("------------------------Travel Entry Details--------------------------");
+                    foreach(TravelEntry TE in p.TravelEntryList)
+                    {
+                        if (string.IsNullOrEmpty(TE.LastCountyOfEmbarkation))
+                        {
+                            Console.WriteLine("No Travel Entry Record Found...");
+                        }
+                        else
+                        {
+                            Console.WriteLine(TE);
+                            //Console.WriteLine("{0,10}  {1,10}  {2,10}  {3,10}  {4,10}  {5,10}", TE.LastCountyOfEmbarkation, TE.EntryMode, TE.EntryDate, TE.ShnEndDate, TE.IsPaid, TE.ShnStay);
+                        }
+                        
+                    }
                     isFound = true;
                     if (p is Resident) //When Person found in list is a resident 
                     {
                         Console.WriteLine();
+                        Console.WriteLine("----------------------TraceTogether Token Details---------------------");
                         if (string.IsNullOrEmpty(((Resident)p).Token.SerialNo))
                         {
                             Console.WriteLine("No Trace Together Token Data Found..."); // When Resident do not have a TraceTogetherToken 
@@ -545,7 +561,7 @@ namespace Prg_Assg_CASY
                     }
                     else if (choice == 4)
                     {
-
+                        CalculateSHNCharges(personList);
                     }
                     else
                     {
@@ -566,14 +582,11 @@ namespace Prg_Assg_CASY
         // Method for Option 1 of TravelEntry Menu 
         static void ListAllSHNFacility(List<SHNFacility> shnFacilityList)
         {
-            Console.WriteLine("{0,-15}   {1,-8}   {2,-28}   {3,-28}   {4,-29}", "Facility Name", "Capacity", "Distance From Air Checkpoint", "From Sea Checkpoint", "From Land Checkpoint");
+            Console.WriteLine("{0,-15}   {1,-8}   {2,-8}   {3,-28}   {3,-28}   {4,-29}", "Facility Name", "Capacity", "Vacancy", "Distance From Air Checkpoint", "From Sea Checkpoint", "From Land Checkpoint");
             foreach (SHNFacility facility in shnFacilityList)
             {
-                Console.WriteLine("{0,-15}   {1,-8}   {2,-28}   {3,-28}   {4,-29}", facility.FacilityName,
-                    facility.FacilityCapacity, facility.DistFromAirCheckpoint, facility.DistFromSeaCheckpoint, facility.DistFromLandCheckpoint);
+                Console.WriteLine("{0,-15}   {1,-8}   {2,-8}   {3,-28}   {3,-28}   {4,-29}", facility.FacilityName,facility.FacilityCapacity, facility.FacilityVacancy, facility.DistFromAirCheckpoint, facility.DistFromSeaCheckpoint, facility.DistFromLandCheckpoint);
             }
-            
-           
         }
         // Method for Option 2 of TravelEntry Menu
         static void CreateVisitor()
@@ -651,8 +664,13 @@ namespace Prg_Assg_CASY
                                 Console.Write("Exception details: ");
                                 Console.WriteLine(ex.Message);
                             }
-                            if (choice >= 1 && choice <= shnFacilityList.Count)
+                            if (choice >= 0 && choice < shnFacilityList.Count)
                             {
+                                if (shnFacilityList[choice].IsAvailable() == false)
+                                {
+                                    Console.WriteLine("The Facility is not available due to vacancy constraints...");
+                                    continue;
+                                }
                                 TE.AssignSHNFacility(shnFacilityList[choice]);
                                 shnFacilityList[choice].FacilityVacancy = shnFacilityList[choice].FacilityVacancy - 1;
                                 
@@ -669,14 +687,34 @@ namespace Prg_Assg_CASY
                         Console.WriteLine("The person identified is not required to serve SHN...");
                     }
                     personList[i].AddTravelEntry(TE);
-                    Console.WriteLine("Travel Entry Successfully Recorded for " + personList[i].Name + ".");
+                    Console.WriteLine();
+                    Console.WriteLine("Travel Entry Successfully Recorded for " + personList[i].Name + "!");
                 }
             }
             if (isFound == false)
             {
                 Console.WriteLine("Searched Name could not be found...");
             }
+        }
+        //Method for Option 4 of TravelEntry Menu
+        static void CalculateSHNCharges(List<Person> personList)
+        {
+            Console.Write("Please enter the name to be searched: ");
+            string searchedName = Console.ReadLine();
+            bool isFound = false;
+            for (int i = 0; i < personList.Count; i++)
+            {
+                if (searchedName.ToLower() == personList[i].Name.ToLower())
+                {
+                    isFound = true;
+                    Console.WriteLine("Name Searched Successfully!.... ");
 
+                }
+            }
+            if (isFound == false)
+            {
+                Console.WriteLine("Name could not be found...");
+            }
         }
 
  //Reading of CSV files         
@@ -704,53 +742,22 @@ namespace Prg_Assg_CASY
                         }
                         /*DateTime dateB = DateTime.ParseExact(properties[8], "dd-MMM-yy", CultureInfo.InvariantCulture);*/
                         resident.Token = new TraceTogetherToken(properties[6], properties[7], expirydate);
-
                     }
                     if (properties[9] != null)
                     {
-                        DateTime dateC;
-                        if (DateTime.TryParseExact(properties[11], "dd/MM/yyyy HH:mm tt", CultureInfo.InvariantCulture, DateTimeStyles.None, out dateC))
-                        {
-                            dateC = DateTime.ParseExact(properties[11], "dd/MM/yyyy HH:mm tt", CultureInfo.InvariantCulture);
-                        }
-                        else if (DateTime.TryParseExact(properties[11], "dd/MM/yyyy hh:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out dateC))
-                        {
-                            dateC = DateTime.ParseExact(properties[11], "dd/MM/yyyy hh:mm", CultureInfo.InvariantCulture);
-                        }
-                        TravelEntry TE = new TravelEntry(properties[9], properties[10], dateC);
-                        DateTime dateD;
+                        DateTime travelEntryDate;
+                        travelEntryDate = FormatTravelDate(properties[11]);
+                        TravelEntry TE = new TravelEntry(properties[9], properties[10], travelEntryDate);
+                        DateTime travelShnEndDate;
+                        travelShnEndDate = FormatTravelDate(properties[12]);
+                        TE.ShnEndDate = travelShnEndDate;
+                        ValidatePayment(properties[13]);
 
-                        if (DateTime.TryParseExact(properties[12], "dd/MM/yyyy HH:mm tt", CultureInfo.InvariantCulture, DateTimeStyles.None, out dateD))
-                        {
-                            dateD = DateTime.ParseExact(properties[12], "dd/MM/yyyy HH:mm tt", CultureInfo.InvariantCulture);
-                        }
-                        else if (DateTime.TryParseExact(properties[12], "dd/MM/yyyy hh:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out dateC))
-                        {
-                            dateD = DateTime.ParseExact(properties[12], "dd/MM/yyyy hh:mm", CultureInfo.InvariantCulture);
-                        }
-                        TE.ShnEndDate = dateD;
-                        //TE.IsPaid = Convert.ToBoolean(properties[13]); // Need to change 
                         if (properties[13] != null)
                         {
-                            if (properties[13] == "TRUE")
-                            {
-                                TE.IsPaid = true;
-                            }
-                            else
-                            {
-                                TE.IsPaid = false;
-                            }
-
+                            string boolValue = properties[13];
+                            TE.IsPaid = ValidatePayment(boolValue);
                         }
-
-                        //if (DateTime.TryParseExact(matchText, "dd MMM yyyy", new CultureInfo("en-US"),
-                        //    DateTimeStyles.None, out parsedDate))
-                        //{
-                        //    // Replace that specific text
-                        //    currentField = currentField.Replace(matchText,
-                        //        parsedDate.ToString("MM/dd/yyyy 00:00"));
-                        //}
-
                         if (properties[14] != null)
                         {
                             TE.AssignSHNFacility(SearchFacility(shnList, properties[14]));
@@ -761,9 +768,54 @@ namespace Prg_Assg_CASY
                 else if (properties[0] == "visitor")  // When the attribute under the heading "type" is a visitor
                 {
                     Visitor visitor = new Visitor(properties[1], properties[4], properties[5]);
+                    TravelEntry TE = new TravelEntry();
                     pList.Add(visitor);
+                    if (properties[9] != null)
+                    {
+                        TE.LastCountyOfEmbarkation = properties[9];
+                        TE.EntryMode = properties[10];
+                        DateTime travelEntryDate;
+                        DateTime travelShnEndDate;
+                        travelEntryDate = FormatTravelDate(properties[11]);
+                        travelShnEndDate = FormatTravelDate(properties[12]);
+                        TE.EntryDate = travelEntryDate;
+                        TE.ShnEndDate = travelShnEndDate;
+                    }
+                    if (properties[13] != null)
+                    {
+                        string boolValue = properties[13];
+                        TE.IsPaid = ValidatePayment(boolValue);
+                    }
+                    if (properties[14] != null)
+                    {
+                        TE.AssignSHNFacility(SearchFacility(shnList, properties[14]));
+                    }
+                    visitor.AddTravelEntry(TE);
                 }
-
+            }
+        }
+        static DateTime FormatTravelDate(string travelDate)
+        {
+            DateTime formattedDate;
+            if (DateTime.TryParseExact(travelDate, "dd/MM/yyyy HH:mm tt", CultureInfo.InvariantCulture, DateTimeStyles.None, out formattedDate))
+            {
+                formattedDate = DateTime.ParseExact(travelDate, "dd/MM/yyyy HH:mm tt", CultureInfo.InvariantCulture);
+            }
+            else if (DateTime.TryParseExact(travelDate, "dd/MM/yyyy hh:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out formattedDate))
+            {
+                formattedDate = DateTime.ParseExact(travelDate, "dd/MM/yyyy hh:mm", CultureInfo.InvariantCulture);
+            }
+            return formattedDate;
+        }
+        static bool ValidatePayment(string boolValue)
+        {
+            if (boolValue == "TRUE")
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 
@@ -794,7 +846,6 @@ namespace Prg_Assg_CASY
             }
             return null;
         }
- 
     }
 }
 
