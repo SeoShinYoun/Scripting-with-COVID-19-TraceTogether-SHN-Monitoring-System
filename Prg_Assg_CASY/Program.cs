@@ -196,8 +196,9 @@ namespace Prg_Assg_CASY
                         else
                         {
                             Console.WriteLine(TE);
+                            //Console.WriteLine("{0,10}  {1,10}  {2,10}  {3,10}  {4,10}  {5,10}", TE.LastCountyOfEmbarkation, TE.EntryMode, TE.EntryDate, TE.ShnEndDate, TE.IsPaid, TE.ShnStay);
                         }
-                        //Console.WriteLine(TE.LastCountyOfEmbarkation, TE.EntryMode, TE.EntryDate, TE.)
+                        
                     }
                     isFound = true;
                     if (p is Resident) //When Person found in list is a resident 
@@ -666,6 +667,11 @@ namespace Prg_Assg_CASY
                             }
                             if (choice >= 0 && choice < shnFacilityList.Count)
                             {
+                                if (shnFacilityList[choice].IsAvailable() == false)
+                                {
+                                    Console.WriteLine("The Facility is not available due to vacancy constraints...");
+                                    continue;
+                                }
                                 TE.AssignSHNFacility(shnFacilityList[choice]);
                                 shnFacilityList[choice].FacilityVacancy = shnFacilityList[choice].FacilityVacancy - 1;
                                 
@@ -682,7 +688,8 @@ namespace Prg_Assg_CASY
                         Console.WriteLine("The person identified is not required to serve SHN...");
                     }
                     personList[i].AddTravelEntry(TE);
-                    Console.WriteLine("Travel Entry Successfully Recorded for " + personList[i].Name + ".");
+                    Console.WriteLine();
+                    Console.WriteLine("Travel Entry Successfully Recorded for " + personList[i].Name + "!");
                 }
             }
             if (isFound == false)
@@ -736,7 +743,6 @@ namespace Prg_Assg_CASY
                         }
                         /*DateTime dateB = DateTime.ParseExact(properties[8], "dd-MMM-yy", CultureInfo.InvariantCulture);*/
                         resident.Token = new TraceTogetherToken(properties[6], properties[7], expirydate);
-
                     }
                     if (properties[9] != null)
                     {
@@ -774,6 +780,7 @@ namespace Prg_Assg_CASY
                         travelEntryDate = FormatTravelDate(properties[11]);
                         travelShnEndDate = FormatTravelDate(properties[12]);
                         TE.EntryDate = travelEntryDate;
+                        TE.ShnEndDate = travelShnEndDate;
                     }
                     if (properties[13] != null)
                     {

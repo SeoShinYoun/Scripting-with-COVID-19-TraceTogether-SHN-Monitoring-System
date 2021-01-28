@@ -120,13 +120,14 @@ namespace Prg_Assg_CASY
             }
             else
             {
+                facilityVacancy = 0;
                 return false;
             }
         }
 
         public override string ToString()
         {
-            return "Facility Name: " + FacilityName + "\nFacility Capacity: " + FacilityCapacity +
+            return "\nFacility Name: " + FacilityName + "\nFacility Capacity: " + FacilityCapacity +
                 "\nFacility Vacancy: " + FacilityVacancy + "\nDistance From Air Checkpoint: " + DistFromAirCheckpoint +
                 "\nDistance From Sea Checkpoint: " + DistFromSeaCheckpoint + "\nDistance From Land Checkpoint: " + DistFromLandCheckpoint;
         }
