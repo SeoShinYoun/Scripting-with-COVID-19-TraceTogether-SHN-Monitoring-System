@@ -159,6 +159,58 @@ namespace Prg_Assg_CASY
             }
 
         }
+
+        // Methods for option 1 of MainMenu (GeneralMenu) 
+        // option 1 of GeneralMenu to display all the visitors 
+        static void DisplayAllVisitors(List<Person> personList)
+        {
+            Console.WriteLine("--------------------------- List of Visitors ---------------------------");
+            for (int i = 0; i < personList.Count; i++)
+            {
+                if (personList[i] is Visitor)
+                {
+                    Console.WriteLine(personList[i]);
+                }
+            }
+            Task.Delay(1500).Wait();
+        }
+        // option 2 of GeneralMenu to ask for person to enter name to  diaplay person details 
+        static void DisplayPersonDetails(List<Person> personList)
+        {
+            bool isFound = false;
+            Console.Write("Enter Name of person you are searching for: "); // Asking for user's input for name to be checked. 
+            string searchedName = Console.ReadLine();
+            foreach (Person p in personList)
+            {
+                if (p.Name.ToLower() == searchedName.ToLower()) // When correct Name is being input by the user 
+                {
+                    Console.WriteLine("");
+                    Console.WriteLine("-------------------------- Detail of Person --------------------------");
+                    Console.WriteLine(p);
+                    isFound = true;
+                    if (p is Resident) //When Person found in list is a resident 
+                    {
+                        Console.WriteLine();
+                        if (string.IsNullOrEmpty(((Resident)p).Token.SerialNo))
+                        {
+                            Console.WriteLine("No Trace Together Token Data Found..."); // When Resident do not have a TraceTogetherToken 
+                        }
+                        else
+                        {
+                            Console.WriteLine("------------ Trace Together Token information ------------");
+                            Console.WriteLine(((Resident)p).Token.ToString()); // When Resident has a TraceTogetherToken 
+                        }
+                    }
+                    Task.Delay(1500).Wait();
+                }
+            }
+            if (isFound == false)
+            {
+                Console.WriteLine("Name of person '" + searchedName + "' could not be found. Please enter a valid name..."); // When an invalid name was being input by the user 
+                Task.Delay(1500).Wait();
+            }
+        }
+        // Saafe Entry Menu and Methods 
         static void SafeEntryMenu(List<Person> personList, List<BusinessLocation> businessLocationList, List<SHNFacility> shnFacilityList) // Menu to allow user to navigate through the functions of SafeEntry
         {
             bool displaySafeEntry = true;
@@ -229,6 +281,226 @@ namespace Prg_Assg_CASY
             SearchName(personList, Name);*/
         }
 
+        static void AssignReplaceToken(List<Person> personList, List<BusinessLocation> businessLocationList, List<SHNFacility> shnFacilityList)
+        {
+            bool isFound = false;
+            Console.WriteLine("Enter your name: ");
+            string ttName = Console.ReadLine();
+            foreach (Person r in personList)
+            {
+                if (r.Name.ToLower() == ttName.ToLower()) // When correct Name is being input by the user 
+                {
+                    isFound = true;
+                    if (r is Resident) //When Person found in list is a resident 
+                    {
+                        Resident resident = (Resident)r;
+                        if (string.IsNullOrEmpty(((Resident)r).Token.SerialNo))// When resident does not have an existing Trace Together Token 
+                        {
+                            Console.WriteLine("===============================================");
+                            Console.WriteLine("There was no Trace Together Token Data Found...");
+                            Console.WriteLine("===============================================");
+                            Console.WriteLine("Would you like to be assigned a token? ");
+                            Console.WriteLine("(1) Yes");
+                            Console.WriteLine("(2) No");
+                            Console.WriteLine("Option: ");
+                            string option = Console.ReadLine(); // store option of either (1) Yes or (2) NO 
+                            while (true)
+                            {
+                                if (option is "1") //When user chooses option (1) Yes 
+                                {
+                                    resident.Token.ReplaceToken(resident.Token.SerialNo, resident.Token.CollectionLocation); //To make a new token for the resident 
+                                    SafeEntryMenu(personList, businessLocationList, shnFacilityList);// Navigate the user back to the SafeEntry Menu after token is being assigned
+                                    //MainMenu(personList, businessLocationList); // Navigate the user back to the Main Menu after token is being assigned 
+                                }
+                                else if (option is "2") //When User Chooses option (2) No 
+                                {
+                                    SafeEntryMenu(personList, businessLocationList, shnFacilityList); // To go back to the Safe Entry Menu 
+                                }
+                            }
+                        }
+                        else // When resident already has an existing Trace Togethger Token 
+                        {
+                            while (true)
+                            {
+                                Console.WriteLine("====================================================");
+                                Console.WriteLine("Hi " + ttName + " ! Your Trace Together Token Data was Found!");
+                                Console.WriteLine("====================================================");
+                                Console.WriteLine(((Resident)r).Token.ToString()); // Print out existing Trace together Token details (Old Trace together Token detail) 
+                                Console.WriteLine("====================================================");
+                                Console.WriteLine("(1) Check for eligibilty to replace token");
+                                Console.WriteLine("(2) Replace Token");
+                                Console.WriteLine("(3) Go Back");
+                                Console.WriteLine("Option: ");
+                                string ReplaceOption = Console.ReadLine();  // store option of either (1) Check for eligibility to replace token or (2) Replace Token or (3) Go Back
+                                if (ReplaceOption is "1") // When user chooses to (1) check for eligibility of their token
+                                {
+                                    resident.Token.IsEligibleForReplacement();
+
+                                }
+                                else if (ReplaceOption is "2")// When user chooses to (2) replace token 
+                                {
+                                    if (resident.Token.IsEligibleForReplacement() == true) // When resident with existing token is elligible to replace their Trace Together token
+                                    {
+
+                                        resident.Token.ReplaceToken(resident.Token.SerialNo, resident.Token.CollectionLocation);
+                                        SafeEntryMenu(personList, businessLocationList, shnFacilityList);// Navigate the user back to the SafeEntry Menu after new token is assigned 
+                                        //MainMenu(personList,businessLocationList);// Brings user back to the Safe Entry menu 
+                                    }
+                                    else // When resident with existing token is unable to replace the Trace Together Token 
+                                    {
+                                        SafeEntryMenu(personList, businessLocationList, shnFacilityList); //Navigate the user back to the SafeEntry Menu after message to tell user that their token cannot be replaced is desplayed
+                                    }
+                                }
+                                else //When user chooses (3) Go Back
+                                {
+                                    SafeEntryMenu(personList, businessLocationList, shnFacilityList);
+                                }
+                            }
+                        }
+                    }
+                    else // When user is not a resident and is a Visitor 
+                    {
+                        Console.WriteLine("Sorry " + ttName + " You are not a Resident in Singapore. You will not have or be assigned a Trace Together Token. "); // A visitor is not entitled to 
+                    }
+                }
+            }
+            if (isFound == false)// When user types in the wrong name 
+            {
+                Console.WriteLine("Name of person '" + ttName + "' could not be found. Please enter a valid name..."); // When an invalid name is being input by the user 
+                Task.Delay(1500).Wait();
+            }
+        }
+
+        // Option 2 of SafeEntry Menu to Display all Business Locations 
+        static void DisplayAllBusinessLocation(List<BusinessLocation> businessLocationList)
+        {
+            Console.WriteLine("--------------------------- All Business Locations---------------------------");
+            for (int i = 0; i < businessLocationList.Count; i++)
+            {
+                Console.WriteLine(i + 1 + ".................................");
+                Console.WriteLine(businessLocationList[i]); // To List all of the business locations 
+                Console.WriteLine("");
+            }
+            Task.Delay(1500).Wait();
+        }
+
+        // Option 3 of SafeEntry Menu to Edit Business Location Capacity
+        static void EditBusinessCapacity(List<BusinessLocation> businessLocationList)
+        {
+            Console.WriteLine("--------------------------- All Business Locations---------------------------");
+            for (int i = 0; i < businessLocationList.Count; i++) // To loop and get index 
+            {
+                Console.WriteLine(i + 1 + ".................................");
+                Console.WriteLine(businessLocationList[i]); // To diplay all of the business locations 
+                Console.WriteLine("");
+            }
+            Console.WriteLine("=========================================");
+            Console.WriteLine("Business Location edit option: ");
+            int BLOption = Convert.ToInt32(Console.ReadLine()); // To store the users choice of shop from 1 to 4 
+            BLOption = BLOption - 1; // To get index of the business locations 
+            Console.WriteLine("Edit New maximum capacity: ");
+            int BLMaxCapacity = Convert.ToInt32(Console.ReadLine()); // To store users option of new maximum capacity 
+            businessLocationList[BLOption].MaximumCapacity = BLMaxCapacity; // To change the business location max capacity 
+            Console.WriteLine(businessLocationList[BLOption].ToString()); // To update the new business location max capacity 
+        }
+
+        // option 4 of SafeEntry Menu to Check-In 
+        static void CheckIn(List<Person> personList, List<BusinessLocation> businessLocationList)
+        {
+            bool isFound = false;
+            Console.WriteLine("Enter your name: ");
+            string SEName = Console.ReadLine();
+            foreach (Person p in personList)
+            {
+                if (p.Name.ToLower() == SEName.ToLower()) // To check if correct Name is being input by the user 
+                {
+                    isFound = true;
+                    Console.WriteLine("--------------------------- All Business Locations---------------------------");
+                    for (int i = 0; i < businessLocationList.Count; i++) // To loop and get index 
+                    {
+                        Console.WriteLine(i + 1 + ".................................");
+                        Console.WriteLine(businessLocationList[i]);// To list business locatiopns for user to choose from 
+                        Console.WriteLine("");
+                    }
+                    Console.WriteLine("=========================================");
+                    Console.WriteLine("Business Location to Check In: ");
+                    int SEBLOption = Convert.ToInt32(Console.ReadLine()); // To store the users choice of shop from 1 to 4 
+                    SEBLOption = SEBLOption - 1; // To get index of the business locations 
+                    Task.Delay(1500).Wait();
+                    if (businessLocationList[SEBLOption].VisitorsNow < businessLocationList[SEBLOption].MaximumCapacity)// When the number of visitors in the loaction is not at amximum 
+                    {
+                        SafeEntry CheckIn = new SafeEntry(DateTime.Now, businessLocationList[SEBLOption]);
+                        businessLocationList[SEBLOption].VisitorsNow = businessLocationList[SEBLOption].VisitorsNow + 1; // Visitor now would add 1 
+                        p.AddSafeEntry(CheckIn); // To update check in data for the business locations 
+                        Console.WriteLine("=============== Checked-In ==============");
+                        Console.WriteLine(CheckIn); // To display the new check in data information with the updated number of visitors 
+                        Console.WriteLine("-----------------------------------------");
+                    }
+                    else // Whem the number of visitors at the locatiopn is at maximum 
+                    {
+                        Console.WriteLine("----------------------------------------------------------------------");
+                        Console.WriteLine("Business Location has reached Maximum Capacity. Try again in a while! ");
+                        Console.WriteLine("----------------------------------------------------------------------");
+                    }
+                }
+
+            }
+            if (isFound == false)// When an invalid name was being input by the user 
+            {
+                Console.WriteLine("Name of person '" + SEName + "' could not be found. Please enter a valid name...");
+                Task.Delay(1500).Wait();
+            }
+
+        }
+
+        // option 5 of SafeEntry Menu to Check-Out
+        static void CheckOut(List<Person> personList, List<BusinessLocation> businessLocationList, List<SHNFacility> shnFacilityList)
+        {
+            bool isFound = false;
+            Console.WriteLine("Enter your name: ");
+            string SEName = Console.ReadLine(); // Stores user input name 
+            foreach (Person p in personList)
+            {
+                if (p.Name.ToLower() == SEName.ToLower()) // To check if correct Name is being input by the user 
+                {
+                    isFound = true;
+                    //DisplayAllBusinessLocation(businessLocationList);
+                    if (p.SafeEntryList.Count == 0) // When there is no check in data to be displayed 
+                    {
+                        Console.WriteLine("");
+                        Console.WriteLine("===================================");
+                        Console.WriteLine("No Location available to check out.");
+                        Console.WriteLine("===================================");// Navigate user back to Sae Entry Menu after diplaying message to tell user that there is no location to check in 
+                    }
+                    for (int i = 0; i < p.SafeEntryList.Count; i++) // To loop and to get index 
+                    {
+                        if (p.SafeEntryList[i].CheckIn != null) // When there is data in checkin in safentry cal
+                        {
+                            Console.WriteLine("------------------- Business Location(s) Not checked out -------------------");
+                            Console.WriteLine(i + 1 + ".................................");
+                            Console.WriteLine(p.SafeEntryList[i]);
+                            Console.WriteLine("");
+                            Console.WriteLine("=========================================");
+                            Console.WriteLine("Business Location(s) to Check Out (please Enter '1' to check out): ");
+                            int SEBLOption = Convert.ToInt32(Console.ReadLine()) - 1; // To store the users choice of shop from 1 to 4 
+                            p.SafeEntryList[SEBLOption].PerformCheckOut();
+                            businessLocationList[SEBLOption].VisitorsNow = businessLocationList[SEBLOption].VisitorsNow - 1; // deduct one from the number of visitors in the business location
+                            Console.WriteLine("");
+                            Console.WriteLine("=============== Checked-Out ==============");
+                            Console.WriteLine(businessLocationList[SEBLOption].ToString()); // To tell users the new information of the business and to confirm that the number of vistors is deducted
+                            Console.WriteLine("==========================================");
+                            SafeEntryMenu(personList, businessLocationList, shnFacilityList); // Navigate user back to the SafeEntry Menu after updated business location is displayed 
+                        }
+                    }
+                }
+            }
+            if (isFound == false) // When an invalid name was being input by the user 
+            {
+                Console.WriteLine("Name of person '" + SEName + "' could not be found. Please enter a valid name...");
+                Task.Delay(1500).Wait();
+            }
+        }
+// Travel Entry Menu and methods 
         static void TravelEntryMenu(List<Person> personList, List<BusinessLocation> businessLocationList, List<SHNFacility> shnFacilityList)
         {
             bool displayTravelEntry = true;
@@ -293,6 +565,7 @@ namespace Prg_Assg_CASY
             }
 
         }
+        
         // Method for Option 1 of TravelEntry Menu 
         static void ListAllSHNFacility(List<SHNFacility> shnFacilityList)
         {
@@ -425,7 +698,7 @@ namespace Prg_Assg_CASY
             }
         }
 
-        //Reading of CSV files         
+ //Reading of CSV files         
         //Reading of Person.csv file using System.IO
         static void IncludePerson(List<Person> pList, List<SHNFacility> shnList)
         {
@@ -554,273 +827,7 @@ namespace Prg_Assg_CASY
             }
             return null;
         }
- // Methods for option 1 of MainMenu (GeneralMenu) 
-        // option 1 of GeneralMenu to display all the visitors 
-        static void DisplayAllVisitors(List<Person> personList)
-        {
-            Console.WriteLine("--------------------------- List of Visitors ---------------------------");
-            for (int i = 0; i < personList.Count; i++)
-            {
-                if (personList[i] is Visitor)
-                {
-                    Console.WriteLine(personList[i]);
-                }
-            }
-            Task.Delay(1500).Wait();
-        }
-        // option 2 of GeneralMenu to ask for person to enter name to  diaplay person details 
-        static void DisplayPersonDetails(List<Person> personList)
-        {
-            bool isFound = false;
-            Console.Write("Enter Name of person you are searching for: "); // Asking for user's input for name to be checked. 
-            string searchedName = Console.ReadLine();
-            foreach (Person p in personList)
-            {
-                if (p.Name.ToLower() == searchedName.ToLower()) // When correct Name is being input by the user 
-                {
-                    Console.WriteLine("");
-                    Console.WriteLine("-------------------------- Detail of Person --------------------------");
-                    Console.WriteLine(p);
-                    isFound = true;
-                    if (p is Resident) //When Person found in list is a resident 
-                    {
-                        Console.WriteLine();
-                        if (string.IsNullOrEmpty(((Resident)p).Token.SerialNo)) 
-                        {
-                            Console.WriteLine("No Trace Together Token Data Found..."); // When Resident do not have a TraceTogetherToken 
-                        }
-                        else
-                        {
-                            Console.WriteLine("------------ Trace Together Token information ------------");
-                            Console.WriteLine(((Resident)p).Token.ToString()); // When Resident has a TraceTogetherToken 
-                        }
-                    }
-                    Task.Delay(1500).Wait();
-                }
-            }
-            if (isFound == false)
-            {
-                Console.WriteLine("Name of person '" + searchedName + "' could not be found. Please enter a valid name..."); // When an invalid name was being input by the user 
-                Task.Delay(1500).Wait();
-            }
-        }
- // Methods for option 2 of MainMenu (SafeEntry Menu) 
-        // Option 1 of SafeEntry Menu to Assign / Replace TraceTogetherToken 
-        static void AssignReplaceToken(List<Person> personList, List<BusinessLocation> businessLocationList, List<SHNFacility> shnFacilityList)
-        {
-            bool isFound = false;
-            Console.WriteLine("Enter your name: ");
-            string ttName = Console.ReadLine();
-            foreach (Person r in personList)
-            {
-                if (r.Name.ToLower() == ttName.ToLower()) // When correct Name is being input by the user 
-                {
-                    isFound = true;
-                    if (r is Resident) //When Person found in list is a resident 
-                    {
-                        Resident resident = (Resident)r;
-                        if (string.IsNullOrEmpty(((Resident)r).Token.SerialNo))// When resident does not have an existing Trace Together Token 
-                        {
-                            Console.WriteLine("===============================================");
-                            Console.WriteLine("There was no Trace Together Token Data Found..."); 
-                            Console.WriteLine("===============================================");
-                            Console.WriteLine("Would you like to be assigned a token? ");
-                            Console.WriteLine("(1) Yes");
-                            Console.WriteLine("(2) No");
-                            Console.WriteLine("Option: ");
-                            string option = Console.ReadLine(); // store option of either (1) Yes or (2) NO 
-                            while (true)
-                            {
-                                if (option is "1") //When user chooses option (1) Yes 
-                                {
-                                    resident.Token.ReplaceToken(resident.Token.SerialNo, resident.Token.CollectionLocation); //To make a new token for the resident 
-                                    SafeEntryMenu(personList, businessLocationList, shnFacilityList);// Navigate the user back to the SafeEntry Menu after token is being assigned
-                                    //MainMenu(personList, businessLocationList); // Navigate the user back to the Main Menu after token is being assigned 
-                                }
-                                else if (option is "2") //When User Chooses option (2) No 
-                                {
-                                    SafeEntryMenu(personList,businessLocationList, shnFacilityList); // To go back to the Safe Entry Menu 
-                                }
-                            }
-                        }
-                        else // When resident already has an existing Trace Togethger Token 
-                        {
-                            while (true) 
-                            {
-                                Console.WriteLine("====================================================");
-                                Console.WriteLine("Hi " + ttName +" ! Your Trace Together Token Data was Found!");
-                                Console.WriteLine("====================================================");
-                                Console.WriteLine(((Resident)r).Token.ToString()); // Print out existing Trace together Token details (Old Trace together Token detail) 
-                                Console.WriteLine("====================================================");
-                                Console.WriteLine("(1) Check for eligibilty to replace token");
-                                Console.WriteLine("(2) Replace Token");
-                                Console.WriteLine("(3) Go Back");
-                                Console.WriteLine("Option: ");
-                                string ReplaceOption = Console.ReadLine();  // store option of either (1) Check for eligibility to replace token or (2) Replace Token or (3) Go Back
-                                if (ReplaceOption is "1") // When user chooses to (1) check for eligibility of their token
-                                {
-                                    resident.Token.IsEligibleForReplacement();
-
-                                }
-                                else if (ReplaceOption is "2")// When user chooses to (2) replace token 
-                                {
-                                    if (resident.Token.IsEligibleForReplacement() == true) // When resident with existing token is elligible to replace their Trace Together token
-                                    {
-
-                                        resident.Token.ReplaceToken(resident.Token.SerialNo, resident.Token.CollectionLocation);
-                                        SafeEntryMenu(personList, businessLocationList, shnFacilityList);// Navigate the user back to the SafeEntry Menu after new token is assigned 
-                                        //MainMenu(personList,businessLocationList);// Brings user back to the Safe Entry menu 
-                                    }
-                                    else // When resident with existing token is unable to replace the Trace Together Token 
-                                    {
-                                        SafeEntryMenu(personList,businessLocationList, shnFacilityList); //Navigate the user back to the SafeEntry Menu after message to tell user that their token cannot be replaced is desplayed
-                                    }
-                                }
-                                else //When user chooses (3) Go Back
-                                {
-                                    SafeEntryMenu(personList,businessLocationList, shnFacilityList);
-                                }
-                            }
-                        }
-                    }
-                    else // When user is not a resident and is a Visitor 
-                    {
-                        Console.WriteLine("Sorry " + ttName + " You are not a Resident in Singapore. You will not have or be assigned a Trace Together Token. "); // A visitor is not entitled to 
-                    }
-                }
-            }
-            if (isFound == false)// When user types in the wrong name 
-            {
-                Console.WriteLine("Name of person '" + ttName + "' could not be found. Please enter a valid name..."); // When an invalid name is being input by the user 
-                Task.Delay(1500).Wait();
-            }          
-        }
-        
-        // Option 2 of SafeEntry Menu to Display all Business Locations 
-        static void DisplayAllBusinessLocation(List<BusinessLocation> businessLocationList)
-        {
-            Console.WriteLine("--------------------------- All Business Locations---------------------------");
-            for (int i = 0; i < businessLocationList.Count; i++)
-            {
-                Console.WriteLine(i + 1 + ".................................");
-                Console.WriteLine(businessLocationList[i]); // To List all of the business locations 
-                Console.WriteLine("");
-            }
-            Task.Delay(1500).Wait();
-        }
-
-        // Option 3 of SafeEntry Menu to Edit Business Location Capacity
-        static void EditBusinessCapacity(List<BusinessLocation> businessLocationList)
-        {
-            Console.WriteLine("--------------------------- All Business Locations---------------------------");
-            for (int i = 0; i < businessLocationList.Count; i++) // To loop and get index 
-            {
-                Console.WriteLine(i + 1 + ".................................");
-                Console.WriteLine(businessLocationList[i]); // To diplay all of the business locations 
-                Console.WriteLine("");               
-            }
-            Console.WriteLine("=========================================");
-            Console.WriteLine("Business Location edit option: ");
-            int BLOption = Convert.ToInt32(Console.ReadLine()); // To store the users choice of shop from 1 to 4 
-            BLOption = BLOption - 1; // To get index of the business locations 
-            Console.WriteLine("Edit New maximum capacity: ");
-            int BLMaxCapacity = Convert.ToInt32(Console.ReadLine()); // To store users option of new maximum capacity 
-            businessLocationList[BLOption].MaximumCapacity = BLMaxCapacity; // To change the business location max capacity 
-            Console.WriteLine(businessLocationList[BLOption].ToString()); // To update the new business location max capacity 
-        }
-
-        // option 4 of SafeEntry Menu to Check-In 
-        static void CheckIn(List<Person> personList, List<BusinessLocation> businessLocationList)
-        {
-            bool isFound = false;
-            Console.WriteLine("Enter your name: ");
-            string SEName = Console.ReadLine();
-            foreach (Person p in personList)
-            {
-                if (p.Name.ToLower() == SEName.ToLower()) // To check if correct Name is being input by the user 
-                {
-                    isFound = true;
-                    Console.WriteLine("--------------------------- All Business Locations---------------------------");
-                    for (int i = 0; i < businessLocationList.Count; i++) // To loop and get index 
-                    {
-                        Console.WriteLine(i + 1 + ".................................");
-                        Console.WriteLine(businessLocationList[i]);// To list business locatiopns for user to choose from 
-                        Console.WriteLine("");
-                    }
-                    Console.WriteLine("=========================================");
-                    Console.WriteLine("Business Location to Check In: ");
-                    int SEBLOption = Convert.ToInt32(Console.ReadLine()); // To store the users choice of shop from 1 to 4 
-                    SEBLOption = SEBLOption - 1; // To get index of the business locations 
-                    Task.Delay(1500).Wait();
-                    if (businessLocationList[SEBLOption].VisitorsNow < businessLocationList[SEBLOption].MaximumCapacity)// When the number of visitors in the loaction is not at amximum 
-                    {
-                        SafeEntry CheckIn = new SafeEntry(DateTime.Now, businessLocationList[SEBLOption]);
-                        businessLocationList[SEBLOption].VisitorsNow = businessLocationList[SEBLOption].VisitorsNow + 1; // Visitor now would add 1 
-                        p.AddSafeEntry(CheckIn); // To update check in data for the business locations 
-                        Console.WriteLine("=============== Checked-In ==============");
-                        Console.WriteLine(CheckIn); // To display the new check in data information with the updated number of visitors 
-                        Console.WriteLine("-----------------------------------------");
-                    }
-                    else // Whem the number of visitors at the locatiopn is at maximum 
-                    {
-                        Console.WriteLine("Business Location has reached Maximum Capacity. Try again in a while! "); 
-                    }
-                }
-            }
-            if (isFound == false)// When an invalid name was being input by the user 
-            {
-                Console.WriteLine("Name of person '" + SEName + "' could not be found. Please enter a valid name..."); 
-                Task.Delay(1500).Wait();
-            }
-            
-        }
-
-        // option 5 of SafeEntry Menu to Check-Out
-        static void CheckOut(List<Person> personList , List<BusinessLocation> businessLocationList, List<SHNFacility> shnFacilityList)
-        {
-            bool isFound = false;
-            Console.WriteLine("Enter your name: ");
-            string SEName = Console.ReadLine(); // Stores user input name 
-            foreach (Person p in personList)
-            {
-                if (p.Name.ToLower() == SEName.ToLower()) // To check if correct Name is being input by the user 
-                {
-                    isFound = true;
-                    //DisplayAllBusinessLocation(businessLocationList);
-                    if (p.SafeEntryList.Count == 0) // When there is no check in data to be displayed 
-                    {
-                        Console.WriteLine("");
-                        Console.WriteLine("===================================");
-                        Console.WriteLine("No Location available to check out.");
-                        Console.WriteLine("===================================");// Navigate user back to Sae Entry Menu after diplaying message to tell user that there is no location to check in 
-                    }
-                    for (int i = 0; i < p.SafeEntryList.Count; i++) // To loop and to get index 
-                    {
-                        if (p.SafeEntryList[i].CheckIn != null) // When there is data in checkin in safentry cal
-                        {
-                            Console.WriteLine("------------------- Business Location(s) Not checked out -------------------");
-                            Console.WriteLine(i + 1 + ".................................");
-                            Console.WriteLine(p.SafeEntryList[i]);
-                            Console.WriteLine("");
-                            Console.WriteLine("=========================================");
-                            Console.WriteLine("Business Location(s) to Check Out (please Enter '1' to check out): ");
-                            int SEBLOption = Convert.ToInt32(Console.ReadLine()) -1 ; // To store the users choice of shop from 1 to 4 
-                            p.SafeEntryList[SEBLOption].PerformCheckOut();
-                            businessLocationList[SEBLOption].VisitorsNow = businessLocationList[SEBLOption].VisitorsNow - 1; // deduct one from the number of visitors in the business location
-                            Console.WriteLine("");
-                            Console.WriteLine("=============== Checked-Out ==============");
-                            Console.WriteLine(businessLocationList[SEBLOption].ToString()); // To tell users the new information of the business and to confirm that the number of vistors is deducted
-                            Console.WriteLine("==========================================");
-                            SafeEntryMenu(personList, businessLocationList, shnFacilityList); // Navigate user back to the SafeEntry Menu after updated business location is displayed 
-                        }
-                    }
-                }
-            }
-            if (isFound == false) // When an invalid name was being input by the user 
-            {
-                Console.WriteLine("Name of person '" + SEName + "' could not be found. Please enter a valid name..."); 
-                Task.Delay(1500).Wait();
-            }
+ 
         }
     }
 }
