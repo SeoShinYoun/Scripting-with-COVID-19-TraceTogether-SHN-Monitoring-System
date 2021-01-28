@@ -157,8 +157,7 @@ namespace Prg_Assg_CASY
             }
 
         }
-
-        // Methods for option 1 of MainMenu (GeneralMenu) 
+ 
         // option 1 of GeneralMenu to display all the visitors 
         static void DisplayAllVisitors(List<Person> personList)
         {
