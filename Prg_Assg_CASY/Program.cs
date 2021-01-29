@@ -478,32 +478,30 @@ namespace Prg_Assg_CASY
                 {
                     isFound = true;
                     //DisplayAllBusinessLocation(businessLocationList);
-                    if (p.SafeEntryList.Count == 0) // When there is no check in data to be displayed 
+                    if ((p.SafeEntryList.Count == 0) || (p.SafeEntryList == null)) // When there is no check in data to be displayed 
                     {
                         Console.WriteLine("");
                         Console.WriteLine("===================================");
                         Console.WriteLine("No Location available to check out.");
                         Console.WriteLine("===================================");// Navigate user back to Sae Entry Menu after diplaying message to tell user that there is no location to check in 
                     }
-                    for (int i = 0; i < p.SafeEntryList.Count; i++) // To loop and to get index 
+                    else if ((p.SafeEntryList != null) || (p.SafeEntryList.Count != 0)) // When there is data in checkin in safentry cal
                     {
-                        if (p.SafeEntryList[i].CheckIn != null) // When there is data in checkin in safentry cal
-                        {
-                            Console.WriteLine("------------------- Business Location(s) Not checked out -------------------");
-                            Console.WriteLine(i + 1 + ".................................");
-                            Console.WriteLine(p.SafeEntryList[i]);
-                            Console.WriteLine("");
-                            Console.WriteLine("=========================================");
-                            Console.WriteLine("Business Location(s) to Check Out (please Enter '1' to check out): ");
-                            int SEBLOption = Convert.ToInt32(Console.ReadLine()) - 1; // To store the users choice of shop from 1 to 4 
-                            p.SafeEntryList[SEBLOption].PerformCheckOut();
-                            businessLocationList[SEBLOption].VisitorsNow = businessLocationList[SEBLOption].VisitorsNow - 1; // deduct one from the number of visitors in the business location
-                            Console.WriteLine("");
-                            Console.WriteLine("=============== Checked-Out ==============");
-                            Console.WriteLine(businessLocationList[SEBLOption].ToString()); // To tell users the new information of the business and to confirm that the number of vistors is deducted
-                            Console.WriteLine("==========================================");
-                            SafeEntryMenu(personList, businessLocationList, shnFacilityList); // Navigate user back to the SafeEntry Menu after updated business location is displayed 
-                        }
+                        Console.WriteLine("------------------- Business Location(s) Not checked out -------------------");
+                        Console.WriteLine(".................................");
+                        Console.WriteLine(p.SafeEntryList[0]);
+                        Console.WriteLine("");
+                        Console.WriteLine("=========================================");
+                        Console.WriteLine("Business Location(s) to Check Out (please Enter '1' to check out): ");
+                        int SEBLOption = Convert.ToInt32(Console.ReadLine()) - 1; // To store the users choice of shop from 1 to 4 
+                        p.SafeEntryList[SEBLOption].PerformCheckOut();
+                        p.SafeEntryList.RemoveAt(0);
+                        businessLocationList[SEBLOption].VisitorsNow = businessLocationList[SEBLOption].VisitorsNow - 1; // deduct one from the number of visitors in the business location
+                        Console.WriteLine("");
+                        Console.WriteLine("=============== Checked-Out ==============");
+                        Console.WriteLine(businessLocationList[SEBLOption].ToString()); // To tell users the new information of the business and to confirm that the number of vistors is deducted
+                        Console.WriteLine("==========================================");
+                        SafeEntryMenu(personList, businessLocationList, shnFacilityList); // Navigate user back to the SafeEntry Menu after updated business location is displayed 
                     }
                 }
             }
