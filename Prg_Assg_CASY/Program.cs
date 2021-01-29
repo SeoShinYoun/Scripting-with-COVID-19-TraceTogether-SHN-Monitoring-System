@@ -700,13 +700,47 @@ namespace Prg_Assg_CASY
             Console.Write("Please enter the name to be searched: ");
             string searchedName = Console.ReadLine();
             bool isFound = false;
+            double cost;
             for (int i = 0; i < personList.Count; i++)
             {
                 if (searchedName.ToLower() == personList[i].Name.ToLower())
                 {
                     isFound = true;
                     Console.WriteLine("Name Searched Successfully!.... ");
-
+                    DateTime presentDate = DateTime.Now;
+                    foreach(TravelEntry TE in personList[i].TravelEntryList)
+                    {
+                        if (TE != null)
+                        {
+                            if (TE.ShnEndDate <= presentDate && TE.IsPaid == false)
+                            {
+                                Console.WriteLine(TE);
+                                if (TE.ShnStay != null)
+                                {
+                                    cost = TE.ShnStay.CalculateTravelCost(TE.EntryMode, TE.EntryDate);
+                                }
+                                else
+                                {
+                                    Console.Write("Would you like to pay for your Swab Test and Transportation?\n[Y]/[N]: ");
+                                    Console.ReadLine();
+                                }
+                            }
+                            else if (TE.IsPaid == true)
+                            {
+                                Console.WriteLine("Payment has already been made...");
+                            }
+                            else if (TE.ShnEndDate > presentDate)
+                            {
+                                Console.WriteLine("Please Refrain From Paying...");
+                                Console.WriteLine("Your SHN Has Not Ended Yet...");
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("No Travel Entry Record Found...");
+                        }
+                    }
+                    
                 }
             }
             if (isFound == false)
