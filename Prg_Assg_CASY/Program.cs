@@ -51,7 +51,7 @@ namespace Prg_Assg_CASY
             MainMenu(personList,businessLocationList, shnfacilityList);
         }
 
-    //Creation of Menus  (MainMenu, GeneralMenu, SafeEntry, TravelEntry) 
+ //Creation of Menus  (MainMenu, GeneralMenu, SafeEntry, TravelEntry) 
         // Creation of the MainMenu for users to navigate through other functions 
         static void MainMenu(List<Person> personList, List<BusinessLocation> businessLocationList, List<SHNFacility> shnFacilityList) 
         {
@@ -106,7 +106,7 @@ namespace Prg_Assg_CASY
                 }
             }
         }
-
+// General Menu and Methods 
         static void GeneralMenu(List<Person> personList, List<BusinessLocation> businessLocationList, List<SHNFacility> shnFacilityList)
         {
             bool displaygeneral = true;
@@ -183,33 +183,33 @@ namespace Prg_Assg_CASY
                 {
                     Console.WriteLine("");
                     Console.WriteLine("-------------------------- Detail of Person --------------------------");
-                    Console.WriteLine(p);
+                    Console.WriteLine(p); // To print the name, address and Date last travelled 
                     Console.WriteLine();
                     Console.WriteLine("------------------------Travel Entry Details--------------------------");
-                    foreach(TravelEntry TE in p.TravelEntryList)
+                    foreach(TravelEntry TE in p.TravelEntryList) 
                     {
-                        if (string.IsNullOrEmpty(TE.LastCountyOfEmbarkation))
+                        if (string.IsNullOrEmpty(TE.LastCountyOfEmbarkation))// When there is no travel records found 
                         {
                             Console.WriteLine("No Travel Entry Record Found...");
                         }
-                        else
+                        else // When there is travel entry record found, travel records would print 
                         {
                             Console.WriteLine(TE);
                             //Console.WriteLine("{0,10}  {1,10}  {2,10}  {3,10}  {4,10}  {5,10}", TE.LastCountyOfEmbarkation, TE.EntryMode, TE.EntryDate, TE.ShnEndDate, TE.IsPaid, TE.ShnStay);
                         }
                     }
-                    
                     Console.WriteLine("");
                     Console.WriteLine("-------------------------Safe Entry Details---------------------------");
-                    foreach (SafeEntry SE in p.SafeEntryList)
+                    if (p.SafeEntryList.Count == 0) // When there is no SafeEntry Check-In records available 
                     {
-                        if (p.SafeEntryList == null)
+                        Console.WriteLine("No Safe Entry Check-In Record Found...");
+                    }
+                    else // When there is Safeentry Check=In records available 
+                    {
+                        foreach (SafeEntry SE in p.SafeEntryList)
                         {
-                            Console.WriteLine("No Safe Entry Check-In Record Found...");
-                        }
-                        else
-                        {
-                            Console.WriteLine(SE);
+                            Console.WriteLine(SE); // To Print out the Check-In location details and time 
+                            Console.WriteLine("-----------------------------------------");
                         }
                     }
                     isFound = true;
@@ -232,13 +232,13 @@ namespace Prg_Assg_CASY
                     Task.Delay(1500).Wait();
                 }
             }
-            if (isFound == false)
+            if (isFound == false) // When an invalid name was being input by the user
             {
-                Console.WriteLine("Name of person '" + searchedName + "' could not be found. Please enter a valid name..."); // When an invalid name was being input by the user 
+                Console.WriteLine("Name of person '" + searchedName + "' could not be found. Please enter a valid name...");
                 Task.Delay(1500).Wait();
             }
         }
-        // Saafe Entry Menu and Methods 
+// Safe Entry Menu and Methods 
         static void SafeEntryMenu(List<Person> personList, List<BusinessLocation> businessLocationList, List<SHNFacility> shnFacilityList) // Menu to allow user to navigate through the functions of SafeEntry
         {
             bool displaySafeEntry = true;
@@ -275,7 +275,7 @@ namespace Prg_Assg_CASY
                 }
                 if (choice != 6)
                 {
-                    if (choice == 1)
+                    if (choice == 1) 
                     {
                         AssignReplaceToken(personList,businessLocationList, shnFacilityList);
                     }
@@ -307,17 +307,13 @@ namespace Prg_Assg_CASY
                     MainMenu(personList,businessLocationList, shnFacilityList);
                 }
             }
-
-            /*Console.WriteLine("Please Enter your name: ");
-            string SafeEntryName = Convert.ToString(Console.ReadLine());
-            SearchName(personList, Name);*/
         }
 
         static void AssignReplaceToken(List<Person> personList, List<BusinessLocation> businessLocationList, List<SHNFacility> shnFacilityList)
         {
             bool isFound = false;
             Console.WriteLine("Enter your name: ");
-            string ttName = Console.ReadLine();
+            string ttName = Console.ReadLine(); // To store user input name 
             foreach (Person r in personList)
             {
                 if (r.Name.ToLower() == ttName.ToLower()) // When correct Name is being input by the user 
@@ -576,6 +572,7 @@ namespace Prg_Assg_CASY
                 Task.Delay(1500).Wait();
             }
         }
+
 // Travel Entry Menu and methods 
         static void TravelEntryMenu(List<Person> personList, List<BusinessLocation> businessLocationList, List<SHNFacility> shnFacilityList)
         {
