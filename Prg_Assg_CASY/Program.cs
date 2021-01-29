@@ -59,6 +59,7 @@ namespace Prg_Assg_CASY
             while (display == true)
             {
                 int choice = 50; //dummy value
+                Console.WriteLine();
                 Console.WriteLine("***************************************************************");// Format of the Main Menu 
                 Console.WriteLine("*                                                             *");
                 Console.WriteLine("*                 COVID-19 Monitoring System                  *");
@@ -78,11 +79,10 @@ namespace Prg_Assg_CASY
                 }
                 catch (FormatException ex)
                 {
+                    Console.WriteLine();
                     Console.WriteLine("Invalid option selected!");
                     Console.Write("Exception details: ");
                     Console.WriteLine(ex.Message);
-                    Console.WriteLine("Choose from either Options 1, 2, 3, or 4...");
-                    Console.WriteLine();
                 }
                 if (choice != 4)
                 {
@@ -97,6 +97,10 @@ namespace Prg_Assg_CASY
                     else if (choice == 3)
                     {
                         TravelEntryMenu(personList,businessLocationList, shnFacilityList);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Choose from either Options 1, 2, 3, or 4...");
                     }
                 }
                 else
@@ -132,11 +136,10 @@ namespace Prg_Assg_CASY
                 }
                 catch (FormatException ex)
                 {
+                    Console.WriteLine();
                     Console.WriteLine("Invalid option selected!");
                     Console.Write("Exception details: ");
                     Console.WriteLine(ex.Message);
-                    Console.WriteLine("Choose from either Options 1, 2, 3, 4 or 5...");
-                    Console.WriteLine();
                 }
                 if (choice != 3)
                 {
@@ -147,6 +150,10 @@ namespace Prg_Assg_CASY
                     else if (choice == 2)
                     {
                         DisplayPersonDetails(personList);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Choose from either Options 1, 2, or 3...");
                     }
                 }
                 else
@@ -642,12 +649,14 @@ namespace Prg_Assg_CASY
         // Method for Option 1 of TravelEntry Menu 
         static void ListAllSHNFacility(List<SHNFacility> shnFacilityList)
         {
+            Console.WriteLine("----------------------------------------------------- SHN Facilities ----------------------------------------------------");
             Console.WriteLine("{0,-15}   {1,-8}   {2,-8}   {3,-28}   {3,-28}   {4,-29}", "Facility Name", "Capacity", "Vacancy", "Distance From Air Checkpoint", "From Sea Checkpoint", "From Land Checkpoint");
             foreach (SHNFacility facility in shnFacilityList)
             {
                 Console.WriteLine("{0,-15}   {1,-8}   {2,-8}   {3,-28}   {3,-28}   {4,-29}", facility.FacilityName,facility.FacilityCapacity, facility.FacilityVacancy, facility.DistFromAirCheckpoint, facility.DistFromSeaCheckpoint, facility.DistFromLandCheckpoint);
             }
         }
+
         // Method for Option 2 of TravelEntry Menu
         static void CreateVisitor()
         {
@@ -965,45 +974,6 @@ namespace Prg_Assg_CASY
 
 // End of Program         
 
-
-
-//Reading of person csv file using system.IO 
-        //static void IncludePerson(List<Person> pList, List<SHNFacility> shnList)
-        //{
-        //    // reading person location csv file, from the second line onwards according to interpretation from csv file (without headings of attributes)
-        //    string[] csvLines = File.ReadAllLines("Person.csv");
-        //    for (int i = 1; i < csvLines.Length; i++)
-        //    {
-        //        string[] attributes = csvLines[i].Split(',');  //splitting the different attributes into its own individual table 
-        //        if (attributes[0] == "resident") // When the attribute under the heading "type" is a resident 
-        //        {
-        //            Resident r = new Resident(attributes[1], attributes[2], DateTime.ParseExact(attributes[3], "dd/MM/yyyy", null)); // last left country date using ParseExact to convert the string in csv to a datetime in program 
-        //            pList.Add(r);
-        //            if (attributes[6] != null) //When token serial number is present 
-        //            {
-        //                r.Token = new TraceTogetherToken(attributes[6], attributes[7], DateTime.ParseExact(attributes[8], "dd/MM/yyyy", null)); // Name, address, Tokenexpiry date using ParseExact to convert the string in csv to a datetime in program 
-        //            }
-        //            if (attributes[9] != null) //When Travel location is present 
-        //            {
-        //                TravelEntry t = new TravelEntry(attributes[9], attributes[10], DateTime.ParseExact(attributes[11], "dd/MM/yyyy H:mm", null)); // TokenExpiry , TravelEntryMode, TravelEntry date and time (in hours and minutes) using ParseExact to convert the string in csv to a datetime in program 
-        //                t.ShnEndDate = DateTime.ParseExact(attributes[12], "dd/MM/yyyy H:mm", null); //SHN end date and time (in hours and minutes) using ParseExact to convert the string in csv to a datetime in program 
-        //                if (attributes[13] != null)
-        //                {
-        //                    t.IsPaid = Convert.ToBoolean(attributes[13]);
-        //                }
-        //                if (attributes[14] != null)
-        //                {
-        //                    t.AssignSHNFacility(SearchFacility(shnList, attributes[14]));
-        //                }
-        //            }
-        //        }
-        //        else if (attributes[0] == "visitor") // When the attribute under the heading "type" is a visitor  
-        //        {
-        //            pList.Add(new Visitor(attributes[1], attributes[4], attributes[5]));
-
-        //        }
-        //    }
-        //}
 
 
     
