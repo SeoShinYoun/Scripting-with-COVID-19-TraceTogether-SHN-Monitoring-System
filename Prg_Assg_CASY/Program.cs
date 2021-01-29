@@ -770,9 +770,10 @@ namespace Prg_Assg_CASY
                     isFound = true;
                     Console.WriteLine("Name Searched Successfully!.... ");
                     DateTime presentDate = DateTime.Now;
+     
                     foreach(TravelEntry TE in personList[i].TravelEntryList)
                     {
-                        if (TE != null)
+                        if (string.IsNullOrEmpty(TE.LastCountyOfEmbarkation) == false)
                         {
                             if (TE.ShnEndDate <= presentDate && TE.IsPaid == false)
                             {
@@ -780,7 +781,7 @@ namespace Prg_Assg_CASY
                                 Console.WriteLine(TE);
                                 if (TE.ShnStay != null)
                                 {
-                                    Console.WriteLine("Would you like to pay $" + cost.ToString("0.00") + " for your Swab Test, Transportaion and SDF Charges?\n[Y]/[N]: ");
+                                    Console.Write("Would you like to pay $" + cost.ToString("0.00") + " for your Swab Test, Transportaion and SDF Charges?\n[Y]/[N]: ");
                                 }
                                 else
                                 {
@@ -819,9 +820,9 @@ namespace Prg_Assg_CASY
                         else
                         {
                             Console.WriteLine("No Travel Entry Record Found...");
+                            Console.WriteLine("The Person Identified Does Not Need to Pay SHN Charges...");
                         }
                     }
-                    
                 }
             }
             if (isFound == false)
