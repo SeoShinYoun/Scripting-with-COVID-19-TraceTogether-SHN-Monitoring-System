@@ -197,7 +197,20 @@ namespace Prg_Assg_CASY
                             Console.WriteLine(TE);
                             //Console.WriteLine("{0,10}  {1,10}  {2,10}  {3,10}  {4,10}  {5,10}", TE.LastCountyOfEmbarkation, TE.EntryMode, TE.EntryDate, TE.ShnEndDate, TE.IsPaid, TE.ShnStay);
                         }
-                        
+                    }
+                    
+                    Console.WriteLine("");
+                    Console.WriteLine("-------------------------Safe Entry Details---------------------------");
+                    foreach (SafeEntry SE in p.SafeEntryList)
+                    {
+                        if (p.SafeEntryList == null)
+                        {
+                            Console.WriteLine("No Safe Entry Check-In Record Found...");
+                        }
+                        else
+                        {
+                            Console.WriteLine(SE);
+                        }
                     }
                     isFound = true;
                     if (p is Resident) //When Person found in list is a resident 
