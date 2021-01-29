@@ -33,21 +33,19 @@ namespace Prg_Assg_CASY
 
         public override double CalculateSHNCharges()
         {
-            /*foreach (TravelEntry TE in TravelEntryList)
+            double charge = 0;
+            foreach (TravelEntry TE in TravelEntryList)
             {
-                double charge;
                 if (TE.LastCountyOfEmbarkation == "Vietnam" || TE.LastCountyOfEmbarkation == "New Zealand" || TE.LastCountyOfEmbarkation == "MACAO SAR")
                 {
-                    charge = 80;
+                    charge = 200 + 80;
                 }
                 else
                 {
-                    charge = 2000;
-                    
+                    charge = 200 + 2000 + TE.ShnStay.CalculateTravelCost(TE.EntryMode, TE.EntryDate);
                 }
-                return charge *= 1.07;
-            }*/
-            return 0.0;
+            }
+            return charge *= 1.07;
         }
 
         public override string ToString()
