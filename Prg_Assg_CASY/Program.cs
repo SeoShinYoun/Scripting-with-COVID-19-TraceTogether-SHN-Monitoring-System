@@ -280,6 +280,10 @@ namespace Prg_Assg_CASY
                     {
                         CheckOut(personList, businessLocationList, shnFacilityList);
                     }
+                    else
+                    {
+                        Console.WriteLine("Choose from either Options 1, 2, 3, 4, 5, or 6...");
+                    }
                 }
                 else
                 {
