@@ -37,12 +37,12 @@ namespace Prg_Assg_CASY
 
         public void AddTravelEntry(TravelEntry TE)
         {
-            TravelEntryList.Add(TE);
+            TravelEntryList.Add(TE); //Add Travel Entry Record To Person's travel Entry List
         }
 
         public void AddSafeEntry(SafeEntry SE)
         {
-            SafeEntryList.Add(SE);
+            SafeEntryList.Add(SE); //Add Safe Entry Record to Person's Safe Entry List
         }
 
         public abstract double CalculateSHNCharges();

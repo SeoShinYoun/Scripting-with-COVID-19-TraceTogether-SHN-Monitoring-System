@@ -63,27 +63,27 @@ namespace Prg_Assg_CASY
         
         public void AssignSHNFacility(SHNFacility facility)
         {
-            ShnStay = facility;
+            ShnStay = facility; //Assign SHN Facility when User creates travel entry record and books a facility
         }
 
         public void CalculateSHNDuration()
         {
             int duration;
-            if (LastCountyOfEmbarkation == "New Zealand" || LastCountyOfEmbarkation == "Vietnam")
+            if (LastCountyOfEmbarkation == "New Zealand" || LastCountyOfEmbarkation == "Vietnam") //if Person cam from New Zealand or Vietnam,
             {
-                duration = 0;
+                duration = 0; //Duration = 0 days as they do not need to serve SHN
             }
             else if (LastCountyOfEmbarkation == "Macao SAR")
             {
-                duration = 7;
+                duration = 7; //Duraion = 7 days as they would need to serve SHN at own accommodation for 7 days
             }
             else
             {
-                duration = 14;
+                duration = 14;  //Other countries' duration = 14 days 
             }
-            Console.WriteLine("The Length of SHN Duration is: " + duration + " Days");
-            ShnEndDate = EntryDate.AddDays(duration);
-            Console.WriteLine("The SHN End Date: " + ShnEndDate.ToString("dd/MM/yyyy"));
+            Console.WriteLine("The Length of SHN Duration is: " + duration + " Days"); //Display Length of duration
+            ShnEndDate = EntryDate.AddDays(duration); //Add the duration days to entry date to find end date of shn
+            Console.WriteLine("The SHN End Date: " + ShnEndDate.ToString("dd/MM/yyyy")); //Format DateTime and Display End Date
         }
 
         public override string ToString()

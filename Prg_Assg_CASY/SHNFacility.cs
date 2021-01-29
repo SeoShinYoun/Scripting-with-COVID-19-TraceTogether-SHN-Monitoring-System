@@ -66,25 +66,26 @@ namespace Prg_Assg_CASY
         //Methods
         public double CalculateTravelCost(string entryMode, DateTime entryDate)
         {
-            double cost = 50 ; // Base Fare and for further calculations
+            double cost = 50 ; //dummy value
+            // Base Fare and for further calculations
             if (entryMode == "Air")
             {
-                cost = cost + DistFromAirCheckpoint * 0.22;
+                cost += DistFromAirCheckpoint * 0.22; // Calculate Travel Cost based on if Entry Mode is Air...
                
             }
             else if (entryMode == "Sea")
             {
-                cost = cost + DistFromSeaCheckpoint * 0.22;
+                cost += DistFromSeaCheckpoint * 0.22; // Calculate Travel Cost based on if Entry Mode is Sea...
             }
             else if (entryMode == "Land")
             {
-                cost = cost + DistFromLandCheckpoint * 0.22;
+                cost += DistFromLandCheckpoint * 0.22; // Calculate Travel Cost based on if Entry Mode is Land...
             }
             else
             {
                 Console.WriteLine("Entry Mode cannot be determined...");
             }
-            DateTime aDate = DateTime.Now;
+            DateTime aDate = DateTime.Now; //
             //Condition checks for entry that falls between 6am to 8.59am
             DateTime timerangea1 = new DateTime(aDate.Year, aDate.Month, aDate.Day, 6, 0, 0);
             DateTime timerangea2 = new DateTime(aDate.Year, aDate.Month, aDate.Day, 8, 59, 0);
@@ -100,28 +101,28 @@ namespace Prg_Assg_CASY
             // Check if entry falls within 6am to 8.59am or 6pm to 11.59pm
             if ((entryDate >= timerangea1 && entryDate <= timerangea2) || (entryDate >= timerangeb1 && entryDate <= timerangeb2))
             {
-                return cost * 1.25; //25% surcharge of basefare
+                return cost * 1.25; //25% surcharge of basefare between 6am to 8.59am OR 6pm to 11.59pm
             }
             else if (entryDate >= timerangec1 && entryDate <= timerangec2)
             {
-                return cost * 1.5; //50% surcharge of basefare
+                return cost * 1.5; //50% surcharge of basefare between Midnight to 5.59am
             }
             else
             {
-                return cost;
+                return cost; //No surcharge for other timings
             }
         }
 
-        public bool IsAvailable()
+        public bool IsAvailable() //Check if Facility has vacancy 
         {
             if (facilityVacancy >= 1)
             {
-                return true;
+                return true; //If there is 1 or more vacancy, the facility would be available for booking
             }
             else
             {
-                facilityVacancy = 0;
-                return false;
+                facilityVacancy = 0;  // If there 0 vacancies left, vacancy would be set to 0 to prevent negative numbers 
+                return false;  //If false, facility would not be available for booking and program will display message accordingly
             }
         }
 
