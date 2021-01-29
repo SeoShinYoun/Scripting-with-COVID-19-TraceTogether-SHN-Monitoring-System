@@ -475,9 +475,11 @@ namespace Prg_Assg_CASY
                         SafeEntry CheckIn = new SafeEntry(DateTime.Now, businessLocationList[SEBLOption]);
                         businessLocationList[SEBLOption].VisitorsNow = businessLocationList[SEBLOption].VisitorsNow + 1; // Visitor now would add 1 
                         p.AddSafeEntry(CheckIn); // To update check in data for the business locations 
+                        Console.WriteLine("");
                         Console.WriteLine("=============== Checked-In ==============");
                         Console.WriteLine(CheckIn); // To display the new check in data information with the updated number of visitors 
                         Console.WriteLine("-----------------------------------------");
+                        Console.WriteLine("=========================================");
                     }
                     else // Whem the number of visitors at the locatiopn is at maximum 
                     {
@@ -511,31 +513,40 @@ namespace Prg_Assg_CASY
                     if ((p.SafeEntryList.Count == 0) || (p.SafeEntryList == null)) // When there is no check in data to be displayed 
                     {
                         Console.WriteLine("");
-                        Console.WriteLine("===================================");
-                        Console.WriteLine("No Location available to check out.");
-                        Console.WriteLine("===================================");// Navigate user back to Sae Entry Menu after diplaying message to tell user that there is no location to check in 
+                        Console.WriteLine("==================================");
+                        Console.WriteLine("No Location available to check out");
+                        Console.WriteLine("==================================");// Navigate user back to Sae Entry Menu after diplaying message to tell user that there is no location to check in 
                     }
                     else if ((p.SafeEntryList != null) || (p.SafeEntryList.Count != 0)) // When there is data in checkin in safentry cal
                     {
-                        Console.WriteLine("------------------- Business Location(s) Not checked out -------------------");
+                        Console.WriteLine("------------------- Business Location Not checked out -------------------");
                         Console.WriteLine(".................................");
                         Console.WriteLine(p.SafeEntryList[0]); // To list the location that the user has yet to check out 
                         Console.WriteLine("");
                         Console.WriteLine("=========================================");
-                        Console.WriteLine("Business Location(s) to Check Out: ");
+                        Console.WriteLine("To Check out from this business location: ");
                         Console.WriteLine("(1) Yes ");
                         Console.WriteLine("(2) No ");
                         Console.WriteLine("option: ");
                         string option = Console.ReadLine();// To store options of (1) Yes & (2) No 
                         if (option == "1") //When the user chooses (1) Yes to checkout from business location 
                         {
-                            p.SafeEntryList.RemoveAt(0); //To remove the checkin data to tell the user that there is no check in data to check out 
-                            businessLocationList[0].VisitorsNow = businessLocationList[0].VisitorsNow - 1; // deduct one from the number of visitors in the business location
-                            Console.WriteLine("");
-                            Console.WriteLine("=============== Checked-Out ==============");
-                            Console.WriteLine(businessLocationList[0].ToString()); // To tell users the new information of the business and to confirm that the number of vistors is deducted
-                            Console.WriteLine("==========================================");
-                            SafeEntryMenu(personList, businessLocationList, shnFacilityList); // Navigate user back to the SafeEntry Menu after updated business location is displayed 
+                            foreach (BusinessLocation b in businessLocationList) // When the checkin location matches the name in business location list 
+                            {
+                               if (p.SafeEntryList[0].Location.BusinessName == b.BusinessName) // If the check In location in safentrylist tallies with the location in businesslocationlist 
+                                {
+                                    b.VisitorsNow = b.VisitorsNow - 1; // deduct one from the number of visitors in the business location
+                                    Console.WriteLine("");
+                                    Console.WriteLine("=============== Checked-Out ==============");
+                                    Console.WriteLine(p.SafeEntryList[0]); // To tell users the new information of the business and to confirm that the number of vistors is deducted
+                                    Console.WriteLine(p.SafeEntryList[0].PerformCheckOut());//Show the checkin and checkout timing 
+                                    Console.WriteLine("------------------------------------------");
+                                    Console.WriteLine("==========================================");
+                                    p.SafeEntryList.RemoveAt(0); //To remove the checkin data to tell the user that there is no check in data to check out 
+                                    Task.Delay(1500).Wait();
+                                    SafeEntryMenu(personList, businessLocationList, shnFacilityList); // Navigate user back to the SafeEntry Menu after updated business location is displayed 
+                                }
+                            }
                         }
                         else if (option == "2") //When the user chooses(2) No to not check out from business location 
                         {

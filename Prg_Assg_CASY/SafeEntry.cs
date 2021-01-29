@@ -42,9 +42,10 @@ namespace Prg_Assg_CASY
             Location = L;
         }
 
-        public virtual void PerformCheckOut()
+        public virtual string PerformCheckOut()
         {
-            CheckOut = DateTime.Now; 
+            CheckOut = DateTime.Now;
+            return "-----------------------------------------" + "\nCheck Out time: " + CheckOut;
         }
 
         public override string ToString()
