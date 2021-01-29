@@ -270,11 +270,11 @@ namespace Prg_Assg_CASY
                     }
                     else if (choice == 3)
                     {
-                        EditBusinessCapacity(businessLocationList);
+                        EditBusinessCapacity(personList, businessLocationList, shnFacilityList);
                     }
                     else if (choice == 4)
                     {
-                        CheckIn(personList, businessLocationList);
+                        CheckIn(personList, businessLocationList, shnFacilityList);
                     }
                     else if (choice == 5)
                     {
@@ -398,7 +398,7 @@ namespace Prg_Assg_CASY
         }
 
         // Option 3 of SafeEntry Menu to Edit Business Location Capacity
-        static void EditBusinessCapacity(List<BusinessLocation> businessLocationList)
+        static void EditBusinessCapacity(List<Person> personList, List<BusinessLocation> businessLocationList, List<SHNFacility> shnFacilityList)
         {
             Console.WriteLine("--------------------------- All Business Locations---------------------------");
             for (int i = 0; i < businessLocationList.Count; i++) // To loop and get index 
@@ -407,18 +407,35 @@ namespace Prg_Assg_CASY
                 Console.WriteLine(businessLocationList[i]); // To diplay all of the business locations 
                 Console.WriteLine("");
             }
-            Console.WriteLine("=========================================");
-            Console.WriteLine("Business Location edit option: ");
-            int BLOption = Convert.ToInt32(Console.ReadLine()); // To store the users choice of shop from 1 to 4 
-            BLOption = BLOption - 1; // To get index of the business locations 
-            Console.WriteLine("Edit New maximum capacity: ");
-            int BLMaxCapacity = Convert.ToInt32(Console.ReadLine()); // To store users option of new maximum capacity 
-            businessLocationList[BLOption].MaximumCapacity = BLMaxCapacity; // To change the business location max capacity 
-            Console.WriteLine(businessLocationList[BLOption].ToString()); // To update the new business location max capacity 
+            Console.WriteLine("=========================================================================");
+            Console.WriteLine("Do You want to edit the Maximum Capacity of selected Business Location(s)");
+            Console.WriteLine("(1) Yes");
+            Console.WriteLine("(2) No");
+            Console.WriteLine("=========================================================================");
+            Console.WriteLine("Option: ");
+            string option = Console.ReadLine(); // To store user option of (1) Yes & (2) No
+            if (option == "1") //When the user chooses (1) Yes to edit maximum capacity of business location 
+            {
+                Console.WriteLine("=================================");
+                Console.WriteLine("Enter Business Location to edit: ");
+                Console.WriteLine("=================================");
+                int BLOption = Convert.ToInt32(Console.ReadLine()); // To store the users choice of shop from 1 to 4 
+                BLOption = BLOption - 1; // To get index of the business locations 
+                Console.WriteLine("========================================================");
+                Console.WriteLine("Edit New maximum capacity of " + businessLocationList[BLOption].BusinessName + ":" );
+                Console.WriteLine("========================================================");
+                int BLMaxCapacity = Convert.ToInt32(Console.ReadLine()); // To store users option of new maximum capacity 
+                businessLocationList[BLOption].MaximumCapacity = BLMaxCapacity; // To change the business location max capacity 
+                Console.WriteLine(businessLocationList[BLOption].ToString()); // To update the new business location max capacity 
+            }
+            else if (option == "2") //When user chooses (2) No to not edit maximum capacity of business location 
+            {
+                SafeEntryMenu(personList, businessLocationList, shnFacilityList); // To navigate the user back to the Safe Entry Menu 
+            }
         }
 
         // option 4 of SafeEntry Menu to Check-In 
-        static void CheckIn(List<Person> personList, List<BusinessLocation> businessLocationList)
+        static void CheckIn(List<Person> personList, List<BusinessLocation> businessLocationList, List<SHNFacility> shnFacilityList)
         {
             bool isFound = false;
             Console.WriteLine("Enter your name: ");
@@ -428,6 +445,15 @@ namespace Prg_Assg_CASY
                 if (p.Name.ToLower() == SEName.ToLower()) // To check if correct Name is being input by the user 
                 {
                     isFound = true;
+                    if ((p.SafeEntryList.Count >= 1)) // When there is no check in data to be displayed 
+                    {
+                        Console.WriteLine("");
+                        Console.WriteLine("========================================");
+                        Console.WriteLine("Please Check Out from previous location!");
+                        Console.WriteLine("========================================");
+                        SafeEntryMenu(personList, businessLocationList, shnFacilityList); // Navigate user back to Safe Entry Menu after diplaying message to tell user that he needs to checkout from the previous location before he can check in again 
+                    }
+                    
                     Console.WriteLine("--------------------------- All Business Locations---------------------------");
                     for (int i = 0; i < businessLocationList.Count; i++) // To loop and get index 
                     {
@@ -489,19 +515,28 @@ namespace Prg_Assg_CASY
                     {
                         Console.WriteLine("------------------- Business Location(s) Not checked out -------------------");
                         Console.WriteLine(".................................");
-                        Console.WriteLine(p.SafeEntryList[0]);
+                        Console.WriteLine(p.SafeEntryList[0]); // To list the location that the user has yet to check out 
                         Console.WriteLine("");
                         Console.WriteLine("=========================================");
-                        Console.WriteLine("Business Location(s) to Check Out (please Enter '1' to check out): ");
-                        int SEBLOption = Convert.ToInt32(Console.ReadLine()) - 1; // To store the users choice of shop from 1 to 4 
-                        p.SafeEntryList[SEBLOption].PerformCheckOut();
-                        p.SafeEntryList.RemoveAt(0);
-                        businessLocationList[SEBLOption].VisitorsNow = businessLocationList[SEBLOption].VisitorsNow - 1; // deduct one from the number of visitors in the business location
-                        Console.WriteLine("");
-                        Console.WriteLine("=============== Checked-Out ==============");
-                        Console.WriteLine(businessLocationList[SEBLOption].ToString()); // To tell users the new information of the business and to confirm that the number of vistors is deducted
-                        Console.WriteLine("==========================================");
-                        SafeEntryMenu(personList, businessLocationList, shnFacilityList); // Navigate user back to the SafeEntry Menu after updated business location is displayed 
+                        Console.WriteLine("Business Location(s) to Check Out: ");
+                        Console.WriteLine("(1) Yes ");
+                        Console.WriteLine("(2) No ");
+                        Console.WriteLine("option: ");
+                        string option = Console.ReadLine();// To store options of (1) Yes & (2) No 
+                        if (option == "1") //When the user chooses (1) Yes to checkout from business location 
+                        {
+                            p.SafeEntryList.RemoveAt(0); //To remove the checkin data to tell the user that there is no check in data to check out 
+                            businessLocationList[0].VisitorsNow = businessLocationList[0].VisitorsNow - 1; // deduct one from the number of visitors in the business location
+                            Console.WriteLine("");
+                            Console.WriteLine("=============== Checked-Out ==============");
+                            Console.WriteLine(businessLocationList[0].ToString()); // To tell users the new information of the business and to confirm that the number of vistors is deducted
+                            Console.WriteLine("==========================================");
+                            SafeEntryMenu(personList, businessLocationList, shnFacilityList); // Navigate user back to the SafeEntry Menu after updated business location is displayed 
+                        }
+                        else if (option == "2") //When the user chooses(2) No to not check out from business location 
+                        {
+                            SafeEntryMenu(personList, businessLocationList, shnFacilityList); // Navigate user back to the SafeEntry Menu after updated business location is displayed 
+                        }
                     }
                 }
             }
