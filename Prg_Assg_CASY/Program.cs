@@ -204,6 +204,8 @@ namespace Prg_Assg_CASY
                     if (p is Resident) //When Person found in list is a resident 
                     {
                         Console.WriteLine();
+                        //Console.WriteLine("--------------------------Safe Entry Details--------------------------");
+                        //if (string.IsNullOrEmpty(((Resident)p).SafeEntryList.
                         Console.WriteLine("----------------------TraceTogether Token Details---------------------");
                         if (string.IsNullOrEmpty(((Resident)p).Token.SerialNo))
                         {
@@ -717,15 +719,34 @@ namespace Prg_Assg_CASY
                         {
                             if (TE.ShnEndDate <= presentDate && TE.IsPaid == false)
                             {
+                                cost = personList[i].CalculateSHNCharges();
                                 Console.WriteLine(TE);
                                 if (TE.ShnStay != null)
                                 {
-                                    cost = TE.ShnStay.CalculateTravelCost(TE.EntryMode, TE.EntryDate);
+                                    Console.WriteLine("Would you like to pay $" + cost.ToString("0.00") + " for your Swab Test, Transportaion and SDF Charges?\n[Y]/[N]: ");
                                 }
                                 else
                                 {
-                                    Console.Write("Would you like to pay for your Swab Test and Transportation?\n[Y]/[N]: ");
-                                    Console.ReadLine();
+                                    Console.Write("Would you like to pay $" + cost.ToString("0.00") + " for your Swab Test and Transportation?\n[Y]/[N]: ");
+                                }
+                                string choice = Console.ReadLine();
+                                while (true)
+                                {
+                                    if (choice.ToUpper() == "Y")
+                                    {
+                                        Console.WriteLine("Ok! Processing Payment...");
+                                        TE.IsPaid = true;
+                                        break;
+                                    }
+                                    else if (choice.ToUpper() == "N")
+                                    {
+                                        Console.WriteLine("Ok! Proceeding without Payment...");
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("Invalid Option... Please Select [Y]/[N]");
+                                    }
                                 }
                             }
                             else if (TE.IsPaid == true)
