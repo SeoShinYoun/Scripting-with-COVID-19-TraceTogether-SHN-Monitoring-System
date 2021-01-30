@@ -626,7 +626,7 @@ namespace Prg_Assg_CASY
                     }
                     else if (choice == 3)
                     {
-                        CreateTravelEntryRecord(personList, shnFacilityList);
+                        CreateTravelEntryRecord(personList, shnFacilityList, businessLocationList);
                     }
                     else if (choice == 4)
                     {
@@ -683,7 +683,7 @@ namespace Prg_Assg_CASY
         }
 
         // Method for Option 3 of TravelEntry Menu
-        static void CreateTravelEntryRecord(List<Person> personList, List<SHNFacility> shnFacilityList)
+        static void CreateTravelEntryRecord(List<Person> personList, List<SHNFacility> shnFacilityList, List<BusinessLocation> businessLocationList)
         {
             Console.Write("Enter Name To Be Searched: ");
             string searchedName = Console.ReadLine();
@@ -695,6 +695,44 @@ namespace Prg_Assg_CASY
                     Console.WriteLine("Successfully Found Name To Be Searched!");
                     isFound = true;
                     Console.WriteLine();
+                    foreach (TravelEntry travelEntry in personList[i].TravelEntryList)
+                    {
+                        if (travelEntry.ShnEndDate > DateTime.Now)
+                        {
+                            Console.WriteLine("The Person Identified is currently serving SHN at a facility or own accommodation...");
+                            Console.WriteLine("He/She would not be able to make a new Travel Entry Record presently...");
+                            TravelEntryMenu(personList, businessLocationList, shnFacilityList);
+                        }
+                        else if (travelEntry.IsPaid == false)
+                        {
+                            while (true)
+                            {
+                                Console.WriteLine("You have not made payment for previous Travel Entry Record...");
+                                Console.WriteLine("Do you wish to enquire on payment details?");
+                                Console.Write("[Y]/[N]: ");
+                                string choice = Console.ReadLine();
+                                if (choice.ToUpper() == "Y")
+                                {
+                                    Console.WriteLine("Ok...");
+                                    CalculateSHNCharges(personList);
+                                    TravelEntryMenu(personList, businessLocationList, shnFacilityList);
+                                    break;
+                                }
+                                else if (choice.ToUpper() == "N")
+                                {
+                                    Console.WriteLine("Ok...");
+                                    TravelEntryMenu(personList, businessLocationList, shnFacilityList);
+                                    break;
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Invalid Option Chosen...");
+                                    Console.WriteLine("Select from either Y or N...");
+                                }
+                            }
+                            
+                        }
+                    }
                     Console.Write("Enter " + personList[i].Name +"'s Last Country of Embarkation: ");
                     string lastCountryOfEmbarkation = Console.ReadLine();
                     lastCountryOfEmbarkation = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(lastCountryOfEmbarkation);
@@ -786,60 +824,67 @@ namespace Prg_Assg_CASY
                     isFound = true;
                     Console.WriteLine("Name Searched Successfully!.... ");
                     DateTime presentDate = DateTime.Now;
-     
-                    foreach(TravelEntry TE in personList[i].TravelEntryList)
+                    if (personList[i].TravelEntryList.Count != 0)
                     {
-                        if (string.IsNullOrEmpty(TE.LastCountyOfEmbarkation) == false)
+                        foreach (TravelEntry TE in personList[i].TravelEntryList)
                         {
-                            if (TE.ShnEndDate <= presentDate && TE.IsPaid == false)
+                            if (string.IsNullOrEmpty(TE.LastCountyOfEmbarkation) == false)
                             {
-                                cost = personList[i].CalculateSHNCharges();
-                                Console.WriteLine(TE);
-                                if (TE.ShnStay != null)
+                                if (TE.ShnEndDate <= presentDate && TE.IsPaid == false)
                                 {
-                                    Console.Write("Would you like to pay $" + cost.ToString("0.00") + " for your Swab Test, Transportaion and SDF Charges?\n[Y]/[N]: ");
+                                    cost = personList[i].CalculateSHNCharges();
+                                    Console.WriteLine(TE);
+                                    while (true)
+                                    {
+                                        if (TE.ShnStay != null)
+                                        {
+                                            Console.Write("Would you like to pay $" + cost.ToString("0.00") + " for your Swab Test, Transportaion and SDF Charges?\n[Y]/[N]: ");
+                                        }
+                                        else
+                                        {
+                                            Console.Write("Would you like to pay $" + cost.ToString("0.00") + " for your Swab Test and Transportation?\n[Y]/[N]: ");
+                                        }
+                                        string choice = Console.ReadLine();
+                                        if (choice.ToUpper() == "Y")
+                                        {
+                                            Console.WriteLine();
+                                            Console.WriteLine("Ok! Processing Payment...");
+                                            Task.Delay(1500).Wait();
+                                            Console.WriteLine("Payment Successfully Made!");
+                                            Console.WriteLine();
+                                            TE.IsPaid = true;
+                                            break;
+                                        }
+                                        else if (choice.ToUpper() == "N")
+                                        {
+                                            Console.WriteLine("Ok! Proceeding without Payment...");
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine();
+                                            Console.WriteLine("Invalid Option... Please Select [Y]/[N]");
+                                            Console.WriteLine();
+                                        }
+                                    }
                                 }
-                                else
+                                else if (TE.IsPaid == true)
                                 {
-                                    Console.Write("Would you like to pay $" + cost.ToString("0.00") + " for your Swab Test and Transportation?\n[Y]/[N]: ");
+                                    Console.WriteLine("Payment has been made for Past Travel Entry Record...");
+                                    Console.WriteLine();
                                 }
-                                string choice = Console.ReadLine();
-                                while (true)
+                                else if (TE.ShnEndDate > presentDate)
                                 {
-                                    if (choice.ToUpper() == "Y")
-                                    {
-                                        Console.WriteLine();
-                                        Console.WriteLine("Ok! Processing Payment...");
-                                        Console.WriteLine();
-                                        TE.IsPaid = true;
-                                        break;
-                                    }
-                                    else if (choice.ToUpper() == "N")
-                                    {
-                                        Console.WriteLine("Ok! Proceeding without Payment...");
-                                        break;
-                                    }
-                                    else
-                                    {
-                                        Console.WriteLine("Invalid Option... Please Select [Y]/[N]");
-                                    }
+                                    Console.WriteLine("Please Refrain From Paying Recent Travel Entry Record...");
+                                    Console.WriteLine("Your SHN Has Not Ended Yet...");
                                 }
                             }
-                            else if (TE.IsPaid == true)
-                            {
-                                Console.WriteLine("Payment has already been made...");
-                            }
-                            else if (TE.ShnEndDate > presentDate)
-                            {
-                                Console.WriteLine("Please Refrain From Paying...");
-                                Console.WriteLine("Your SHN Has Not Ended Yet...");
-                            }
-                        }
-                        else
-                        {
-                            Console.WriteLine("No Travel Entry Record Found...");
-                            Console.WriteLine("The Person Identified Does Not Need to Pay SHN Charges...");
-                        }
+                        } 
+                    }
+                    else
+                    {
+                        Console.WriteLine("No Travel Entry Record Found...");
+                        Console.WriteLine("The Person Identified Does Not Need to Pay SHN Charges...");
                     }
                 }
             }
@@ -875,7 +920,7 @@ namespace Prg_Assg_CASY
                         /*DateTime dateB = DateTime.ParseExact(properties[8], "dd-MMM-yy", CultureInfo.InvariantCulture);*/
                         resident.Token = new TraceTogetherToken(properties[6], properties[7], expirydate);
                     }
-                    if (properties[9] != null)
+                    if (string.IsNullOrEmpty(properties[9]) == false)
                     {
                         DateTime travelEntryDate;
                         travelEntryDate = FormatTravelDate(properties[11]);
@@ -884,6 +929,7 @@ namespace Prg_Assg_CASY
                         travelShnEndDate = FormatTravelDate(properties[12]);
                         TE.ShnEndDate = travelShnEndDate;
                         ValidatePayment(properties[13]);
+                        resident.AddTravelEntry(TE);
 
                         if (properties[13] != null)
                         {
@@ -894,7 +940,6 @@ namespace Prg_Assg_CASY
                         {
                             TE.AssignSHNFacility(SearchFacility(shnList, properties[14]));
                         }
-                        resident.AddTravelEntry(TE);
                     }
                 }
                 else if (properties[0] == "visitor")  // When the attribute under the heading "type" is a visitor
@@ -902,7 +947,7 @@ namespace Prg_Assg_CASY
                     Visitor visitor = new Visitor(properties[1], properties[4], properties[5]);
                     TravelEntry TE = new TravelEntry();
                     pList.Add(visitor);
-                    if (properties[9] != null)
+                    if (string.IsNullOrEmpty(properties[9]) == false)
                     {
                         TE.LastCountyOfEmbarkation = properties[9];
                         TE.EntryMode = properties[10];
@@ -914,12 +959,12 @@ namespace Prg_Assg_CASY
                         TE.ShnEndDate = travelShnEndDate;
                         visitor.AddTravelEntry(TE);
                     }
-                    if (properties[13] != null)
+                    if (string.IsNullOrEmpty(properties[13]) == false)
                     {
                         string boolValue = properties[13];
                         TE.IsPaid = ValidatePayment(boolValue);
                     }
-                    if (properties[14] != null)
+                    if (string.IsNullOrEmpty(properties[14]) == false)
                     {
                         TE.AssignSHNFacility(SearchFacility(shnList, properties[14]));
                     }
