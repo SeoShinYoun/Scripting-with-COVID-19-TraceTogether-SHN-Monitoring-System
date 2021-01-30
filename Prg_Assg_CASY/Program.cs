@@ -193,18 +193,20 @@ namespace Prg_Assg_CASY
                     Console.WriteLine(p); // To print the name, address and Date last travelled 
                     Console.WriteLine();
                     Console.WriteLine("------------------------Travel Entry Details--------------------------");
-                    foreach(TravelEntry TE in p.TravelEntryList) 
+                    if (p.TravelEntryList.Count == 0)
                     {
-                        if (string.IsNullOrEmpty(TE.LastCountyOfEmbarkation))// When there is no travel records found 
-                        {
-                            Console.WriteLine("No Travel Entry Record Found...");
-                        }
-                        else // When there is travel entry record found, travel records would print 
+                        Console.WriteLine("No Travel Entry Record Found...");
+                    }
+                    else
+                    {
+                        foreach (TravelEntry TE in p.TravelEntryList)
                         {
                             Console.WriteLine(TE);
                             //Console.WriteLine("{0,10}  {1,10}  {2,10}  {3,10}  {4,10}  {5,10}", TE.LastCountyOfEmbarkation, TE.EntryMode, TE.EntryDate, TE.ShnEndDate, TE.IsPaid, TE.ShnStay);
+
                         }
                     }
+                    
                     Console.WriteLine("");
                     Console.WriteLine("-------------------------Safe Entry Details---------------------------");
                     if (p.SafeEntryList.Count == 0) // When there is no SafeEntry Check-In records available 
@@ -709,12 +711,12 @@ namespace Prg_Assg_CASY
                     }
                     TravelEntry TE = new TravelEntry(lastCountryOfEmbarkation, entryMode, DateTime.Now);
                     TE.CalculateSHNDuration();
-                    if ((lastCountryOfEmbarkation.ToLower() != "New Zealand") && (lastCountryOfEmbarkation != "Vietnam") && (lastCountryOfEmbarkation.ToLower() != "macao sar"))
+                    if ((lastCountryOfEmbarkation != "New Zealand") && (lastCountryOfEmbarkation != "Vietnam") && (lastCountryOfEmbarkation.ToLower() != "macao sar"))
                     {
                         Console.WriteLine("====================================");
                         for (int x = 0; x < shnFacilityList.Count; x++)
                         {
-                            Console.WriteLine("Option " + Convert.ToInt32(x+1) + ":");
+                            Console.WriteLine("Option " + Convert.ToInt32(x + 1) + ":");
                             Console.WriteLine(shnFacilityList[x]);
                             Console.WriteLine("====================================");
                         }
@@ -725,7 +727,7 @@ namespace Prg_Assg_CASY
                             {
                                 Console.Write("From the Options above...\nPlease Select A SHN Facility To Be Assigned To: ");
                                 choice = Convert.ToInt32(Console.ReadLine()) - 1;
-                            }   
+                            }
                             catch (FormatException ex)
                             {
                                 Console.WriteLine();
@@ -742,7 +744,7 @@ namespace Prg_Assg_CASY
                                 }
                                 TE.AssignSHNFacility(shnFacilityList[choice]);
                                 shnFacilityList[choice].FacilityVacancy = shnFacilityList[choice].FacilityVacancy - 1;
-                                
+
                                 break;
                             }
                             else
@@ -751,10 +753,15 @@ namespace Prg_Assg_CASY
                             }
                         }
                     }
+                    else if (lastCountryOfEmbarkation.ToLower() == "macao sar")
+                    {
+                        Console.WriteLine("The Person Identified Is Only Required To Serve SHN At Own Accommodation...");
+                    }
                     else
                     {
                         Console.WriteLine("The person identified is not required to serve SHN...");
                     }
+                    TE.IsPaid = false;
                     personList[i].AddTravelEntry(TE);
                     Console.WriteLine();
                     Console.WriteLine("Travel Entry Successfully Recorded for " + personList[i].Name + "!");
@@ -801,7 +808,9 @@ namespace Prg_Assg_CASY
                                 {
                                     if (choice.ToUpper() == "Y")
                                     {
+                                        Console.WriteLine();
                                         Console.WriteLine("Ok! Processing Payment...");
+                                        Console.WriteLine();
                                         TE.IsPaid = true;
                                         break;
                                     }
@@ -903,6 +912,7 @@ namespace Prg_Assg_CASY
                         travelShnEndDate = FormatTravelDate(properties[12]);
                         TE.EntryDate = travelEntryDate;
                         TE.ShnEndDate = travelShnEndDate;
+                        visitor.AddTravelEntry(TE);
                     }
                     if (properties[13] != null)
                     {
@@ -913,7 +923,6 @@ namespace Prg_Assg_CASY
                     {
                         TE.AssignSHNFacility(SearchFacility(shnList, properties[14]));
                     }
-                    visitor.AddTravelEntry(TE);
                 }
             }
         }

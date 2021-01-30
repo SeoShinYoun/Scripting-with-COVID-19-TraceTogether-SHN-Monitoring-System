@@ -73,7 +73,7 @@ namespace Prg_Assg_CASY
             {
                 duration = 0; //Duration = 0 days as they do not need to serve SHN
             }
-            else if (LastCountyOfEmbarkation == "Macao SAR")
+            else if (LastCountyOfEmbarkation.ToLower() == "macao sar")
             {
                 duration = 7; //Duraion = 7 days as they would need to serve SHN at own accommodation for 7 days
             }
