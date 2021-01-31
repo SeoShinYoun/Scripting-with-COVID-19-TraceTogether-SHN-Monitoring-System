@@ -595,9 +595,15 @@ namespace Prg_Assg_CASY
                                         SafeEntryMenu(personList, businessLocationList, shnFacilityList); //Navigate the user back to the SafeEntry Menu after message to tell user that their token cannot be replaced is desplayed
                                     }
                                 }
-                                else //When user chooses (3) Go Back
+                                else if (ReplaceOption is "3")//When user chooses (3) Go Back
                                 {
                                     SafeEntryMenu(personList, businessLocationList, shnFacilityList);
+                                }
+                                else
+                                {
+                                    Console.WriteLine();
+                                    Console.WriteLine("Choose from either Options 1, 2 or 3...");
+                                    Task.Delay(1500).Wait();
                                 }
                             }
                         }
@@ -663,6 +669,11 @@ namespace Prg_Assg_CASY
             {
                 SafeEntryMenu(personList, businessLocationList, shnFacilityList); // To navigate the user back to the Safe Entry Menu 
             }
+            else
+            {
+                Console.WriteLine();
+                Console.WriteLine("Choose from either Options 1, 2, 3, 4, 5, or 6...");
+            }
         }
 
         // option 4 of SafeEntry Menu to Check-In 
@@ -692,7 +703,9 @@ namespace Prg_Assg_CASY
                         Console.WriteLine(businessLocationList[i]);// To list business locatiopns for user to choose from 
                         Console.WriteLine("");
                     }
-                    Console.WriteLine("=========================================");
+                    Console.WriteLine();
+                    Console.WriteLine("Please enter the number tagged to the business location...");
+                    Console.WriteLine("==========================================================");
                     Console.Write("Business Location to Check In: ");
                     int SEBLOption = Convert.ToInt32(Console.ReadLine()); // To store the users choice of shop from 1 to 4 
                     SEBLOption = SEBLOption - 1; // To get index of the business locations 
@@ -708,7 +721,7 @@ namespace Prg_Assg_CASY
                         Console.WriteLine("-----------------------------------------");
                         Console.WriteLine("=========================================");
                     }
-                    else // Whem the number of visitors at the locatiopn is at maximum 
+                    else // Whem the number of visitors at the location is at maximum 
                     {
                         Console.WriteLine("----------------------------------------------------------------------");
                         Console.WriteLine("Business Location has reached Maximum Capacity. Try again in a while! ");
