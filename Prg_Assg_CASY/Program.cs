@@ -209,6 +209,11 @@ namespace Prg_Assg_CASY
                 }
             }
         }
+        //Advanced Feature 3.1 - Contact Tracing Reporting
+        static void ContractTracingReporting()
+        {
+
+        }
     
 
         //Advanced Feature 3.2 - SHN Status Reporting 
@@ -740,6 +745,7 @@ namespace Prg_Assg_CASY
                                 Console.WriteLine("----------------------------------------------------------------------");
                                 Console.WriteLine("Business Location has reached Maximum Capacity. Try again in a while! ");
                                 Console.WriteLine("----------------------------------------------------------------------");
+                                SafeEntryMenu(personList, businessLocationList, shnFacilityList);
                             }
                         }
                         catch (FormatException ex)
