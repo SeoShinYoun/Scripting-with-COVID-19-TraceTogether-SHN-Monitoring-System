@@ -192,7 +192,7 @@ namespace Prg_Assg_CASY
                 Console.WriteLine("*                    SHN Status Reporting                     *");
                 Console.WriteLine("*                                                             *");
                 Console.WriteLine("***************************************************************");
-                Console.WriteLine("Would you like to generate a Contact Tracing Report?");
+                Console.WriteLine("Would you like to generate a SHN Status Report?");
                 Console.WriteLine("(1) Yes");
                 Console.WriteLine("(2) No");
                 try
@@ -243,31 +243,27 @@ namespace Prg_Assg_CASY
             string headings = "Name of Traveller" + "," + "SHN End Date" + "," + "SHN Location";
             using (StreamWriter sw = new StreamWriter("SHNStatusReport.csv", false))
             {
-                sw.WriteLine("SHN Status Reporting For: " + formattedDate.ToString("dd/MM/yyyy"));
+                sw.WriteLine("SHN Status Reporting Date: " + formattedDate.ToString("dd/MM/yyyy"));
                 sw.WriteLine(headings);
+                string data = null;
                 for (int i = 1; i < pList.Count; i++)
                 {
                     if (pList[i].TravelEntryList.Count != 0)
                     {
                         foreach (TravelEntry TE in pList[i].TravelEntryList)
                         {
-                            if ((TE.EntryDate <= formattedDate) && (formattedDate <= TE.ShnEndDate))
+                            if ((TE.EntryDate.Date <= formattedDate) && (formattedDate <= TE.ShnEndDate.Date))
                             {
-                                string data;
-                                if (string.IsNullOrEmpty(TE.ShnStay.FacilityName))
+                                if (TE.ShnStay == null)
                                 {
-                                    if (TE.EntryDate == TE.ShnEndDate)
+                                    if (TE.ShnEndDate > TE.EntryDate)
                                     {
-                                        data = pList[i].Name + "," + TE.ShnEndDate + "," + "No SHN";
-                                    }
-                                    else
-                                    {
-                                        data = pList[i].Name + "," + TE.ShnEndDate + "," + "Own Accommodation";
+                                        data = pList[i].Name + "," + TE.ShnEndDate.ToString("dd/MM/yyyy HH:mm") + "," + "Own Accommodation";
                                     }
                                 }
                                 else
                                 {
-                                    data = pList[i].Name + "," + TE.ShnEndDate + "," + TE.ShnStay.FacilityName;
+                                    data = pList[i].Name + "," + TE.ShnEndDate.ToString("dd/MM/yyyy HH:mm") + "," + TE.ShnStay.FacilityName;
                                 }
                                 sw.WriteLine(data);
                             }
