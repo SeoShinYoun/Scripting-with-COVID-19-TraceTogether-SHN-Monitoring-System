@@ -106,7 +106,7 @@ namespace Prg_Assg_CASY
                     }
                     else if (choice == 5)
                     {
-
+                        ShnStatusReporting(personList);
                     }
                     else
                     {
@@ -171,7 +171,6 @@ namespace Prg_Assg_CASY
                         }
                     }
                 }
-
             }
             else if (options == "2")
             {
@@ -180,7 +179,63 @@ namespace Prg_Assg_CASY
 
             }
         }
-// General Menu and Methods 
+        //Advanced Feature 3.2 - SHN Status Reporting 
+        static void ShnStatusReporting(List<Person> pList)
+        {
+            DateTime formattedDate = DateTime.Now;
+            bool shnStatusReporting = true;
+            while(shnStatusReporting == true)
+            {
+                Console.WriteLine("***************************************************************");
+                Console.WriteLine("*                                                             *");
+                Console.WriteLine("*                    SHN Status Reporting                     *");
+                Console.WriteLine("*                                                             *");
+                Console.WriteLine("***************************************************************");
+                Console.Write("Please Select A Date To Generate The Report For (yyyy/mm/dd): ");
+                string dateChosen = Console.ReadLine();
+                if (DateTime.TryParse(dateChosen, out formattedDate))
+                {
+                    String.Format("{0:yyy/MM/dd}", formattedDate);
+                    Console.WriteLine("Date successfully obtained!");
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine();
+                    Console.Write("Invalid...");
+                    Console.WriteLine("Please Enter Date in Format of yyyy/mm/dd ");
+                    Console.WriteLine("If date is in correct format, ensure that it is a valid date (e.g. 2021/14/52 - Invalid)");
+                    Console.WriteLine();
+                }
+            }
+            string headings = "Name of Traveller" + "," + "SHN End Date" + "," + "SHN Location";
+            using (StreamWriter sw = new StreamWriter("SHNStatusReport.csv", true))
+            {
+                sw.WriteLine(headings);
+                for (int i = 1; i < pList.Count; i++)
+                {
+                    if (pList[i].TravelEntryList.Count != 0)
+                    {
+                        foreach (TravelEntry TE in pList[i].TravelEntryList)
+                        {
+                            if ((TE.EntryDate <= formattedDate) && formattedDate <= TE.ShnEndDate)
+                            {
+                                //Console.WriteLi
+                            }
+                        }
+                    }
+                }
+            }
+
+            //Given a date, generate a csv report of all travellers 
+            //serving their SHN, their SHN end date, and where they are serving their SHN.
+            //string data = 1 + "," + 2;
+            //using (StreamWriter sw = new StreamWriter("testmarks.csv", true))
+            //{
+            //    sw.WriteLine(data);
+            //}
+        }
+        // General Menu and Methods 
         static void GeneralMenu(List<Person> personList, List<BusinessLocation> businessLocationList, List<SHNFacility> shnFacilityList)
         {
             bool displaygeneral = true;
@@ -670,8 +725,7 @@ namespace Prg_Assg_CASY
                 Console.WriteLine("(2) Create Visitor");
                 Console.WriteLine("(3) Create TravelEntry Record");
                 Console.WriteLine("(4) Calculate SHN Charges");
-                Console.WriteLine("(5) Advanced - SHN Status Reporting");
-                Console.WriteLine("(6) Back to Main Menu");
+                Console.WriteLine("(5) Back to Main Menu");
                 Console.WriteLine("==================================");
                 try
                 {
@@ -685,7 +739,7 @@ namespace Prg_Assg_CASY
                     Console.Write("Exception details: ");
                     Console.WriteLine(ex.Message);
                 }
-                if (choice != 6)
+                if (choice != 5)
                 {
                     if (choice == 1)
                     {
@@ -693,7 +747,7 @@ namespace Prg_Assg_CASY
                     }
                     else if (choice == 2)
                     {
-                        CreateVisitor();
+                        CreateVisitor(personList);
                     }
                     else if (choice == 3)
                     {
@@ -703,13 +757,9 @@ namespace Prg_Assg_CASY
                     {
                         CalculateSHNCharges(personList);
                     }
-                    else if (choice == 5)
-                    {
-                        ShnStatusReporting(personList);
-                    }
                     else
                     {
-                        Console.WriteLine("Choose from either Options 1, 2, 3, 4, 5, or 6...");
+                        Console.WriteLine("Choose from either Options 1, 2, 3, 4, or 5...");
                     }
                 }
                 else
@@ -735,7 +785,7 @@ namespace Prg_Assg_CASY
         }
 
         // Method for Option 2 of TravelEntry Menu
-        static void CreateVisitor()
+        static void CreateVisitor(List<Person> pList)
         {
             Console.Write("Please Enter Your Name: ");
             string name = Console.ReadLine();
@@ -744,6 +794,7 @@ namespace Prg_Assg_CASY
             Console.Write("Please Enter Your Nationality: ");
             string nationality = Console.ReadLine();
             Visitor visitor = new Visitor(name, passportNo, nationality);
+            pList.Add(visitor);
             if (visitor != null)
             {
                 Console.WriteLine();
@@ -968,58 +1019,6 @@ namespace Prg_Assg_CASY
                 Console.WriteLine("Name could not be found...");
             }
         }
-
-        //Advanced - SHN Status Reporting 
-        static void ShnStatusReporting(List<Person> pList)
-        {
-            DateTime formattedDate;
-            while (true)
-            {
-                Console.Write("Please Select A Date To Generate The Report For (yyyy/mm/dd): ");
-                string dateChosen = Console.ReadLine();
-                if (DateTime.TryParse(dateChosen, out formattedDate))
-                {
-                    String.Format("{0:yyy/MM/dd}", formattedDate);
-                    Console.WriteLine("Date successfully obtained!");
-                    break;
-                }
-                else
-                {
-                    Console.WriteLine();
-                    Console.Write("Invalid...");
-                    Console.WriteLine("Please Enter Date in Format of yyyy/mm/dd ");
-                    Console.WriteLine("If date is in correct format, ensure that it is a valid date (e.g. 2021/14/52 - Invalid)");
-                    Console.WriteLine();
-                }
-            }
-            string headings = "Name of Traveller" + "," + "SHN End Date" + "," + "SHN Location";
-            //using (StreamWriter sw = new StreamWriter("SHNStatusReport.csv", true))
-            //{
-            //    sw.WriteLine(headings);
-            //    for (int i = 1; i < pList.Count; i++)
-            //    {
-            //        if (pList[i].TravelEntryList.Count != 0)
-            //        {
-            //            foreach (TravelEntry TE in pList[i].TravelEntryList)
-            //            {
-            //                if (TE.EntryDate <= formattedDate && formattedDate <= TE.ShnEndDate)
-            //                {
-            //                    //Console.WriteLi
-            //                }
-            //            }
-            //        }
-            //    }
-            //}
-            
-            //Given a date, generate a csv report of all travellers 
-            //serving their SHN, their SHN end date, and where they are serving their SHN.
-            //string data = 1 + "," + 2;
-            //using (StreamWriter sw = new StreamWriter("testmarks.csv", true))
-            //{
-            //    sw.WriteLine(data);
-            //}
-        }
-
 
         //Reading of CSV files         
         //Reading of Person.csv file using System.IO
