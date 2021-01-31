@@ -106,7 +106,7 @@ namespace Prg_Assg_CASY
                     }
                     else if (choice == 5)
                     {
-
+                        ShnStatusReporting(personList, businessLocationList, shnFacilityList);
                     }
                     else
                     {
@@ -178,7 +178,6 @@ namespace Prg_Assg_CASY
                         }
                     }
                 }
-
             }
             else if (options == "2")
             {
@@ -187,7 +186,108 @@ namespace Prg_Assg_CASY
 
             }
         }
-// General Menu and Methods 
+        //Advanced Feature 3.2 - SHN Status Reporting 
+        static void ShnStatusReporting(List<Person> pList, List<BusinessLocation> bList, List<SHNFacility> shnList)
+        {
+            DateTime formattedDate = DateTime.Now; // dummy value
+            bool shnStatusReporting = true;
+            int choice = 50;// dummy value
+            while(shnStatusReporting == true)
+            {
+                Console.WriteLine("***************************************************************");
+                Console.WriteLine("*                                                             *");
+                Console.WriteLine("*                    SHN Status Reporting                     *");
+                Console.WriteLine("*                                                             *");
+                Console.WriteLine("***************************************************************");
+                Console.WriteLine("Would you like to generate a SHN Status Report?");
+                Console.WriteLine("(1) Yes");
+                Console.WriteLine("(2) No");
+                try
+                {
+                    Console.Write("Options: ");
+                    choice = Convert.ToInt32(Console.ReadLine());
+                    Console.WriteLine();
+                }
+                catch (FormatException ex)
+                {
+                    Console.WriteLine();
+                    Console.WriteLine("Invalid option selected!");
+                    Console.Write("Exception details: ");
+                    Console.WriteLine(ex.Message);
+                }
+                if (choice == 1)
+                {
+                    Console.Write("Please Select A Date To Generate The Report For (yyyy/mm/dd): ");
+                    string dateChosen = Console.ReadLine();
+                    if (DateTime.TryParse(dateChosen, out formattedDate))
+                    {
+                        String.Format("{0:yyy/MM/dd}", formattedDate);
+                        Console.WriteLine("Date successfully obtained!");
+                        break;
+                    }
+                    else
+                    {
+                        Console.WriteLine();
+                        Console.Write("Invalid...");
+                        Console.WriteLine("Please Enter Date in Format of yyyy/mm/dd ");
+                        Console.WriteLine("If date is in correct format, ensure that it is a valid date (e.g. 2021/14/52 - Invalid)");
+                        Console.WriteLine();
+                    }
+                }
+                else if (choice == 2)
+                {
+                    shnStatusReporting = false;
+                    Console.WriteLine("returning to main menu...");
+                    Task.Delay(1000).Wait();
+                    MainMenu(pList, bList, shnList);
+                }
+                else
+                {
+                    Console.WriteLine("Invalid Option...Please Select From Either Option 1 or 2...");
+                    Console.WriteLine();
+                }
+            }
+            string headings = "Name of Traveller" + "," + "SHN End Date" + "," + "SHN Location";
+            using (StreamWriter sw = new StreamWriter("SHNStatusReport.csv", false))
+            {
+                sw.WriteLine("SHN Status Reporting Date: " + formattedDate.ToString("dd/MM/yyyy"));
+                sw.WriteLine(headings);
+                string data = null;
+                for (int i = 1; i < pList.Count; i++)
+                {
+                    if (pList[i].TravelEntryList.Count != 0)
+                    {
+                        foreach (TravelEntry TE in pList[i].TravelEntryList)
+                        {
+                            if ((TE.EntryDate.Date <= formattedDate) && (formattedDate <= TE.ShnEndDate.Date))
+                            {
+                                if (TE.ShnStay == null)
+                                {
+                                    if (TE.ShnEndDate > TE.EntryDate)
+                                    {
+                                        data = pList[i].Name + "," + TE.ShnEndDate.ToString("dd/MM/yyyy HH:mm") + "," + "Own Accommodation";
+                                    }
+                                }
+                                else
+                                {
+                                    data = pList[i].Name + "," + TE.ShnEndDate.ToString("dd/MM/yyyy HH:mm") + "," + TE.ShnStay.FacilityName;
+                                }
+                                sw.WriteLine(data);
+                            }
+                        }
+                    }
+                }
+            }
+
+            //Given a date, generate a csv report of all travellers 
+            //serving their SHN, their SHN end date, and where they are serving their SHN.
+            //string data = 1 + "," + 2;
+            //using (StreamWriter sw = new StreamWriter("testmarks.csv", true))
+            //{
+            //    sw.WriteLine(data);
+            //}
+        }
+        // General Menu and Methods 
         static void GeneralMenu(List<Person> personList, List<BusinessLocation> businessLocationList, List<SHNFacility> shnFacilityList)
         {
             bool displaygeneral = true;
@@ -699,7 +799,7 @@ namespace Prg_Assg_CASY
                     }
                     else if (choice == 2)
                     {
-                        CreateVisitor();
+                        CreateVisitor(personList);
                     }
                     else if (choice == 3)
                     {
@@ -737,15 +837,18 @@ namespace Prg_Assg_CASY
         }
 
         // Method for Option 2 of TravelEntry Menu
-        static void CreateVisitor()
+        static void CreateVisitor(List<Person> pList)
         {
             Console.Write("Please Enter Your Name: ");
             string name = Console.ReadLine();
+            name = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(name);
             Console.Write("Please Enter Your Passport Number: ");
-            string passportNo = Console.ReadLine();
-            Console.Write("Please Enter Your Nationality: ");
+            string passportNo = Console.ReadLine().ToUpper();
+            Console.Write("Please Enter Your Nationality: "); 
             string nationality = Console.ReadLine();
+            nationality = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(nationality);
             Visitor visitor = new Visitor(name, passportNo, nationality);
+            pList.Add(visitor);
             if (visitor != null)
             {
                 Console.WriteLine();
@@ -971,7 +1074,7 @@ namespace Prg_Assg_CASY
             }
         }
 
- //Reading of CSV files         
+        //Reading of CSV files         
         //Reading of Person.csv file using System.IO
         static void IncludePerson(List<Person> pList, List<SHNFacility> shnList)
         {
