@@ -52,7 +52,7 @@ namespace Prg_Assg_CASY
         }
 
  //Creation of Menus  (MainMenu, GeneralMenu, SafeEntry, TravelEntry) 
-        // Creation of the MainMenu for users to navigate through other functions 
+        // Creation of the MainMenu for users to navigate through other functions as well as methods for the advanced features 
         static void MainMenu(List<Person> personList, List<BusinessLocation> businessLocationList, List<SHNFacility> shnFacilityList) 
         {
             bool display = true;
@@ -69,7 +69,9 @@ namespace Prg_Assg_CASY
                 Console.WriteLine("(1) General "); // A GeneralMenu method is created to display a sepoerate menu 
                 Console.WriteLine("(2) SafeEntry/TraceTogether"); // A SafeEntryMenu method is created to display a seperate menu 
                 Console.WriteLine("(3) TravelEntry"); // A TravelntryMenu method is created to display a seperate menu 
-                Console.WriteLine("(4) Exit");// Exit the application 
+                Console.WriteLine("(4) Contact Tracing Reporting"); //Advance feature 3.1  
+                Console.WriteLine("(5) SHN Status Reporting"); //Advance feature 3.2
+                Console.WriteLine("(6) Exit");// Exit the application 
                 Console.WriteLine("=============================");
                 try
                 {
@@ -84,7 +86,7 @@ namespace Prg_Assg_CASY
                     Console.Write("Exception details: ");
                     Console.WriteLine(ex.Message);
                 }
-                if (choice != 4)
+                if (choice != 6)
                 {
                     if (choice == 1)
                     {
@@ -98,6 +100,14 @@ namespace Prg_Assg_CASY
                     {
                         TravelEntryMenu(personList,businessLocationList, shnFacilityList);
                     }
+                    else if (choice == 4)
+                    {
+                        ContactTracingReporting(personList, businessLocationList, shnFacilityList);
+                    }
+                    else if (choice == 5)
+                    {
+
+                    }
                     else
                     {
                         Console.WriteLine("Choose from either Options 1, 2, 3, or 4...");
@@ -108,6 +118,66 @@ namespace Prg_Assg_CASY
                     display = false;
                     Console.WriteLine("Thank you! Bye...");
                 }
+            }
+        }
+        // option 4 of Main Menu (Contact Tracing Reporting) ------ Advanced Feature 3.1 
+        static void ContactTracingReporting(List<Person> personList, List<BusinessLocation> businessLocationList, List<SHNFacility> shnFacilityList)
+        {
+            string date, businesslocation, data;
+            int record;
+            record = 0;
+            Console.WriteLine();
+            Console.WriteLine("***************************************************************");
+            Console.WriteLine("*                                                             *");
+            Console.WriteLine("*                 Contact Tracing Reporting                   *");
+            Console.WriteLine("*                                                             *");
+            Console.WriteLine("***************************************************************");
+            Console.WriteLine("Do you want to generate the Contact Tracing Report?");
+            Console.WriteLine("(1) Yes");
+            Console.WriteLine("(2) No");
+            Console.WriteLine("Options: ");
+            string options = Console.ReadLine();
+            if (options == "1" )
+            {
+                while (true)
+                {
+                    Console.WriteLine("------------------------------------------------------");
+                    Console.Write("Please enter a date (dd/mm/yy) and time (H:m: Am/Pm): ");
+                    DateTime checkDT = Convert.ToDateTime(Console.ReadLine());
+                    Console.WriteLine("------------------------------------------------------");
+                    Console.Write("Please Enter a business location: ");
+                    Console.WriteLine("------------------------------------------------------");
+                    string CheckBL = Convert.ToString(Console.ReadLine());
+                    for (int i = 0; i < personList.Count; i++)
+                    {
+                        if ((personList[i].SafeEntryList != null) || (personList[i].SafeEntryList.Count != 0))
+                        {
+                            foreach (SafeEntry se in personList[i].SafeEntryList)
+                            {
+                                if (((se.CheckIn >= checkDT == true) && (se.Location.BusinessName.ToLower() == CheckBL.ToLower())))
+                                {
+                                    data = checkDT + "," + CheckBL;
+                                    using (StreamWriter sw = new StreamWriter("contactTracingReport.csv", false))
+                                    {
+                                        sw.WriteLine(personList[i].Name);
+                                        sw.WriteLine(se.CheckIn.ToString());
+                                        sw.WriteLine(se.CheckOut.ToString());
+                                        sw.WriteLine(se.Location.ToString());
+                                    }
+                                    record++;
+
+                                }
+                            }
+                        }
+                    }
+                }
+
+            }
+            else if (options == "2")
+            {
+                MainMenu(personList, businessLocationList, shnFacilityList);
+                Task.Delay(1500).Wait();
+
             }
         }
 // General Menu and Methods 
@@ -321,7 +391,7 @@ namespace Prg_Assg_CASY
         static void AssignReplaceToken(List<Person> personList, List<BusinessLocation> businessLocationList, List<SHNFacility> shnFacilityList)
         {
             bool isFound = false;
-            Console.WriteLine("Enter your name: ");
+            Console.Write("Enter your name: ");
             string ttName = Console.ReadLine(); // To store user input name 
             foreach (Person r in personList)
             {
@@ -339,7 +409,7 @@ namespace Prg_Assg_CASY
                             Console.WriteLine("Would you like to be assigned a token? ");
                             Console.WriteLine("(1) Yes");
                             Console.WriteLine("(2) No");
-                            Console.WriteLine("Option: ");
+                            Console.Write("Option: ");
                             string option = Console.ReadLine(); // store option of either (1) Yes or (2) NO 
                             while (true)
                             {
@@ -367,7 +437,7 @@ namespace Prg_Assg_CASY
                                 Console.WriteLine("(1) Check for eligibilty to replace token");
                                 Console.WriteLine("(2) Replace Token");
                                 Console.WriteLine("(3) Go Back");
-                                Console.WriteLine("Option: ");
+                                Console.Write("Option: ");
                                 string ReplaceOption = Console.ReadLine();  // store option of either (1) Check for eligibility to replace token or (2) Replace Token or (3) Go Back
                                 if (ReplaceOption is "1") // When user chooses to (1) check for eligibility of their token
                                 {
@@ -436,7 +506,7 @@ namespace Prg_Assg_CASY
             Console.WriteLine("(1) Yes");
             Console.WriteLine("(2) No");
             Console.WriteLine("=========================================================================");
-            Console.WriteLine("Option: ");
+            Console.Write("Option: ");
             string option = Console.ReadLine(); // To store user option of (1) Yes & (2) No
             if (option == "1") //When the user chooses (1) Yes to edit maximum capacity of business location 
             {
@@ -462,7 +532,7 @@ namespace Prg_Assg_CASY
         static void CheckIn(List<Person> personList, List<BusinessLocation> businessLocationList, List<SHNFacility> shnFacilityList)
         {
             bool isFound = false;
-            Console.WriteLine("Enter your name: ");
+            Console.Write("Enter your name: ");
             string SEName = Console.ReadLine();
             foreach (Person p in personList)
             {
@@ -472,9 +542,9 @@ namespace Prg_Assg_CASY
                     if ((p.SafeEntryList.Count >= 1)) // When there is no check in data to be displayed 
                     {
                         Console.WriteLine("");
-                        Console.WriteLine("========================================");
-                        Console.WriteLine("Please Check Out from previous location!");
-                        Console.WriteLine("========================================");
+                        Console.WriteLine("===========================================================================================");
+                        Console.WriteLine("Please Check Out from previous location, before you are able to Check-In to a new loaction!");
+                        Console.WriteLine("===========================================================================================");
                         SafeEntryMenu(personList, businessLocationList, shnFacilityList); // Navigate user back to Safe Entry Menu after diplaying message to tell user that he needs to checkout from the previous location before he can check in again 
                     }
                     
@@ -486,7 +556,7 @@ namespace Prg_Assg_CASY
                         Console.WriteLine("");
                     }
                     Console.WriteLine("=========================================");
-                    Console.WriteLine("Business Location to Check In: ");
+                    Console.Write("Business Location to Check In: ");
                     int SEBLOption = Convert.ToInt32(Console.ReadLine()); // To store the users choice of shop from 1 to 4 
                     SEBLOption = SEBLOption - 1; // To get index of the business locations 
                     Task.Delay(1500).Wait();
@@ -522,7 +592,7 @@ namespace Prg_Assg_CASY
         static void CheckOut(List<Person> personList, List<BusinessLocation> businessLocationList, List<SHNFacility> shnFacilityList)
         {
             bool isFound = false;
-            Console.WriteLine("Enter your name: ");
+            Console.Write("Enter your name: ");
             string SEName = Console.ReadLine(); // Stores user input name 
             foreach (Person p in personList)
             {
@@ -547,7 +617,7 @@ namespace Prg_Assg_CASY
                         Console.WriteLine("To Check out from this business location: ");
                         Console.WriteLine("(1) Yes ");
                         Console.WriteLine("(2) No ");
-                        Console.WriteLine("option: ");
+                        Console.Write("option: ");
                         string option = Console.ReadLine();// To store options of (1) Yes & (2) No 
                         if (option == "1") //When the user chooses (1) Yes to checkout from business location 
                         {
