@@ -792,6 +792,11 @@ namespace Prg_Assg_CASY
                         {
                             SafeEntryMenu(personList, businessLocationList, shnFacilityList); // Navigate user back to the SafeEntry Menu after updated business location is displayed 
                         }
+                        else
+                        {
+                            Console.WriteLine();
+                            Console.WriteLine("Choose from either Options 1 or 2...");
+                        }
                     }
                 }
             }
