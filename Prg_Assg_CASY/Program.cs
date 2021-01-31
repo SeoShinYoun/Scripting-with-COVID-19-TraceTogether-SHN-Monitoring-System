@@ -733,6 +733,7 @@ namespace Prg_Assg_CASY
                                 Console.WriteLine(CheckIn); // To display the new check in data information with the updated number of visitors 
                                 Console.WriteLine("-----------------------------------------");
                                 Console.WriteLine("=========================================");
+                                break;
                             }
                             else // Whem the number of visitors at the location is at maximum 
                             {
