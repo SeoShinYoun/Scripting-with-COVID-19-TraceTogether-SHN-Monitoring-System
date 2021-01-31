@@ -123,10 +123,9 @@ namespace Prg_Assg_CASY
         // option 4 of Main Menu (Contact Tracing Reporting) ------ Advanced Feature 3.1 
         static void ContactTracingReporting(List<Person> personList, List<BusinessLocation> businessLocationList, List<SHNFacility> shnFacilityList)
         {
-            DateTime formattedDate = DateTime.Now; // dummy value
             bool ContactTracing = true;
             int options = 50;
-            while (ContactTracing = true)
+            while (ContactTracing == true)
             {
                 Console.WriteLine();
                 Console.WriteLine("***************************************************************");
@@ -153,21 +152,9 @@ namespace Prg_Assg_CASY
                 }
                 if (options == 1)
                 {
-                    Console.Write("Please Select A Date To Generate The Report For (yyyy/mm/dd): ");
-                    string dateChosen = Console.ReadLine();
-                    if (DateTime.TryParse(dateChosen, out formattedDate))
-                    {
-                        String.Format("", formattedDate);
-                        Console.WriteLine("Date successfully obtained!");
-                    }
-                    else
-                    {
-                        Console.WriteLine();
-                        Console.Write("Invalid...");
-                        Console.WriteLine("Please Enter Date in Format of yyyy/mm/dd ");
-                        Console.WriteLine("If date is in correct format, ensure that it is a valid date (e.g. 2021/14/52 - Invalid)");
-                        Console.WriteLine();
-                    }
+                    Console.Write("Please Select A Date To Generate The Report For (yyyy/mm/dd hh:mm): ");
+                    DateTime dateChosen = DateTime.Parse(Console.ReadLine());
+                    
                     Console.WriteLine("------------------------------------------------------");
                     Console.Write("Please Enter a business location: ");
                     string CheckBL = Convert.ToString(Console.ReadLine());
@@ -197,7 +184,7 @@ namespace Prg_Assg_CASY
                                 {
                                     foreach (SafeEntry SE in personList[a].SafeEntryList)
                                     {
-                                        if ((SE.CheckIn <= formattedDate) && (formattedDate <= SE.CheckIn))
+                                        if ((SE.CheckIn.Ticks <= dateChosen.Ticks) && (dateChosen.Ticks <= SE.CheckIn.Ticks))
                                         {
                                             data = CheckBL + "," + personList[a].Name + "," + SE.CheckIn.ToString("dd/MM/yyyy HH:mm") + "," + SE.CheckOut.ToString("dd/MM/yyyy HH:mm");
                                         }
