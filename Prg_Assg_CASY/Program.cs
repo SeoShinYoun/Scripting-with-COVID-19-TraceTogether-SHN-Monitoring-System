@@ -139,15 +139,16 @@ namespace Prg_Assg_CASY
             string options = Console.ReadLine();
             if (options == "1" )
             {
+                DateTime checkDT;
                 while (true)
                 {
                     Console.WriteLine("------------------------------------------------------");
-                    Console.Write("Please enter a date (dd/mm/yy) and time (H:m: Am/Pm): ");
-                    DateTime checkDT = Convert.ToDateTime(Console.ReadLine());
+                    Console.Write("Please enter a date (mm/dd/yyyy) and time (H:mm: AM/PM): ");
+                    checkDT = Convert.ToDateTime(Console.ReadLine());
                     Console.WriteLine("------------------------------------------------------");
                     Console.Write("Please Enter a business location: ");
-                    Console.WriteLine("------------------------------------------------------");
                     string CheckBL = Convert.ToString(Console.ReadLine());
+                    Console.WriteLine("------------------------------------------------------");
                     for (int i = 0; i < personList.Count; i++)
                     {
                         if ((personList[i].SafeEntryList != null) || (personList[i].SafeEntryList.Count != 0))
@@ -157,16 +158,22 @@ namespace Prg_Assg_CASY
                                 if (((se.CheckIn >= checkDT == true) && (se.Location.BusinessName.ToLower() == CheckBL.ToLower())))
                                 {
                                     data = checkDT + "," + CheckBL;
-                                    using (StreamWriter sw = new StreamWriter("contactTracingReport.csv", false))
+                                    using (StreamWriter sw = new StreamWriter("ContactTracingReport.csv", false))
                                     {
                                         sw.WriteLine(personList[i].Name);
                                         sw.WriteLine(se.CheckIn.ToString());
                                         sw.WriteLine(se.CheckOut.ToString());
                                         sw.WriteLine(se.Location.ToString());
+                                        Console.WriteLine("report has been generated into 'ContactTracingReport.csv' file!");
+                                        MainMenu(personList, businessLocationList, shnFacilityList);
                                     }
-                                    record++;
-
                                 }
+                                else
+                                {
+                                    Console.WriteLine("You have typed in an incorrect business location!");
+                                }
+                                //Console.WriteLine("report has been generated into 'ContactTracingReport.csv' file!");
+                                //MainMenu(personList, businessLocationList, shnFacilityList);
                             }
                         }
                     }
