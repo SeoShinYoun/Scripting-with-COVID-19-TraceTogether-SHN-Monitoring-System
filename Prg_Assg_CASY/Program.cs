@@ -1252,5 +1252,51 @@ namespace Prg_Assg_CASY
 // End of Program         
 
 
+//if (options == "1" )
+//{
+//    DateTime checkDT;
+//    while (true)
+//    {
+//        Console.WriteLine("------------------------------------------------------");
+//        Console.Write("Please enter a date (mm/dd/yyyy) and time (H:mm: AM/PM): ");
+//        checkDT = Convert.ToDateTime(Console.ReadLine());
+//        Console.WriteLine("------------------------------------------------------");
+//        Console.Write("Please Enter a business location: ");
+//        string CheckBL = Convert.ToString(Console.ReadLine());
+//        Console.WriteLine("------------------------------------------------------");
+//        for (int i = 0; i < personList.Count; i++)
+//        {
+//            if ((personList[i].SafeEntryList != null) || (personList[i].SafeEntryList.Count != 0))
+//            {
+//                foreach (SafeEntry se in personList[i].SafeEntryList)
+//                {
+//                    if (((se.CheckIn >= checkDT == true) && (se.Location.BusinessName.ToLower() == CheckBL.ToLower())))
+//                    {
+//                        data = checkDT + "," + CheckBL;
+//                        using (StreamWriter sw = new StreamWriter("ContactTracingReport.csv", false))
+//                        {
+//                            sw.WriteLine(personList[i].Name);
+//                            sw.WriteLine(se.CheckIn.ToString());
+//                            sw.WriteLine(se.CheckOut.ToString());
+//                            sw.WriteLine(se.Location.ToString());
+//                            Console.WriteLine("report has been generated into 'ContactTracingReport.csv' file!");
+//                            MainMenu(personList, businessLocationList, shnFacilityList);
+//                        }
+//                    }
+//                    else
+//                    {
+//                        Console.WriteLine("You have typed in an incorrect business location!");
+//                    }
+//                    //Console.WriteLine("report has been generated into 'ContactTracingReport.csv' file!");
+//                    //MainMenu(personList, businessLocationList, shnFacilityList);
+//                }
+//            }
+//        }
+//    }
+//}
+//else if (options == "2")
+//{
+//    MainMenu(personList, businessLocationList, shnFacilityList);
+//    Task.Delay(1500).Wait();
 
-    
+//}
