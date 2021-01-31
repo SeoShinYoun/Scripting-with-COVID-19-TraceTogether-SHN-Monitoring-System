@@ -106,7 +106,7 @@ namespace Prg_Assg_CASY
                     }
                     else if (choice == 5)
                     {
-                        ShnStatusReporting(personList);
+                        ShnStatusReporting(personList, businessLocationList, shnFacilityList);
                     }
                     else
                     {
@@ -180,10 +180,11 @@ namespace Prg_Assg_CASY
             }
         }
         //Advanced Feature 3.2 - SHN Status Reporting 
-        static void ShnStatusReporting(List<Person> pList)
+        static void ShnStatusReporting(List<Person> pList, List<BusinessLocation> bList, List<SHNFacility> shnList)
         {
-            DateTime formattedDate = DateTime.Now;
+            DateTime formattedDate = DateTime.Now; // dummy value
             bool shnStatusReporting = true;
+            int choice = 50;// dummy value
             while(shnStatusReporting == true)
             {
                 Console.WriteLine("***************************************************************");
@@ -191,26 +192,58 @@ namespace Prg_Assg_CASY
                 Console.WriteLine("*                    SHN Status Reporting                     *");
                 Console.WriteLine("*                                                             *");
                 Console.WriteLine("***************************************************************");
-                Console.Write("Please Select A Date To Generate The Report For (yyyy/mm/dd): ");
-                string dateChosen = Console.ReadLine();
-                if (DateTime.TryParse(dateChosen, out formattedDate))
+                Console.WriteLine("Would you like to generate a Contact Tracing Report?");
+                Console.WriteLine("(1) Yes");
+                Console.WriteLine("(2) No");
+                try
                 {
-                    String.Format("{0:yyy/MM/dd}", formattedDate);
-                    Console.WriteLine("Date successfully obtained!");
-                    break;
+                    Console.Write("Options: ");
+                    choice = Convert.ToInt32(Console.ReadLine());
+                    Console.WriteLine();
+                }
+                catch (FormatException ex)
+                {
+                    Console.WriteLine();
+                    Console.WriteLine("Invalid option selected!");
+                    Console.Write("Exception details: ");
+                    Console.WriteLine(ex.Message);
+                }
+                if (choice == 1)
+                {
+                    Console.Write("Please Select A Date To Generate The Report For (yyyy/mm/dd): ");
+                    string dateChosen = Console.ReadLine();
+                    if (DateTime.TryParse(dateChosen, out formattedDate))
+                    {
+                        String.Format("{0:yyy/MM/dd}", formattedDate);
+                        Console.WriteLine("Date successfully obtained!");
+                        break;
+                    }
+                    else
+                    {
+                        Console.WriteLine();
+                        Console.Write("Invalid...");
+                        Console.WriteLine("Please Enter Date in Format of yyyy/mm/dd ");
+                        Console.WriteLine("If date is in correct format, ensure that it is a valid date (e.g. 2021/14/52 - Invalid)");
+                        Console.WriteLine();
+                    }
+                }
+                else if (choice == 2)
+                {
+                    shnStatusReporting = false;
+                    Console.WriteLine("returning to main menu...");
+                    Task.Delay(1000).Wait();
+                    MainMenu(pList, bList, shnList);
                 }
                 else
                 {
-                    Console.WriteLine();
-                    Console.Write("Invalid...");
-                    Console.WriteLine("Please Enter Date in Format of yyyy/mm/dd ");
-                    Console.WriteLine("If date is in correct format, ensure that it is a valid date (e.g. 2021/14/52 - Invalid)");
+                    Console.WriteLine("Invalid Option...Please Select From Either Option 1 or 2...");
                     Console.WriteLine();
                 }
             }
             string headings = "Name of Traveller" + "," + "SHN End Date" + "," + "SHN Location";
-            using (StreamWriter sw = new StreamWriter("SHNStatusReport.csv", true))
+            using (StreamWriter sw = new StreamWriter("SHNStatusReport.csv", false))
             {
+                sw.WriteLine("SHN Status Reporting For: " + formattedDate.ToString("dd/MM/yyyy"));
                 sw.WriteLine(headings);
                 for (int i = 1; i < pList.Count; i++)
                 {
@@ -218,9 +251,25 @@ namespace Prg_Assg_CASY
                     {
                         foreach (TravelEntry TE in pList[i].TravelEntryList)
                         {
-                            if ((TE.EntryDate <= formattedDate) && formattedDate <= TE.ShnEndDate)
+                            if ((TE.EntryDate <= formattedDate) && (formattedDate <= TE.ShnEndDate))
                             {
-                                //Console.WriteLi
+                                string data;
+                                if (string.IsNullOrEmpty(TE.ShnStay.FacilityName))
+                                {
+                                    if (TE.EntryDate == TE.ShnEndDate)
+                                    {
+                                        data = pList[i].Name + "," + TE.ShnEndDate + "," + "No SHN";
+                                    }
+                                    else
+                                    {
+                                        data = pList[i].Name + "," + TE.ShnEndDate + "," + "Own Accommodation";
+                                    }
+                                }
+                                else
+                                {
+                                    data = pList[i].Name + "," + TE.ShnEndDate + "," + TE.ShnStay.FacilityName;
+                                }
+                                sw.WriteLine(data);
                             }
                         }
                     }
@@ -789,10 +838,12 @@ namespace Prg_Assg_CASY
         {
             Console.Write("Please Enter Your Name: ");
             string name = Console.ReadLine();
+            name = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(name);
             Console.Write("Please Enter Your Passport Number: ");
-            string passportNo = Console.ReadLine();
-            Console.Write("Please Enter Your Nationality: ");
+            string passportNo = Console.ReadLine().ToUpper();
+            Console.Write("Please Enter Your Nationality: "); 
             string nationality = Console.ReadLine();
+            nationality = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(nationality);
             Visitor visitor = new Visitor(name, passportNo, nationality);
             pList.Add(visitor);
             if (visitor != null)
