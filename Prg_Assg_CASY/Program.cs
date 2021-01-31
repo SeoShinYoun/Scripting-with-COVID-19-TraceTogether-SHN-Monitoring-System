@@ -271,14 +271,6 @@ namespace Prg_Assg_CASY
                     }
                 }
             }
-
-            //Given a date, generate a csv report of all travellers 
-            //serving their SHN, their SHN end date, and where they are serving their SHN.
-            //string data = 1 + "," + 2;
-            //using (StreamWriter sw = new StreamWriter("testmarks.csv", true))
-            //{
-            //    sw.WriteLine(data);
-            //}
         }
         // General Menu and Methods 
         static void GeneralMenu(List<Person> personList, List<BusinessLocation> businessLocationList, List<SHNFacility> shnFacilityList)
