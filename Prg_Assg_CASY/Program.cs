@@ -34,7 +34,7 @@ namespace Prg_Assg_CASY
                     shnfacilityList = JsonConvert.DeserializeObject<List<SHNFacility>>(data);
                 }
             }
-            foreach(SHNFacility facility in shnfacilityList)
+            foreach (SHNFacility facility in shnfacilityList)
             {
                 facility.FacilityVacancy = facility.FacilityCapacity;
             }
@@ -48,12 +48,12 @@ namespace Prg_Assg_CASY
 
             //Loading of the different Menus (MainMenu, GeneralMenu, SafeEntry, TravelEntry) 
             // Load MainMenu page
-            MainMenu(personList,businessLocationList, shnfacilityList);
+            MainMenu(personList, businessLocationList, shnfacilityList);
         }
 
- //Creation of Menus  (MainMenu, GeneralMenu, SafeEntry, TravelEntry) 
+        //Creation of Menus  (MainMenu, GeneralMenu, SafeEntry, TravelEntry) 
         // Creation of the MainMenu for users to navigate through other functions as well as methods for the advanced features 
-        static void MainMenu(List<Person> personList, List<BusinessLocation> businessLocationList, List<SHNFacility> shnFacilityList) 
+        static void MainMenu(List<Person> personList, List<BusinessLocation> businessLocationList, List<SHNFacility> shnFacilityList)
         {
             bool display = true;
             while (display == true)
@@ -94,11 +94,11 @@ namespace Prg_Assg_CASY
                     }
                     else if (choice == 2)
                     {
-                        SafeEntryMenu(personList,businessLocationList, shnFacilityList);
+                        SafeEntryMenu(personList, businessLocationList, shnFacilityList);
                     }
                     else if (choice == 3)
                     {
-                        TravelEntryMenu(personList,businessLocationList, shnFacilityList);
+                        TravelEntryMenu(personList, businessLocationList, shnFacilityList);
                     }
                     else if (choice == 4)
                     {
@@ -157,9 +157,8 @@ namespace Prg_Assg_CASY
                     string dateChosen = Console.ReadLine();
                     if (DateTime.TryParse(dateChosen, out formattedDate))
                     {
-                        String.Format("{0:yyy/MM/dd}", formattedDate);
+                        String.Format("", formattedDate);
                         Console.WriteLine("Date successfully obtained!");
-                        break;
                     }
                     else
                     {
@@ -168,6 +167,45 @@ namespace Prg_Assg_CASY
                         Console.WriteLine("Please Enter Date in Format of yyyy/mm/dd ");
                         Console.WriteLine("If date is in correct format, ensure that it is a valid date (e.g. 2021/14/52 - Invalid)");
                         Console.WriteLine();
+                    }
+                    Console.WriteLine("------------------------------------------------------");
+                    Console.Write("Please Enter a business location: ");
+                    string CheckBL = Convert.ToString(Console.ReadLine());
+                    Console.WriteLine("------------------------------------------------------");
+                    for (int i = 0; i < businessLocationList.Count; i++)
+                    {
+                        if (businessLocationList[i].BusinessName == CheckBL)
+                        {
+                            Console.WriteLine("report has been generated into 'ContactTracingReport.csv' file!");
+                            MainMenu(personList, businessLocationList, shnFacilityList);
+                        }
+                        else
+                        {
+                            Console.WriteLine();
+                            Console.Write("Invalid...");
+                            Console.WriteLine("Please Enter a valid business location..... ");
+                            Console.WriteLine();
+                        }
+                        using (StreamWriter sw = new StreamWriter("ContactTracingReport.csv", false))
+                        {
+                            string headings = "Business Name" + "," + "Name of Person(s)" + "," + "check-in" + "," + "check-out";
+                            sw.WriteLine(headings);
+                            string data = null;
+                            for (int a = 1; a < personList.Count; a++)
+                            {
+                                if (personList[a].SafeEntryList.Count != 0)
+                                {
+                                    foreach (SafeEntry SE in personList[a].SafeEntryList)
+                                    {
+                                        if ((SE.CheckIn <= formattedDate) && (formattedDate <= SE.CheckIn))
+                                        {
+                                            data = CheckBL + "," + personList[a].Name + "," + SE.CheckIn.ToString("dd/MM/yyyy HH:mm") + "," + SE.CheckOut.ToString("dd/MM/yyyy HH:mm");
+                                        }
+                                        sw.WriteLine(data);
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
                 else if (options == 2)
@@ -184,42 +222,7 @@ namespace Prg_Assg_CASY
                 }
             }
         }
-
-            /*if (options == "1" )
-            {
-                DateTime checkDT;
-                while (true)
-                {
-                    Console.WriteLine("------------------------------------------------------");
-                    Console.Write("Please enter a date (mm/dd/yyyy) and time (H:mm: AM/PM): ");
-                    checkDT = Convert.ToDateTime(Console.ReadLine());
-                    Console.WriteLine("------------------------------------------------------");
-                    Console.Write("Please Enter a business location: ");
-                    string CheckBL = Convert.ToString(Console.ReadLine());
-                    Console.WriteLine("------------------------------------------------------");
-                    for (int i = 0; i < personList.Count; i++)
-                    {
-                        if ((personList[i].SafeEntryList != null) || (personList[i].SafeEntryList.Count != 0))
-                        {
-                            foreach (SafeEntry se in personList[i].SafeEntryList)
-                            {
-                                if (((se.CheckIn >= checkDT == true) && (se.Location.BusinessName.ToLower() == CheckBL.ToLower())))
-                                {
-                                    data = checkDT + "," + CheckBL;
-                                    using (StreamWriter sw = new StreamWriter("ContactTracingReport.csv", false))
-                                    {
-                                        sw.WriteLine(personList[i].Name);
-                                        sw.WriteLine(se.CheckIn.ToString());
-                                        sw.WriteLine(se.CheckOut.ToString());
-                                        sw.WriteLine(se.Location.ToString());
-                                        Console.WriteLine("report has been generated into 'ContactTracingReport.csv' file!");
-                                        MainMenu(personList, businessLocationList, shnFacilityList);
-                                    }
-                                }
-                                else
-                                {
-                                    Console.WriteLine("You have typed in an incorrect business location!");
-                                }*/
+    
 
         //Advanced Feature 3.2 - SHN Status Reporting 
         static void ShnStatusReporting(List<Person> pList, List<BusinessLocation> bList, List<SHNFacility> shnList)
