@@ -526,27 +526,43 @@ namespace Prg_Assg_CASY
                     {
                         Resident resident = (Resident)r;
                         if (string.IsNullOrEmpty(((Resident)r).Token.SerialNo))// When resident does not have an existing Trace Together Token 
-                        {
-                            Console.WriteLine("===============================================");
-                            Console.WriteLine("There was no Trace Together Token Data Found...");
-                            Console.WriteLine("===============================================");
-                            Console.WriteLine("Would you like to be assigned a token? ");
-                            Console.WriteLine("(1) Yes");
-                            Console.WriteLine("(2) No");
-                            Console.Write("Option: ");
-                            string option = Console.ReadLine(); // store option of either (1) Yes or (2) NO 
+                        {   
                             while (true)
                             {
-                                if (option is "1") //When user chooses option (1) Yes 
+                                Console.WriteLine("===============================================");
+                                Console.WriteLine("There was no Trace Together Token Data Found...");
+                                Console.WriteLine("===============================================");
+                                Console.WriteLine("Would you like to be assigned a token? ");
+                                Console.WriteLine("(1) Yes");
+                                Console.WriteLine("(2) No");
+                                Console.Write("Option: ");
+                                try
                                 {
-                                    resident.Token.ReplaceToken(resident.Token.SerialNo, resident.Token.CollectionLocation); //To make a new token for the resident 
-                                    SafeEntryMenu(personList, businessLocationList, shnFacilityList);// Navigate the user back to the SafeEntry Menu after token is being assigned
-                                    //MainMenu(personList, businessLocationList); // Navigate the user back to the Main Menu after token is being assigned 
+                                    string option = Console.ReadLine(); // store option of either (1) Yes or (2) NO 
+                                    if (option is "1") //When user chooses option (1) Yes 
+                                    {
+                                        resident.Token.ReplaceToken(resident.Token.SerialNo, resident.Token.CollectionLocation); //To make a new token for the resident 
+                                        SafeEntryMenu(personList, businessLocationList, shnFacilityList);// Navigate the user back to the SafeEntry Menu after token is being assigned
+                                                                                                         //MainMenu(personList, businessLocationList); // Navigate the user back to the Main Menu after token is being assigned 
+                                    }
+                                    else if (option is "2") //When User Chooses option (2) No 
+                                    {
+                                        SafeEntryMenu(personList, businessLocationList, shnFacilityList); // To go back to the Safe Entry Menu 
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("Invalid Option... Please Select from either Option 1 or 2...");
+                                    }
                                 }
-                                else if (option is "2") //When User Chooses option (2) No 
+                                catch(FormatException ex)
                                 {
-                                    SafeEntryMenu(personList, businessLocationList, shnFacilityList); // To go back to the Safe Entry Menu 
+                                    Console.WriteLine("Invalid option selected!");
+                                    Console.Write("Exception details: ");
+                                    Console.WriteLine(ex.Message);
+                                    Console.WriteLine("Choose from either Options 1 or 2..");
+                                    Console.WriteLine();
                                 }
+                                
                             }
                         }
                         else // When resident already has an existing Trace Togethger Token 
@@ -666,6 +682,7 @@ namespace Prg_Assg_CASY
         // option 4 of SafeEntry Menu to Check-In 
         static void CheckIn(List<Person> personList, List<BusinessLocation> businessLocationList, List<SHNFacility> shnFacilityList)
         {
+            
             bool isFound = false;
             Console.Write("Enter your name: ");
             string SEName = Console.ReadLine();
@@ -693,27 +710,47 @@ namespace Prg_Assg_CASY
                     Console.WriteLine();
                     Console.WriteLine("Please enter the number tagged to the business location...");
                     Console.WriteLine("==========================================================");
-                    Console.Write("Business Location to Check In: ");
-                    int SEBLOption = Convert.ToInt32(Console.ReadLine()); // To store the users choice of shop from 1 to 4 
-                    SEBLOption = SEBLOption + 1; // To get index of the business locations 
-                    Task.Delay(1500).Wait();
-                    if (businessLocationList[SEBLOption].VisitorsNow < businessLocationList[SEBLOption].MaximumCapacity)// When the number of visitors in the loaction is not at amximum 
+                    while (true)
                     {
-                        SafeEntry CheckIn = new SafeEntry(DateTime.Now, businessLocationList[SEBLOption]);
-                        businessLocationList[SEBLOption].VisitorsNow = businessLocationList[SEBLOption].VisitorsNow + 1; // Visitor now would add 1 
-                        p.AddSafeEntry(CheckIn); // To update check in data for the business locations 
-                        Console.WriteLine("");
-                        Console.WriteLine("=============== Checked-In ==============");
-                        Console.WriteLine(CheckIn); // To display the new check in data information with the updated number of visitors 
-                        Console.WriteLine("-----------------------------------------");
-                        Console.WriteLine("=========================================");
-                    }
-                    else // Whem the number of visitors at the location is at maximum 
-                    {
-                        Console.WriteLine("----------------------------------------------------------------------");
-                        Console.WriteLine("Business Location has reached Maximum Capacity. Try again in a while! ");
-                        Console.WriteLine("----------------------------------------------------------------------");
-                    }
+                        try
+                        {
+                            Console.Write("Business Location to Check In: ");
+                            int SEBLOption = Convert.ToInt32(Console.ReadLine()); // To store the users choice of shop from 1 to 4 
+                            if (SEBLOption >= 5 || SEBLOption <= 0)
+                            {
+                                Console.WriteLine("Invalid Option!...");
+                                CheckIn(personList, businessLocationList, shnFacilityList);
+                            }
+                            SEBLOption = SEBLOption - 1; // To get index of the business locations 
+                            Task.Delay(1500).Wait();
+                            if (businessLocationList[SEBLOption].VisitorsNow < businessLocationList[SEBLOption].MaximumCapacity)// When the number of visitors in the loaction is not at amximum 
+                            {
+                                SafeEntry CheckIn = new SafeEntry(DateTime.Now, businessLocationList[SEBLOption]);
+                                businessLocationList[SEBLOption].VisitorsNow = businessLocationList[SEBLOption].VisitorsNow + 1; // Visitor now would add 1 
+                                p.AddSafeEntry(CheckIn); // To update check in data for the business locations 
+                                Console.WriteLine("");
+                                Console.WriteLine("=============== Checked-In ==============");
+                                Console.WriteLine(CheckIn); // To display the new check in data information with the updated number of visitors 
+                                Console.WriteLine("-----------------------------------------");
+                                Console.WriteLine("=========================================");
+                            }
+                            else // Whem the number of visitors at the location is at maximum 
+                            {
+                                Console.WriteLine("----------------------------------------------------------------------");
+                                Console.WriteLine("Business Location has reached Maximum Capacity. Try again in a while! ");
+                                Console.WriteLine("----------------------------------------------------------------------");
+                            }
+                        }
+                        catch (FormatException ex)
+                        {
+                            Console.WriteLine("Invalid option selected!");
+                            Console.Write("Exception details: ");
+                            Console.WriteLine(ex.Message);
+                            Console.WriteLine("Choose from either Options 1 or 2..");
+                            Console.WriteLine();
+                        }
+                     }
+                    
                 }
 
             }
@@ -1241,53 +1278,3 @@ namespace Prg_Assg_CASY
 }
 
 // End of Program         
-
-
-//if (options == "1" )
-//{
-//    DateTime checkDT;
-//    while (true)
-//    {
-//        Console.WriteLine("------------------------------------------------------");
-//        Console.Write("Please enter a date (mm/dd/yyyy) and time (H:mm: AM/PM): ");
-//        checkDT = Convert.ToDateTime(Console.ReadLine());
-//        Console.WriteLine("------------------------------------------------------");
-//        Console.Write("Please Enter a business location: ");
-//        string CheckBL = Convert.ToString(Console.ReadLine());
-//        Console.WriteLine("------------------------------------------------------");
-//        for (int i = 0; i < personList.Count; i++)
-//        {
-//            if ((personList[i].SafeEntryList != null) || (personList[i].SafeEntryList.Count != 0))
-//            {
-//                foreach (SafeEntry se in personList[i].SafeEntryList)
-//                {
-//                    if (((se.CheckIn >= checkDT == true) && (se.Location.BusinessName.ToLower() == CheckBL.ToLower())))
-//                    {
-//                        data = checkDT + "," + CheckBL;
-//                        using (StreamWriter sw = new StreamWriter("ContactTracingReport.csv", false))
-//                        {
-//                            sw.WriteLine(personList[i].Name);
-//                            sw.WriteLine(se.CheckIn.ToString());
-//                            sw.WriteLine(se.CheckOut.ToString());
-//                            sw.WriteLine(se.Location.ToString());
-//                            Console.WriteLine("report has been generated into 'ContactTracingReport.csv' file!");
-//                            MainMenu(personList, businessLocationList, shnFacilityList);
-//                        }
-//                    }
-//                    else
-//                    {
-//                        Console.WriteLine("You have typed in an incorrect business location!");
-//                    }
-//                    //Console.WriteLine("report has been generated into 'ContactTracingReport.csv' file!");
-//                    //MainMenu(personList, businessLocationList, shnFacilityList);
-//                }
-//            }
-//        }
-//    }
-//}
-//else if (options == "2")
-//{
-//    MainMenu(personList, businessLocationList, shnFacilityList);
-//    Task.Delay(1500).Wait();
-
-//}
