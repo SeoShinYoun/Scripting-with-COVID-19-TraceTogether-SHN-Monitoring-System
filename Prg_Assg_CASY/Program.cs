@@ -818,13 +818,13 @@ namespace Prg_Assg_CASY
                                 Console.WriteLine("Invalid Option!...");
                                 CheckIn(personList, businessLocationList, shnFacilityList);
                             }
-                            SEBLOption = SEBLOption - 1; // To get index of the business locations 
+                            //SEBLOption = SEBLOption - 1; // To get index of the business locations 
                             Task.Delay(1500).Wait();
-                            if (businessLocationList[SEBLOption].VisitorsNow < businessLocationList[SEBLOption].MaximumCapacity)// When the number of visitors in the loaction is not at amximum 
+                            if (businessLocationList[SEBLOption-1].VisitorsNow < businessLocationList[SEBLOption-1].MaximumCapacity)// When the number of visitors in the location is not at maximum 
                             {
-                                SafeEntry CheckIn = new SafeEntry(DateTime.Now, businessLocationList[SEBLOption]);
+                                SafeEntry CheckIn = new SafeEntry(DateTime.Now, businessLocationList[SEBLOption-1]);
                                 CheckIn.CheckOut = Convert.ToDateTime("1212/02/20"); //Store Checkout DateTime to "1212/02/20" when user checked in but has not checked out
-                                businessLocationList[SEBLOption].VisitorsNow = businessLocationList[SEBLOption].VisitorsNow + 1; // Visitor now would add 1 
+                                businessLocationList[SEBLOption-1].VisitorsNow = businessLocationList[SEBLOption-1].VisitorsNow + 1; // Visitor now would add 1 
                                 p.AddSafeEntry(CheckIn); // To update check in data for the business locations 
                                 Console.WriteLine("");
                                 Console.WriteLine("=============== Checked-In ==============");
@@ -894,6 +894,7 @@ namespace Prg_Assg_CASY
                         {
                             Console.WriteLine("Record #" + Convert.ToInt32(i + 1)); //Numbering of records
                             Console.WriteLine(notCheckedOut[i]); //Display not checked out Safeentry objects
+                            Console.WriteLine();
                         }
                         while (true)
                         {
@@ -929,6 +930,7 @@ namespace Prg_Assg_CASY
                                 }
                                 else
                                 {
+                                    Console.WriteLine();
                                     Console.WriteLine("Invalid Input...Please select from Integer Option from 1 to " + notCheckedOut.Count); //Prompt user to select an option from 1 to ... when user does not entered a valid input
                                 }
                             }
