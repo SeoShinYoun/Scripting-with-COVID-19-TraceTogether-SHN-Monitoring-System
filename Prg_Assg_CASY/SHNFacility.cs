@@ -112,7 +112,7 @@ namespace Prg_Assg_CASY
                 return cost; //No surcharge for other timings
             }
         }
-
+ 
         public bool IsAvailable() //Check if Facility has vacancy 
         {
             if (facilityVacancy >= 1)
