@@ -88,10 +88,11 @@ namespace Prg_Assg_CASY
 
         public override string ToString()
         {
-            return "Last Country of Embarkation: " + LastCountyOfEmbarkation 
-                + "\nEntry Mode: " + EntryMode + "\nEntry Date: " + EntryDate + 
-                "\nSHN End Date: " + shnEndDate + "\nSHN Stay: " + shnStay +
-                "\nIs Paid: " + isPaid;
+            return "Last Country of Embarkation: " + LastCountyOfEmbarkation
+                + "\nEntry Mode: " + EntryMode + "\nEntry Date: " + EntryDate;
+            //+ 
+            //    "\nSHN End Date: " + shnEndDate + "\nSHN Stay: " + shnStay +
+            //    "\nIs Paid: " + isPaid;
         }
     }
 }

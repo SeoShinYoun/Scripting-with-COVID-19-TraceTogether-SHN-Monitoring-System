@@ -22,29 +22,29 @@ namespace Prg_Assg_CASY
             List<SHNFacility> shnfacilityList = new List<SHNFacility>();
             using (HttpClient client = new HttpClient())
             {
-                client.BaseAddress = new Uri("https://covidmonitoringapiprg2.azurewebsites.net");
-                Task<HttpResponseMessage> responseTask = client.GetAsync("/facility");
+                client.BaseAddress = new Uri("https://covidmonitoringapiprg2.azurewebsites.net"); // Sending HTTP GET request to Web API
+                Task<HttpResponseMessage> responseTask = client.GetAsync("/facility"); // Sending HTTP GET request to Web API
                 responseTask.Wait();
                 HttpResponseMessage result = responseTask.Result;
                 if (result.IsSuccessStatusCode)
                 {
-                    Task<string> readTask = result.Content.ReadAsStringAsync();
+                    Task<string> readTask = result.Content.ReadAsStringAsync(); // Receiving HTTP Response from Web API
                     readTask.Wait();
                     string data = readTask.Result;
-                    shnfacilityList = JsonConvert.DeserializeObject<List<SHNFacility>>(data);
+                    shnfacilityList = JsonConvert.DeserializeObject<List<SHNFacility>>(data); //Converting the JSON text string back to a List of SHNFacility Objects
                 }
             }
             foreach (SHNFacility facility in shnfacilityList)
             {
-                facility.FacilityVacancy = facility.FacilityCapacity;
+                facility.FacilityVacancy = facility.FacilityCapacity; // Making Facility Vacancy to be equal to Facility Capacity at the start of the Program
             }
             //Basic Feature 1 - Loading of Person and Business Location Data
             //Creation of list to store csv file 
-            List<Person> personList = new List<Person>();
+            List<Person> personList = new List<Person>(); 
             List<BusinessLocation> businessLocationList = new List<BusinessLocation>();
             //IncludePerson(personList, shnfacilityList);
-            IncludeBusinessLocation(businessLocationList);
-            IncludePerson(personList, shnfacilityList);
+            IncludeBusinessLocation(businessLocationList); //Calling IncludeBusinessLocation Method to Load BusinessLocation.CSV and Populate List
+            IncludePerson(personList, shnfacilityList); // Calling IncludePerson Method to Load Person.CSV and Populate List
 
             //Loading of the different Menus (MainMenu, GeneralMenu, SafeEntry, TravelEntry) 
             // Load MainMenu page
@@ -73,6 +73,7 @@ namespace Prg_Assg_CASY
                 Console.WriteLine("(5) SHN Status Reporting"); //Advance feature 3.2
                 Console.WriteLine("(6) Exit");// Exit the application 
                 Console.WriteLine("=============================");
+                //Exception Handling for Option
                 try
                 {
                     Console.Write("Options: ");
@@ -84,29 +85,29 @@ namespace Prg_Assg_CASY
                     Console.WriteLine();
                     Console.WriteLine("Invalid option selected!");
                     Console.Write("Exception details: ");
-                    Console.WriteLine(ex.Message);
+                    Console.WriteLine(ex.Message); //Print out Error Message
                 }
                 if (choice != 6)
                 {
                     if (choice == 1)
                     {
-                        GeneralMenu(personList, businessLocationList, shnFacilityList);
+                        GeneralMenu(personList, businessLocationList, shnFacilityList); // Calling General Menu For User to select General Features from the Basic Feature
                     }
                     else if (choice == 2)
                     {
-                        SafeEntryMenu(personList, businessLocationList, shnFacilityList);
+                        SafeEntryMenu(personList, businessLocationList, shnFacilityList); //Calling SafeEntryMenu For Users to Select SafeEntry/TraceTogether Options from the Basic Feature
                     }
                     else if (choice == 3)
                     {
-                        TravelEntryMenu(personList, businessLocationList, shnFacilityList);
+                        TravelEntryMenu(personList, businessLocationList, shnFacilityList); //Calling TravelEntryMenu For Users to Select TravelEntry Options from the Basic Feature
                     }
                     else if (choice == 4)
                     {
-                        ContactTracingReporting(personList, businessLocationList, shnFacilityList);
+                        ContactTracingReporting(personList, businessLocationList, shnFacilityList); //Calling ContracTracingReporting For Users to generate CSV for People who checked in and out of a Business Location during a period of Time From the Advanced Feature
                     }
                     else if (choice == 5)
                     {
-                        ShnStatusReporting(personList, businessLocationList, shnFacilityList);
+                        ShnStatusReporting(personList, businessLocationList, shnFacilityList); // Calling SHNStatusReporting For Users to Generate CSV for Travellers serving their SHN From the Advanced Feature
                     }
                     else
                     {
@@ -115,8 +116,8 @@ namespace Prg_Assg_CASY
                 }
                 else
                 {
-                    display = false;
-                    Console.WriteLine("Thank you! Bye...");
+                    display = false; //break from while loop by making condition false
+                    Console.WriteLine("Thank you! Bye..."); //Exit From Program
                 }
             }
         }
@@ -124,12 +125,13 @@ namespace Prg_Assg_CASY
         //Advanced Feature 3.1 - Contact Tracing Reporting
         static void ContactTracingReporting(List<Person> pList, List<BusinessLocation> bList, List<SHNFacility> shnFacilityList)
         {
-            DateTime formattedDate = DateTime.Now;
-            int choice = 50;
+            DateTime formattedDate; //Format Date from user input
+            int choice = 50; //Dummy value
             bool display = true;
             while (display == true)
-            {
+            { 
                 Console.WriteLine();
+                //Display Contract Tracing Reporting Menu
                 Console.WriteLine("***************************************************************");
                 Console.WriteLine("*                                                             *");
                 Console.WriteLine("*                 Contact Tracing Reporting                   *");
@@ -139,7 +141,7 @@ namespace Prg_Assg_CASY
                 Console.WriteLine("(1) Yes");
                 Console.WriteLine("(2) No");
                 Console.Write("Options: ");
-                //string options = Console.ReadLine();
+                //Exception Handling
                 try
                 {
                     choice = Convert.ToInt32(Console.ReadLine());
@@ -152,40 +154,42 @@ namespace Prg_Assg_CASY
                     Console.Write("Exception details: ");
                     Console.WriteLine(ex.Message);
                 }
-                if (choice == 1)
+                if (choice == 1) //When User Chooses to Generate A Contract Tracing Report
                 {
-                    Console.Write("Please Select A Date To Generate The Report For (yyyy/mm/dd): ");
-                    string dateChosen = Console.ReadLine();
+                    Console.Write("Please Select A Date To Generate The Report For (yyyy/mm/dd): "); //Specify format of date
+                    string dateChosen = Console.ReadLine(); //Read Date inputted by user
+                    //Check if Date is in the correct format as Inputted by User
                     if (DateTime.TryParse(dateChosen, out formattedDate))
                     {
                         String.Format("{0:yyy/MM/dd}", formattedDate);
-                        Console.WriteLine("Date successfully obtained!");
+                        Console.WriteLine("Date successfully obtained!"); 
                     }
-                    else
+                    else //If Date input is not as expected
                     {
                         Console.WriteLine();
                         Console.Write("Invalid...");
                         Console.WriteLine("Please Enter Date in Format of yyyy/mm/dd ");
                         Console.WriteLine("If date is in correct format, ensure that it is a valid date (e.g. 2021/14/52 - Invalid)");
-                        ContactTracingReporting(pList, bList, shnFacilityList);
+                        ContactTracingReporting(pList, bList, shnFacilityList); //Return back to contract Tracing reporting Menu
                         Console.WriteLine();
                     }
-                    int hour;
+                    int hour; 
                     int minute;
                     int seconds;
                     while (true)
                     {
+                        //Exception Handling for Hour Input 
                         try
                         {
-                            Console.Write("Enter Hour of Day from 0 to 24: ");
+                            Console.Write("Enter Hour of Day from 0 to 23 (24-Hour Format): "); //Prompt User to Enter Hour of 24-Hour Time Format to Generate Contract Tracing Report
                             hour = Convert.ToInt32(Console.ReadLine());
-                            if (hour < 0 || hour > 24)
+                            if (hour < 0 || hour > 23) //Check if Hour entered by user is between 0 and 23 - 0 being 12 AM and 23 being 11 PM
                             {
-                                Console.WriteLine("Selected hour is out of range... Please Select Between 0 and 24...");
+                                Console.WriteLine("Selected hour is out of range... Please Select Between 0 and 23..."); //Display Invalid Message
                             }
                             else
                             {
-                                break;
+                                break; //break from loop if Hour entered is valid
                             }
                         }
                         catch (FormatException ex)
@@ -199,22 +203,23 @@ namespace Prg_Assg_CASY
                     }
                     while (true)
                     {
+                        //Exception Handling
                         try
                         {
-                            Console.Write("Enter Minute of Day 0 to 60: ");
+                            Console.Write("Enter Minute of Day 0 to 59: "); //Prompt User to Enter Minute of 24-Hour Time Format to Generate Contract Tracing Report
                             minute = Convert.ToInt32(Console.ReadLine());
 
-                            Console.Write("Enter Seconds of Day 0 to 60: ");
+                            Console.Write("Enter Seconds of Day 0 to 59: "); //Prompt User to Enter Second of 24-Hour Time Format to Generate Contract Tracing Report
                             seconds = Convert.ToInt32(Console.ReadLine());
-                            if ((minute < 0 || minute > 60))
+                            if ((minute < 0 || minute > 59)) //Ensure that Minute is between 0 Minute and 59 Minute
                             {
-                                Console.WriteLine("Selected Minute is out of range... Please Select Between 0 and 60...");
+                                Console.WriteLine("Selected Minute is out of range... Please Select Between 0 and 60..."); //Display Out of range Invalid Message
                             }
-                            if ((seconds < 0 || seconds > 60))
+                            if ((seconds < 0 || seconds > 59)) //Ensure that Second is between 0 Seconds and 59 seconds
                             {
-                                Console.WriteLine("Selected Second is out of range... Please Select Between 0 and 60...");
+                                Console.WriteLine("Selected Second is out of range... Please Select Between 0 and 60..."); //Display Out of range invalid Message
                             }
-                            if ((minute >= 0 && minute <= 60) && (seconds >= 0 && seconds <= 60))
+                            if ((minute >= 0 && minute <= 59) && (seconds >= 0 && seconds <= 59)) // Check if Both Hour and Minute is Valid and Break From Loop if true
                             {
                                 break;
                             }
@@ -227,35 +232,43 @@ namespace Prg_Assg_CASY
                             Console.WriteLine(ex.Message);
                         }
                     }
-                    DateTime date = new DateTime(formattedDate.Year, formattedDate.Month, formattedDate.Day, hour, minute, seconds);
-                    Console.WriteLine("Date Object Successfully Created!...");
+                    DateTime date = new DateTime(formattedDate.Year, formattedDate.Month, formattedDate.Day, hour, minute, seconds); //Create A DateTime object to store Date Entered by user with Exact Hour, Minute and Seconds
+                    Console.WriteLine("Date Object Successfully Created!..."); //Validation Message
                     Console.WriteLine();
-                    Console.WriteLine("Enter Valid Business Location Name: ");
+                    Console.WriteLine("Enter Valid Business Location Name: "); //Prompt User to Input Business Name to Generate Contract Tracing Report For
                     string checkName = Console.ReadLine();
-                    checkName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(checkName);
                     bool isFound = false;
                     foreach (BusinessLocation businessLocation in bList)
                     {
-                        if (businessLocation.BusinessName == checkName)
+                        if (businessLocation.BusinessName.ToUpper() == checkName.ToUpper()) //Check if name entered by user is in business location list of names
                         {
                             Console.WriteLine("Report has been Created into 'ContactTracingReport.csv' File!");
                             isFound = true;
-                        }
-                        using (StreamWriter sw = new StreamWriter("ContactTracingReport.csv", false))
-                        {
-                            string data = "Dummy Value"; //Dummy Value
-                            string headings = "Business Name" + "," + "Name of Person(s)" + "," + "check-in" + "," + "check-out";
-                            sw.WriteLine(headings);
-                            for (int a = 1; a < pList.Count; a++)
+                            using (StreamWriter sw = new StreamWriter("ContactTracingReport.csv", false)) //Using StreamWriter to write data to ContactTracingReport.csv
                             {
-                                if (pList[a].SafeEntryList.Count != 0)
+                                sw.WriteLine(businessLocation.BusinessName); //Add business location name as  title to the csv report
+                                string headings = "Name of Person(s)" + "," + "Check-In" + "," + "Check-Out"; //Add Headings of csv Report
+                                sw.WriteLine(headings); 
+                                string dataInput;
+                                foreach (Person p in pList) //Loop through person list 
                                 {
-                                    foreach (SafeEntry SE in pList[a].SafeEntryList)
+                                    foreach (SafeEntry SE in p.SafeEntryList) //Loop through safeentry list to find safeentry reocrd
                                     {
-                                        if ((SE.CheckIn.Ticks <= formattedDate.Ticks) && (formattedDate.Ticks <= SE.CheckOut.Ticks))
+                                        if (SE.Location.BusinessName == businessLocation.BusinessName) //Check if Location Name with safeentry record is found in business location list
                                         {
-                                            data = checkName +"," + pList[a].Name + "," + SE.CheckIn.ToString("dd/MM/yyyy HH:mm") + "," + SE.CheckOut.ToString("dd/MM/yyyy HH:mm");
-                                            sw.WriteLine(data);
+                                            if (SE.CheckIn <= date) // Check that Date Input by user is after the Safeentry Check in timing so that it is within the period
+                                            {
+                                                if (date <= SE.CheckOut) //Check that Date Input by user is before the Safeentry Check out timing so that it is within the period
+                                                {
+                                                    dataInput = p.Name + "," + SE.CheckIn + "," + SE.CheckOut; 
+                                                    sw.WriteLine(dataInput); //Write data to csv file if date Input by user is between Check in DateTime and Checkout DateTime
+                                                }
+                                                else if (SE.CheckOut == Convert.ToDateTime("1212/02/20")) // Dummy Value of Date "1212/02/20" to temporarily store Checkout property when user checks in. If DateTime = 1212/02/20, User hasnt Checked out
+                                                {
+                                                    dataInput = p.Name + "," + SE.CheckIn + "," + "NA"; //NA entered into checkout property if user has not checked out (i.e. 1212/02/20)
+                                                    sw.WriteLine(dataInput);
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -267,7 +280,7 @@ namespace Prg_Assg_CASY
                         Console.WriteLine("Business Name Searched Could not be found...");
                     }
                 }
-                else if (choice == 2)
+                else if (choice == 2) //If user chooses not to generate Contract Tracing Report
                 {
                     display = false;
                     Console.WriteLine("Returning back to main menu");
@@ -281,7 +294,6 @@ namespace Prg_Assg_CASY
                 
             }
         }
-    
 
         //Advanced Feature 3.2 - SHN Status Reporting 
         static void ShnStatusReporting(List<Person> pList, List<BusinessLocation> bList, List<SHNFacility> shnList)
@@ -291,6 +303,7 @@ namespace Prg_Assg_CASY
             int choice = 50;// dummy value
             while(shnStatusReporting == true)
             {
+                //Print out SHN Status Reporting Menu
                 Console.WriteLine("***************************************************************");
                 Console.WriteLine("*                                                             *");
                 Console.WriteLine("*                    SHN Status Reporting                     *");
@@ -299,6 +312,7 @@ namespace Prg_Assg_CASY
                 Console.WriteLine("Would you like to generate a SHN Status Report?");
                 Console.WriteLine("(1) Yes");
                 Console.WriteLine("(2) No");
+                //Exception handling
                 try
                 {
                     Console.Write("Options: ");
@@ -314,66 +328,70 @@ namespace Prg_Assg_CASY
                 }
                 if (choice == 1)
                 {
-                    Console.Write("Please Select A Date To Generate The Report For (yyyy/mm/dd): ");
-                    string dateChosen = Console.ReadLine();
+                    Console.Write("Please Select A Date To Generate The Report For (yyyy/mm/dd): "); //Prompt user to enter the day to generate Travel Entry Records with SHN for that date
+                    string dateChosen = Console.ReadLine(); 
+                    // Check if Date Input by user is in the correct format of yyyy/MM/dd
                     if (DateTime.TryParse(dateChosen, out formattedDate))
                     {
                         String.Format("{0:yyy/MM/dd}", formattedDate);
-                        Console.WriteLine("Date successfully obtained!");
+                        Console.WriteLine("Date successfully obtained!"); //Print validation message when date is obtained successfully
                         break;
                     }
                     else
                     {
                         Console.WriteLine();
                         Console.Write("Invalid...");
-                        Console.WriteLine("Please Enter Date in Format of yyyy/mm/dd ");
-                        Console.WriteLine("If date is in correct format, ensure that it is a valid date (e.g. 2021/14/52 - Invalid)");
+                        Console.WriteLine("Please Enter Date in Format of yyyy/mm/dd "); //Prompt validation message
+                        Console.WriteLine("If date is in correct format, ensure that it is a valid date (e.g. 2021/14/52 - Invalid)"); //Prompt user to enter Year, Month and Day is not out of range 
                         Console.WriteLine();
                     }
                 }
-                else if (choice == 2)
+                else if (choice == 2) // If user chooses not to generate SHN Status Reprot
                 {
                     shnStatusReporting = false;
                     Console.WriteLine("returning to main menu...");
                     Task.Delay(1000).Wait();
-                    MainMenu(pList, bList, shnList);
+                    MainMenu(pList, bList, shnList); //Return Back to Main Menu
                 }
                 else
                 {
-                    Console.WriteLine("Invalid Option...Please Select From Either Option 1 or 2...");
+                    Console.WriteLine("Invalid Option...Please Select From Either Option 1 or 2..."); // Check that option inputted by user is either 1 or 2 
                     Console.WriteLine();
                 }
             }
-            string headings = "Name of Traveller" + "," + "SHN End Date" + "," + "SHN Location";
+            string headings = "Name of Traveller" + "," + "SHN End Date" + "," + "SHN Location"; //headings for Excel report to display the name, shn end date and location of SHN
             using (StreamWriter sw = new StreamWriter("SHNStatusReport.csv", false))
             {
-                sw.WriteLine("SHN Status Reporting Date: " + formattedDate.ToString("dd/MM/yyyy"));
-                sw.WriteLine(headings);
+                sw.WriteLine("SHN Status Reporting Date: " + formattedDate.ToString("dd/MM/yyyy")); //Title of CSV Report of the Date Inputted By user 
+                sw.WriteLine(headings); //Write Headings to csv report
                 string data = null;
-                for (int i = 1; i < pList.Count; i++)
+                int countRecord = 0; //Count number of travel entry records with SHN registered during that date inputted by user, Default being 0
+                for (int i = 1; i < pList.Count; i++) //Loop through personList
                 {
-                    if (pList[i].TravelEntryList.Count != 0)
+                    if (pList[i].TravelEntryList.Count != 0) //Check if Person's Travel list is not empty
                     {
-                        foreach (TravelEntry TE in pList[i].TravelEntryList)
+                        foreach (TravelEntry TE in pList[i].TravelEntryList) //loop through Travel entry list of Person
                         {
-                            if ((TE.EntryDate.Date <= formattedDate) && (formattedDate <= TE.ShnEndDate.Date))
+                            if ((TE.EntryDate.Date <= formattedDate) && (formattedDate <= TE.ShnEndDate.Date)) //Check if formatted date is in between the entry date and shn End Date
                             {
-                                if (TE.ShnStay == null)
+                                if (TE.ShnStay == null) //Check if SHN Stay is empty when user comes from Macao SAR, Vietnam or New Zealand
                                 {
-                                    if (TE.ShnEndDate > TE.EntryDate)
+                                    if (TE.ShnEndDate > TE.EntryDate)  //Check if SHN Stay is empty when user comes from Macao SAR, as shn end date would be same as entry date for travellers coming form Vietnmae or New Zealand
                                     {
-                                        data = pList[i].Name + "," + TE.ShnEndDate.ToString("dd/MM/yyyy HH:mm") + "," + "Own Accommodation";
+                                        data = pList[i].Name + "," + TE.ShnEndDate.ToString("dd/MM/yyyy HH:mm") + "," + "Own Accommodation"; //data to be inputted to csv, with "Own Accommodation" as third column for travellers who came from Macao SAR
                                     }
                                 }
                                 else
                                 {
-                                    data = pList[i].Name + "," + TE.ShnEndDate.ToString("dd/MM/yyyy HH:mm") + "," + TE.ShnStay.FacilityName;
+                                    data = pList[i].Name + "," + TE.ShnEndDate.ToString("dd/MM/yyyy HH:mm") + "," + TE.ShnStay.FacilityName; //if person currently has shn Stay in a facility
                                 }
                                 sw.WriteLine(data);
+                                countRecord += 1; //increase count record by 1 when data is written to csv
                             }
                         }
                     }
                 }
+                Console.WriteLine(countRecord + " Record(s) successfully added to SHN Status Report..."); //Display number of records successfully written to csv
             }
         }
         // General Menu and Methods 
@@ -390,9 +408,9 @@ namespace Prg_Assg_CASY
                 Console.WriteLine("*                                                             *");
                 Console.WriteLine("***************************************************************");
                 Console.WriteLine("======== Menu Options =======");
-                Console.WriteLine("(1) List all Visitors");
-                Console.WriteLine("(2) List Person Details");
-                Console.WriteLine("(3) Back to Main Menu");
+                Console.WriteLine("(1) List all Visitors"); //Display all visitor and details
+                Console.WriteLine("(2) List Person Details"); //Display specific person details from name entered
+                Console.WriteLine("(3) Back to Main Menu"); // Return back to Main Menu
                 Console.WriteLine("=============================");
                 try
                 {
@@ -411,7 +429,7 @@ namespace Prg_Assg_CASY
                 {
                     if (choice == 1)
                     {
-                        DisplayAllVisitors(personList);
+                        DisplayAllVisitors(personList); 
                     }
                     else if (choice == 2)
                     {
@@ -434,15 +452,15 @@ namespace Prg_Assg_CASY
         // option 1 of GeneralMenu to display all the visitors 
         static void DisplayAllVisitors(List<Person> personList)
         {
-            Console.WriteLine("--------------------------- List of Visitors ---------------------------");
+            Console.WriteLine("--------------------------- List of Visitors ---------------------------"); //Listing of all visitors
             for (int i = 0; i < personList.Count; i++)
             {
-                if (personList[i] is Visitor)
+                if (personList[i] is Visitor) //Check if object in person list is also a visitor object
                 {
                     Console.WriteLine(personList[i]);
                 }
             }
-            Task.Delay(1500).Wait();
+            Task.Delay(1500).Wait(); //Delay output for users to view longer duration
         }
         // option 2 of GeneralMenu to ask for person to enter name to  diaplay person details 
         static void DisplayPersonDetails(List<Person> personList)
@@ -459,17 +477,18 @@ namespace Prg_Assg_CASY
                     Console.WriteLine(p); // To print the name, address and Date last travelled 
                     Console.WriteLine();
                     Console.WriteLine("------------------------Travel Entry Details--------------------------");
-                    if (p.TravelEntryList.Count == 0)
+                    if (p.TravelEntryList.Count == 0) //When there is no travel entry record found
                     {
                         Console.WriteLine("No Travel Entry Record Found...");
                     }
                     else
                     {
-                        foreach (TravelEntry TE in p.TravelEntryList)
+                        for (int i = 0; i < p.TravelEntryList.Count; i++)
                         {
-                            Console.WriteLine(TE);
+                            Console.WriteLine("Record " + "#" + Convert.ToInt32(i + 1) + ":");
+                            Console.WriteLine(p.TravelEntryList[i]);
+                            Console.WriteLine();
                             //Console.WriteLine("{0,10}  {1,10}  {2,10}  {3,10}  {4,10}  {5,10}", TE.LastCountyOfEmbarkation, TE.EntryMode, TE.EntryDate, TE.ShnEndDate, TE.IsPaid, TE.ShnStay);
-
                         }
                     }
                     
@@ -478,19 +497,28 @@ namespace Prg_Assg_CASY
                     if (p.SafeEntryList.Count == 0) // When there is no SafeEntry Check-In records available 
                     {
                         Console.WriteLine("No Safe Entry Check-In Record Found...");
+                        Console.WriteLine();
                     }
                     else // When there is Safeentry Check=In records available 
                     {
-                        foreach (SafeEntry SE in p.SafeEntryList)
+                        foreach (SafeEntry SE in p.SafeEntryList) //Loop through Safeentry List
                         {
-                            Console.WriteLine(SE); // To Print out the Check-In location details and time 
+                            if (SE.CheckOut == Convert.ToDateTime("1212/02/20")) // DateTime set as "1212/02/20" when user checked in, means that user has not checked out yet
+                            {
+                                Console.WriteLine(SE); //Display Safeentry Details without check out details
+                            }
+                            else
+                            {
+                                Console.WriteLine(SE);
+                                Console.WriteLine("Check Out Time: " + SE.CheckOut); //Display Safentry Details with checkout when user has checked out
+                            }
                             Console.WriteLine("-----------------------------------------");
+                            Console.WriteLine();
                         }
                     }
                     isFound = true;
                     if (p is Resident) //When Person found in list is a resident 
                     {
-                        Console.WriteLine();
                         //Console.WriteLine("--------------------------Safe Entry Details--------------------------");
                         //if (string.IsNullOrEmpty(((Resident)p).SafeEntryList.
                         Console.WriteLine("----------------------TraceTogether Token Details---------------------");
@@ -654,13 +682,11 @@ namespace Prg_Assg_CASY
                                 if (ReplaceOption is "1") // When user chooses to (1) check for eligibility of their token
                                 {
                                     resident.Token.IsEligibleForReplacement();
-
                                 }
                                 else if (ReplaceOption is "2")// When user chooses to (2) replace token 
                                 {
                                     if (resident.Token.IsEligibleForReplacement() == true) // When resident with existing token is elligible to replace their Trace Together token
                                     {
-
                                         resident.Token.ReplaceToken(resident.Token.SerialNo, resident.Token.CollectionLocation);
                                         SafeEntryMenu(personList, businessLocationList, shnFacilityList);// Navigate the user back to the SafeEntry Menu after new token is assigned 
                                         //MainMenu(personList,businessLocationList);// Brings user back to the Safe Entry menu 
@@ -754,7 +780,6 @@ namespace Prg_Assg_CASY
         // option 4 of SafeEntry Menu to Check-In 
         static void CheckIn(List<Person> personList, List<BusinessLocation> businessLocationList, List<SHNFacility> shnFacilityList)
         {
-            
             bool isFound = false;
             Console.Write("Enter your name: ");
             string SEName = Console.ReadLine();
@@ -763,14 +788,14 @@ namespace Prg_Assg_CASY
                 if (p.Name.ToLower() == SEName.ToLower()) // To check if correct Name is being input by the user 
                 {
                     isFound = true;
-                    if ((p.SafeEntryList.Count >= 1)) // When there is no check in data to be displayed 
-                    {
-                        Console.WriteLine("");
-                        Console.WriteLine("===========================================================================================");
-                        Console.WriteLine("Please Check Out from previous location, before you are able to Check-In to a new loaction!");
-                        Console.WriteLine("===========================================================================================");
-                        SafeEntryMenu(personList, businessLocationList, shnFacilityList); // Navigate user back to Safe Entry Menu after diplaying message to tell user that he needs to checkout from the previous location before he can check in again 
-                    }
+                    //if ((p.SafeEntryList.Count >= 1)) // When there is no check in data to be displayed 
+                    //{
+                    //    Console.WriteLine("");
+                    //    Console.WriteLine("===========================================================================================");
+                    //    Console.WriteLine("Please Check Out from previous location, before you are able to Check-In to a new loaction!");
+                    //    Console.WriteLine("===========================================================================================");
+                    //    SafeEntryMenu(personList, businessLocationList, shnFacilityList); // Navigate user back to Safe Entry Menu after diplaying message to tell user that he needs to checkout from the previous location before he can check in again 
+                    //}
                     
                     Console.WriteLine("--------------------------- All Business Locations---------------------------");
                     for (int i = 0; i < businessLocationList.Count; i++) // To loop and get index 
@@ -798,6 +823,7 @@ namespace Prg_Assg_CASY
                             if (businessLocationList[SEBLOption].VisitorsNow < businessLocationList[SEBLOption].MaximumCapacity)// When the number of visitors in the loaction is not at amximum 
                             {
                                 SafeEntry CheckIn = new SafeEntry(DateTime.Now, businessLocationList[SEBLOption]);
+                                CheckIn.CheckOut = Convert.ToDateTime("1212/02/20"); //Store Checkout DateTime to "1212/02/20" when user checked in but has not checked out
                                 businessLocationList[SEBLOption].VisitorsNow = businessLocationList[SEBLOption].VisitorsNow + 1; // Visitor now would add 1 
                                 p.AddSafeEntry(CheckIn); // To update check in data for the business locations 
                                 Console.WriteLine("");
@@ -820,20 +846,17 @@ namespace Prg_Assg_CASY
                             Console.WriteLine("Invalid option selected!");
                             Console.Write("Exception details: ");
                             Console.WriteLine(ex.Message);
-                            Console.WriteLine("Choose from either Options 1 or 2..");
+                            Console.WriteLine("Choose from either Options 1, 2, 3, 4...");
                             Console.WriteLine();
                         }
                      }
-                    
                 }
-
             }
             if (isFound == false)// When an invalid name was being input by the user 
             {
                 Console.WriteLine("Name of person '" + SEName + "' could not be found. Please enter a valid name...");
                 Task.Delay(1500).Wait();
             }
-
         }
 
         // option 5 of SafeEntry Menu to Check-Out
@@ -847,53 +870,76 @@ namespace Prg_Assg_CASY
                 if (p.Name.ToLower() == SEName.ToLower()) // To check if correct Name is being input by the user 
                 {
                     isFound = true;
+                    List<SafeEntry> notCheckedOut = new List<SafeEntry>(); //List of SafeEntry objects that have not been checked out
+                    foreach (SafeEntry SE in p.SafeEntryList)
+                    {
+                        if (SE.CheckOut == Convert.ToDateTime("1212/02/20")) //Check if DateTime is not checked out which is represented by "1212/02/20"
+                        {
+                            notCheckedOut.Add(SE); //Add Safeentry Objects that have not been checked out into a list
+                        }
+                    }
                     //DisplayAllBusinessLocation(businessLocationList);
-                    if ((p.SafeEntryList.Count == 0) || (p.SafeEntryList == null)) // When there is no check in data to be displayed 
+                    if ((notCheckedOut.Count == 0) || (notCheckedOut == null)) // When there is no check in data to be displayed 
                     {
                         Console.WriteLine("");
                         Console.WriteLine("==================================");
                         Console.WriteLine("No Location available to check out");
                         Console.WriteLine("==================================");// Navigate user back to Sae Entry Menu after diplaying message to tell user that there is no location to check in 
                     }
-                    else if ((p.SafeEntryList != null) || (p.SafeEntryList.Count != 0)) // When there is data in checkin in safentry cal
+                    else if ((notCheckedOut != null) || (notCheckedOut.Count != 0)) // When there is data in checkin in safentry cal
                     {
-                        Console.WriteLine("------------------- Business Location Not checked out -------------------");
+                        Console.WriteLine("------------------- Business Location Not checked out -------------------"); //Display Business Locations which have not been checked out
                         Console.WriteLine(".................................");
-                        Console.WriteLine(p.SafeEntryList[0]); // To list the location that the user has yet to check out 
-                        Console.WriteLine("");
-                        Console.WriteLine("=========================================");
-                        Console.WriteLine("To Check out from this business location: ");
-                        Console.WriteLine("(1) Yes ");
-                        Console.WriteLine("(2) No ");
-                        Console.Write("option: ");
-                        string option = Console.ReadLine();// To store options of (1) Yes & (2) No 
-                        if (option == "1") //When the user chooses (1) Yes to checkout from business location 
+                        for (int i = 0;  i< notCheckedOut.Count; i++)
                         {
-                            foreach (BusinessLocation b in businessLocationList) // When the checkin location matches the name in business location list 
+                            Console.WriteLine("Record #" + Convert.ToInt32(i + 1)); //Numbering of records
+                            Console.WriteLine(notCheckedOut[i]); //Display not checked out Safeentry objects
+                        }
+                        while (true)
+                        {
+                            try
                             {
-                               if (p.SafeEntryList[0].Location.BusinessName == b.BusinessName) // If the check In location in safentrylist tallies with the location in businesslocationlist 
+                                Console.Write("Please Select Record Number to Check Out From: "); //Prompt user to enter record to check out from 
+                                int choice = Convert.ToInt32(Console.ReadLine());
+                                if ((choice >= 1) && (choice <= notCheckedOut.Count))
                                 {
-                                    b.VisitorsNow = b.VisitorsNow - 1; // deduct one from the number of visitors in the business location
-                                    Console.WriteLine("");
-                                    Console.WriteLine("=============== Checked-Out ==============");
-                                    Console.WriteLine(p.SafeEntryList[0]); // To tell users the new information of the business and to confirm that the number of vistors is deducted
-                                    Console.WriteLine(p.SafeEntryList[0].PerformCheckOut());//Show the checkin and checkout timing 
-                                    Console.WriteLine("------------------------------------------");
-                                    Console.WriteLine("==========================================");
-                                    p.SafeEntryList.RemoveAt(0); //To remove the checkin data to tell the user that there is no check in data to check out 
-                                    Task.Delay(1500).Wait();
-                                    SafeEntryMenu(personList, businessLocationList, shnFacilityList); // Navigate user back to the SafeEntry Menu after updated business location is displayed 
+                                    foreach (BusinessLocation b in businessLocationList) // When the checkin location matches the name in business location list 
+                                    {
+                                        if (notCheckedOut[choice-1].Location.BusinessName == b.BusinessName) // If the check In location in safentrylist tallies with the location in businesslocationlist 
+                                        {
+                                            b.VisitorsNow = b.VisitorsNow - 1; // deduct one from the number of visitors in the business location
+                                            Console.WriteLine("");
+                                            Console.WriteLine("=============== Checked-Out ==============");
+                                            foreach (SafeEntry SE in p.SafeEntryList)
+                                            {
+                                                if (SE.CheckIn == notCheckedOut[choice - 1].CheckIn) //Check if not Safentry object equals to selected object from the notCheckedOut List
+                                                {
+                                                    Console.WriteLine(SE);
+                                                    Console.WriteLine(SE.PerformCheckOut()); //Check out with DateTime.Now
+                                                }
+                                            }
+                                            //Console.WriteLine(notCheckedOut[choice-1]); // To tell users the new information of the business and to confirm that the number of vistors is deducted
+                                            //Console.WriteLine(notCheckedOut[choice-1].PerformCheckOut());//Show the checkin and checkout timing
+                                            Console.WriteLine("------------------------------------------");
+                                            Console.WriteLine("==========================================");
+                                            Task.Delay(1500).Wait();
+                                            SafeEntryMenu(personList, businessLocationList, shnFacilityList); // Navigate user back to the SafeEntry Menu after updated business location is displayed 
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Invalid Input...Please select from Integer Option from 1 to " + notCheckedOut.Count); //Prompt user to select an option from 1 to ... when user does not entered a valid input
                                 }
                             }
-                        }
-                        else if (option == "2") //When the user chooses(2) No to not check out from business location 
-                        {
-                            SafeEntryMenu(personList, businessLocationList, shnFacilityList); // Navigate user back to the SafeEntry Menu after updated business location is displayed 
-                        }
-                        else
-                        {
-                            Console.WriteLine();
-                            Console.WriteLine("Choose from either Options 1 or 2...");
+                            catch (FormatException ex) //Check if option selected by user is not a number
+                            {
+                                Console.WriteLine("Invalid option selected!");
+                                Console.Write("Exception details: ");
+                                Console.WriteLine(ex.Message);
+                                Console.WriteLine("Choose from a Numbered Record (e.g. 1)...");
+                                Console.WriteLine();
+                            }
                         }
                     }
                 }
@@ -974,38 +1020,54 @@ namespace Prg_Assg_CASY
         // Method for Option 1 of TravelEntry Menu 
         static void ListAllSHNFacility(List<SHNFacility> shnFacilityList)
         {   // Listing of all SHN Facilities including Facility Name, Capacity, Vacancy, Distance From Air/Sea/Land Checkpoints
-            Console.WriteLine("----------------------------------------------------- SHN Facilities ----------------------------------------------------");
+            Console.WriteLine();
+            Console.WriteLine("=================================================== SHN Facilities ======================================================");
             Console.WriteLine("{0,-15}   {1,-8}   {2,-8}   {3,-28}   {3,-28}   {4,-29}", "Facility Name", "Capacity", "Vacancy", "Distance From Air Checkpoint", "From Sea Checkpoint", "From Land Checkpoint");
             foreach (SHNFacility facility in shnFacilityList)
             {
                 Console.WriteLine("{0,-15}   {1,-8}   {2,-8}   {3,-28}   {3,-28}   {4,-29}", facility.FacilityName,facility.FacilityCapacity, facility.FacilityVacancy, facility.DistFromAirCheckpoint, facility.DistFromSeaCheckpoint, facility.DistFromLandCheckpoint);
             }
+            Console.WriteLine("=========================================================================================================================");
+            Console.WriteLine();
+            Task.Delay(1500).Wait();
         }
 
         // Method for Option 2 of TravelEntry Menu
         static void CreateVisitor(List<Person> pList)
         {
-            Console.Write("Please Enter Your Name: "); //Obtain Visitor Name
+            bool alreadyExist = false;
+            Console.Write("Please Enter The Visitor's Name: "); //Obtain Visitor Name
             string name = Console.ReadLine(); 
             name = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(name); //Modify Name to Uppercase for first character and every character after spacing
-            Console.Write("Please Enter Your Passport Number: "); //Obtain Passport Number
-            string passportNo = Console.ReadLine().ToUpper(); //Modify PassportNo to all uppercases
-            Console.Write("Please Enter Your Nationality: "); // Obtain Nationality of Visior
-            string nationality = Console.ReadLine();
-            nationality = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(nationality); // Modify Nationality to Uppercase for first character and every character after spacing
-            Visitor visitor = new Visitor(name, passportNo, nationality);  //Creating Visitor Object
-            pList.Add(visitor); //Adding Visior Object to Person List
-            // Check if Visitor Object is successfully created or not
-            if (visitor != null) 
+            foreach (Person p in pList)
             {
-                Console.WriteLine();
-                Console.WriteLine("Visitor Object Successfully Created!");
-                Console.WriteLine(visitor);
-                Task.Delay(2000).Wait(); //Delay Program Flow
+                if (p.Name == name)
+                {
+                    alreadyExist = true;
+                    Console.WriteLine("Person with Name, " + name + " already exists...");
+                    break;
+                }
             }
-            else
+            if (alreadyExist == false)
             {
-                Console.WriteLine("Visitor Object Could Not Be Created..."); 
+                Console.Write("Please Enter Your Passport Number: "); //Obtain Passport Number
+                string passportNo = Console.ReadLine().ToUpper(); //Modify PassportNo to all uppercases
+                char passportNoLastChar = passportNo[passportNo.Length - 1];
+                string passportSubstring = passportNo.Substring(1, passportNo.Length - 2);
+                if (passportNo.StartsWith("A") && (passportSubstring.Length == 7 || passportSubstring.Length == 8) && int.TryParse(passportSubstring, out _) && char.IsLetter(passportNoLastChar))
+                {
+                    Console.Write("Please Enter Your Nationality: "); // Obtain Nationality of Visior
+                    string nationality = Console.ReadLine();
+                    nationality = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(nationality); // Modify Nationality to Uppercase for first character and every character after spacing
+                    Visitor visitor = new Visitor(name, passportNo, nationality);  //Creating Visitor Object
+                    Console.WriteLine("Visitor Object Successfully Created...");
+                    pList.Add(visitor);
+                }
+                else
+                {
+                    Console.WriteLine("Passport Number Must Start with 'A', have a String Length of 7/8 Numeric Characters in Between and Must End with an Alphabetical Character...");
+                    Console.WriteLine("e.g. A1234567E");
+                }
             }
         }
 
@@ -1154,7 +1216,7 @@ namespace Prg_Assg_CASY
                     DateTime presentDate = DateTime.Now;
                     if (personList[i].TravelEntryList.Count != 0) // Check if a person's Travel Entry List is empty or not 
                     {
-                        foreach (TravelEntry TE in personList[i].TravelEntryList) 
+                        foreach (TravelEntry TE in personList[i].TravelEntryList)
                         {
                             if (string.IsNullOrEmpty(TE.LastCountyOfEmbarkation) == false) //Check if Last Country of Embarkation is null or empty
                             {
@@ -1166,7 +1228,7 @@ namespace Prg_Assg_CASY
                                     {
                                         if (TE.ShnStay != null)
                                         {
-                                            Console.Write("Would you like to pay $" + cost.ToString("0.00") + " for your Swab Test, Transportaion and SDF Charges?\n[Y]/[N]: "); 
+                                            Console.Write("Would you like to pay $" + cost.ToString("0.00") + " for your Swab Test, Transportaion and SDF Charges?\n[Y]/[N]: ");
                                         }   //Prompt users if they would like to pay for their swab test, transportation and SDF charges rounded off to two decimal places
                                         else
                                         {
@@ -1208,13 +1270,13 @@ namespace Prg_Assg_CASY
                                     Console.WriteLine("Your SHN Has Not Ended Yet...");
                                 }
                             }
-                        } 
+                        }
                     }
                     else
                     {
                         //Check if person has travel entry record, if no person would not need to pay for SHN Charges
-                        Console.WriteLine("No Travel Entry Record Found...");  
-                        Console.WriteLine("The Person Identified Does Not Need to Pay SHN Charges..."); 
+                        Console.WriteLine("No Travel Entry Record Found...");
+                        Console.WriteLine("The Person Identified Does Not Need to Pay SHN Charges...");
                     }
                 }
             }

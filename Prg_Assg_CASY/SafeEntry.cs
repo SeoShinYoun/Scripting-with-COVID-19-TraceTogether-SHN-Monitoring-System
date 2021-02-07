@@ -50,7 +50,7 @@ namespace Prg_Assg_CASY
 
         public override string ToString()
         {
-            return Location + "\n-----------------------------------------" +  "\nCheck in time: " + CheckIn;
+            return Location + "\n-----------------------------------------" +  "\nCheck In time: " + CheckIn;   
         }
     }
 }
