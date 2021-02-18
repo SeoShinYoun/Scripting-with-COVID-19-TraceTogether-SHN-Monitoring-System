@@ -66,7 +66,7 @@ namespace Prg_Assg_CASY
         //Methods
         public double CalculateTravelCost(string entryMode, DateTime entryDate)
         {
-            double cost = 50 ; //dummy value
+            double cost = 50 ; //Base Fare Default Value before Distance Cost
             // Base Fare and for further calculations
             if (entryMode == "Air")
             {
@@ -80,7 +80,7 @@ namespace Prg_Assg_CASY
             else if (entryMode == "Land")
             {
                 cost += DistFromLandCheckpoint * 0.22; // Calculate Travel Cost based on if Entry Mode is Land...
-            }
+            } 
             else
             {
                 Console.WriteLine("Entry Mode cannot be determined...");
@@ -99,11 +99,11 @@ namespace Prg_Assg_CASY
             DateTime timerangec2 = new DateTime(aDate.Year, aDate.Month, aDate.Day, 5, 59, 0);
 
             // Check if entry falls within 6am to 8.59am or 6pm to 11.59pm
-            if ((entryDate >= timerangea1 && entryDate <= timerangea2) || (entryDate >= timerangeb1 && entryDate <= timerangeb2))
+            if ((entryDate.TimeOfDay >= timerangea1.TimeOfDay && entryDate.TimeOfDay <= timerangea2.TimeOfDay) || (entryDate.TimeOfDay >= timerangeb1.TimeOfDay && entryDate.TimeOfDay <= timerangeb2.TimeOfDay))
             {
                 return cost * 1.25; //25% surcharge of basefare between 6am to 8.59am OR 6pm to 11.59pm
             }
-            else if (entryDate >= timerangec1 && entryDate <= timerangec2)
+            else if (entryDate.TimeOfDay >= timerangec1.TimeOfDay && entryDate.TimeOfDay <= timerangec2.TimeOfDay)
             {
                 return cost * 1.5; //50% surcharge of basefare between Midnight to 5.59am
             }

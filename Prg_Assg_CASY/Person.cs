@@ -45,7 +45,7 @@ namespace Prg_Assg_CASY
             SafeEntryList.Add(SE); //Add Safe Entry Record to Person's Safe Entry List
         }
 
-        public abstract double CalculateSHNCharges();
+        public abstract double CalculateSHNCharges(TravelEntry te);
 
         public override string ToString()
         {

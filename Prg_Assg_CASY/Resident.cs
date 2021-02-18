@@ -40,22 +40,26 @@ namespace Prg_Assg_CASY
             LastLeftCountry = aLastLeftCountry;
         }
 
-        public override double CalculateSHNCharges()
+        public override double CalculateSHNCharges(TravelEntry te)
         {
             double charge = 0; //dummy value
             foreach(TravelEntry TE in TravelEntryList) 
             {
-                if (TE.LastCountyOfEmbarkation == "Vietnam" || TE.LastCountyOfEmbarkation == "New Zealand") // If came from Vietnam or New Zealand....
+                if (te == TE)
                 {
-                    charge = 200; //No transportation fee only Swab Test Fee
-                }
-                else if (TE.LastCountyOfEmbarkation.ToUpper() == "MACAO SAR") //If came from Macao SAR....
-                {
-                     charge = (200 + 20); //Swab Test Fee of $200 and Transportation fee of $20
-                }
-                else //If from other countries not stated....
-                {
-                    charge = (200 + 20 + 1000); //Swab Test Fee of $200, Transportation Fee of $20 and SDF Charge of $1,000
+                    if (TE.LastCountyOfEmbarkation == "Vietnam" || TE.LastCountyOfEmbarkation == "New Zealand") // If came from Vietnam or New Zealand....
+                    {
+                        charge = 200; //No transportation fee only Swab Test Fee
+                    }
+                    else if (TE.LastCountyOfEmbarkation.ToUpper() == "MACAO SAR") //If came from Macao SAR....
+                    {
+                        charge = (200 + 20); //Swab Test Fee of $200 and Transportation fee of $20
+                    }
+                    else //If from other countries not stated....
+                    {
+                        charge = (200 + 20 + 1000); //Swab Test Fee of $200, Transportation Fee of $20 and SDF Charge of $1,000
+                    }
+                    break;
                 }
             }
             return charge * 1.07; //return charge with 7% GST

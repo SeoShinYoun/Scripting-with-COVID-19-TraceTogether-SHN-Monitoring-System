@@ -31,18 +31,22 @@ namespace Prg_Assg_CASY
             Nationality = aNationality;
         }
 
-        public override double CalculateSHNCharges()
+        public override double CalculateSHNCharges(TravelEntry te)
         {
             double charge = 0; //dummy value
             foreach (TravelEntry TE in TravelEntryList)
             {
-                if (TE.LastCountyOfEmbarkation == "Vietnam" || TE.LastCountyOfEmbarkation == "New Zealand" || TE.LastCountyOfEmbarkation.ToUpper() == "MACAO SAR") //If Visitor cam from Vietnam, New Zealand, or Macao SAR
+                if (te == TE)
                 {
-                    charge = 200 + 80; //Swab Test Fee of $200 and Transportation Cost of $80
-                }
-                else
-                {
-                    charge = 200 + 2000 + TE.ShnStay.CalculateTravelCost(TE.EntryMode, TE.EntryDate); //Swab Test Fee of $200, SDF charge of $2,000 and Calling CalculateTravelCost(...) to calculate Transporation Fee
+                    if (TE.LastCountyOfEmbarkation == "Vietnam" || TE.LastCountyOfEmbarkation == "New Zealand" || TE.LastCountyOfEmbarkation.ToUpper() == "MACAO SAR") //If Visitor cam from Vietnam, New Zealand, or Macao SAR
+                    {
+                        charge = 200 + 80; //Swab Test Fee of $200 and Transportation Cost of $80
+                    }
+                    else
+                    {
+                        charge = 200 + 2000 + TE.ShnStay.CalculateTravelCost(TE.EntryMode, TE.EntryDate); //Swab Test Fee of $200, SDF charge of $2,000 and Calling CalculateTravelCost(...) to calculate Transporation Fee
+                    }
+                    break;
                 }
             }
             return charge *= 1.07; //return charge with 7% GST

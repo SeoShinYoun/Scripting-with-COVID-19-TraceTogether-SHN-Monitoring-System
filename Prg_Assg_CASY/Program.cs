@@ -379,14 +379,16 @@ namespace Prg_Assg_CASY
                                     if (TE.ShnEndDate > TE.EntryDate)  //Check if SHN Stay is empty when user comes from Macao SAR, as shn end date would be same as entry date for travellers coming form Vietnmae or New Zealand
                                     {
                                         data = pList[i].Name + "," + TE.ShnEndDate.ToString("dd/MM/yyyy HH:mm") + "," + "Own Accommodation"; //data to be inputted to csv, with "Own Accommodation" as third column for travellers who came from Macao SAR
+                                        sw.WriteLine(data);
+                                        countRecord += 1; //increase count record by 1 when data is written to csv
                                     }
                                 }
                                 else
                                 {
                                     data = pList[i].Name + "," + TE.ShnEndDate.ToString("dd/MM/yyyy HH:mm") + "," + TE.ShnStay.FacilityName; //if person currently has shn Stay in a facility
+                                    sw.WriteLine(data);
+                                    countRecord += 1; //increase count record by 1 when data is written to csv
                                 }
-                                sw.WriteLine(data);
-                                countRecord += 1; //increase count record by 1 when data is written to csv
                             }
                         }
                     }
@@ -1087,44 +1089,6 @@ namespace Prg_Assg_CASY
                     Console.WriteLine("Successfully Found Name To Be Searched!");
                     isFound = true;
                     Console.WriteLine();
-                    foreach (TravelEntry travelEntry in personList[i].TravelEntryList)
-                    {
-                        if (travelEntry.ShnEndDate > DateTime.Now) // Check if SHN has ended or not
-                        {
-                            Console.WriteLine("The Person Identified is currently serving SHN at a facility or own accommodation...");
-                            Console.WriteLine("He/She would not be able to make a new Travel Entry Record presently..."); // If SHN has not ended, user would not be able to book for a new travel entry yet
-                            TravelEntryMenu(personList, businessLocationList, shnFacilityList); //Return back to menu options of Travel Entry menu
-                        }
-                        else if (travelEntry.IsPaid == false) // Check if SHN has/has not been paid for
-                        {
-                            while (true) 
-                            {
-                                Console.WriteLine("You have not made payment for previous Travel Entry Record..."); //User has not paid for previous travel entry facility booking and would not be allowed to create a new travel entry record unless paid for...
-                                Console.WriteLine("Do you wish to enquire on payment details?");
-                                Console.Write("[Y]/[N]: "); 
-                                string choice = Console.ReadLine();
-                                if (choice.ToUpper() == "Y") //If user enter yes on enquiring on payment details
-                                {
-                                    Console.WriteLine("Ok...");
-                                    CalculateSHNCharges(personList); //Brings user to CalculateSHNCharges method for payment 
-                                    TravelEntryMenu(personList, businessLocationList, shnFacilityList); // Brings user back to travel entry menu to continue with creating new travel entry record.
-                                    break;
-                                }
-                                else if (choice.ToUpper() == "N") //If user enters no to enquriing payment
-                                {
-                                    Console.WriteLine("Ok...");
-                                    TravelEntryMenu(personList, businessLocationList, shnFacilityList); //User would not be able to proceed to create new travel entry record.
-                                    break;
-                                }
-                                else
-                                {
-                                    Console.WriteLine("Invalid Option Chosen..."); // If user enters invalid option
-                                    Console.WriteLine("Select from either Y or N..."); //Prompts user to choose eith Y or N
-                                }
-                            }
-                            
-                        }
-                    }
                     Console.Write("Enter " + personList[i].Name +"'s Last Country of Embarkation: "); //Creating Travel Entry Object of personList[i]
                     string lastCountryOfEmbarkation = Console.ReadLine();
                     lastCountryOfEmbarkation = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(lastCountryOfEmbarkation); // Change last country of embarkation first character to capital case for every word
@@ -1174,12 +1138,13 @@ namespace Prg_Assg_CASY
                                 }
                                 TE.AssignSHNFacility(shnFacilityList[choice]);
                                 shnFacilityList[choice].FacilityVacancy = shnFacilityList[choice].FacilityVacancy - 1; //Reduce vacancy of SHN facility after faculty is booked by customers
-
                                 break;
                             }
                             else
                             {
+                                Console.WriteLine();
                                 Console.WriteLine("Invalid option selected. Select a given numbered option..."); //prompts users to enter a correct input.
+                                Console.WriteLine();
                             }
                         }
                     }
@@ -1207,78 +1172,106 @@ namespace Prg_Assg_CASY
         {
             Console.Write("Please enter the name to be searched: ");
             string searchedName = Console.ReadLine(); //search for name
-            bool isFound = false;
+            bool isFound = false; //Check if Person can be found in list and update accordingly
             double cost;
+            List<TravelEntry> notEndedAndUnpaid = new List<TravelEntry>();
             for (int i = 0; i < personList.Count; i++)
             {
-                if (searchedName.ToLower() == personList[i].Name.ToLower())
+                if (searchedName.ToLower() == personList[i].Name.ToLower()) //Check if Searched Name is in Person List
                 {
                     isFound = true;
-                    Console.WriteLine("Name Searched Successfully!.... ");
-                    DateTime presentDate = DateTime.Now;
-                    if (personList[i].TravelEntryList.Count != 0) // Check if a person's Travel Entry List is empty or not 
+                    Console.WriteLine("Name Searched Successfully!.... "); 
+                    Console.WriteLine();
+                    DateTime presentDate = DateTime.Now; //Date to check against SHN Ended Date if Stay has ended
+                    foreach(TravelEntry TE in personList[i].TravelEntryList) //Loop Through List of TravelEntry Records in Travel Entry List
                     {
-                        foreach (TravelEntry TE in personList[i].TravelEntryList)
+                        if (TE.ShnEndDate <= presentDate && TE.IsPaid == false) //Check if SHN has ended and is unpaid
                         {
-                            if (string.IsNullOrEmpty(TE.LastCountyOfEmbarkation) == false) //Check if Last Country of Embarkation is null or empty
-                            {
-                                if (TE.ShnEndDate <= presentDate && TE.IsPaid == false) //If last country of embarkation is not null or empty, Check if shn has ended previously and if i were paid for 
-                                {
-                                    cost = personList[i].CalculateSHNCharges(); //Calculate charges based on factors mentioned in the PRG2 Assignment WriteUp
-                                    Console.WriteLine(TE);
-                                    while (true)
-                                    {
-                                        if (TE.ShnStay != null)
-                                        {
-                                            Console.Write("Would you like to pay $" + cost.ToString("0.00") + " for your Swab Test, Transportaion and SDF Charges?\n[Y]/[N]: ");
-                                        }   //Prompt users if they would like to pay for their swab test, transportation and SDF charges rounded off to two decimal places
-                                        else
-                                        {
-                                            Console.Write("Would you like to pay $" + cost.ToString("0.00") + " for your Swab Test and Transportation?\n[Y]/[N]: ");
-                                            //Prompt users if they would like to pay for their swab test and transportation charges rounded off to two decimal places
-                                        }
-                                        string choice = Console.ReadLine();
-                                        if (choice.ToUpper() == "Y") //If user wants to proceed with payment display the following message
-                                        {
-                                            Console.WriteLine();
-                                            Console.WriteLine("Ok! Processing Payment...");
-                                            Task.Delay(1500).Wait();
-                                            Console.WriteLine("Payment Successfully Made!");
-                                            Console.WriteLine();
-                                            TE.IsPaid = true; // Change boolean value of IsPaid to true
-                                            break;
-                                        }
-                                        else if (choice.ToUpper() == "N") //If user wants to proceed without payment, display the following message
-                                        {
-                                            Console.WriteLine("Ok! Proceeding without Payment...");
-                                            break;
-                                        }
-                                        else
-                                        {
-                                            Console.WriteLine();
-                                            Console.WriteLine("Invalid Option... Please Select [Y]/[N]"); //Prompt user to click of Y or N if an invalid option is made
-                                            Console.WriteLine();
-                                        }
-                                    }
-                                }
-                                else if (TE.IsPaid == true)
-                                {
-                                    Console.WriteLine("Payment has been made for Past Travel Entry Record..."); //If payment has been made previously, and user chooses CalculateSHNCharges(), display message
-                                    Console.WriteLine();
-                                }
-                                else if (TE.ShnEndDate > presentDate)
-                                {
-                                    Console.WriteLine("Please Refrain From Paying Recent Travel Entry Record..."); //If SHN has not ended, Prevent traveller from paying yet
-                                    Console.WriteLine("Your SHN Has Not Ended Yet...");
-                                }
-                            }
+                            notEndedAndUnpaid.Add(TE); //add to list of Travel Entry Records which have not ended and is unpaid
                         }
+                    }
+                    if (notEndedAndUnpaid.Count == 0) //Check if There is no travel entry record that has ended or is unpaid
+                    {
+                        //Check if person has travel entry record, if no person would not need to pay for SHN Charges
+                        Console.WriteLine("No Travel Entry Record Found to have Ended and is Unpaid...");
+                        Console.WriteLine("The Person Identified Does Not Need to Pay SHN Charges...");
                     }
                     else
                     {
-                        //Check if person has travel entry record, if no person would not need to pay for SHN Charges
-                        Console.WriteLine("No Travel Entry Record Found...");
-                        Console.WriteLine("The Person Identified Does Not Need to Pay SHN Charges...");
+                        int choice = 100; //dummy value
+                        Console.WriteLine("================================================");
+                        Console.WriteLine("==  TravelEntry with SHN ended and is unpaid  =="); //Menu to Display Travel Entry Records for payment 
+                        Console.WriteLine("================================================");
+                        for (int index = 0; index < notEndedAndUnpaid.Count; index++) 
+                        {
+                            Console.WriteLine("Record #" + Convert.ToInt32(index + 1)); //Labelling Travel entry records by numbering them
+                            Console.WriteLine(notEndedAndUnpaid[index]); //Display Travel Entry Records Properties
+                            Console.WriteLine("SHN End Date: " + notEndedAndUnpaid[index].ShnEndDate); //Display SHN End Date of Unpaid and SHN Ended Travel Entry Record
+                            if (notEndedAndUnpaid[index].EntryDate != notEndedAndUnpaid[index].ShnEndDate) //Check for Travel Entry Records with the Exception of Vietnam or New Zealand
+                            {
+                                if (string.IsNullOrEmpty(Convert.ToString(notEndedAndUnpaid[index].ShnStay)) == false) //Check if Travel Entry Record has SHN Stay
+                                {
+                                    Console.WriteLine("SHN Stay: " + notEndedAndUnpaid[index].ShnStay); //For Other countries besides Macao SAR and Vietnam or New Zealand
+                                }
+                                else
+                                {
+                                    Console.WriteLine("SHN Stay: Own Accommodation"); //For display of Macao SAR
+                                }
+                            }
+                            else if (notEndedAndUnpaid[index].EntryDate == notEndedAndUnpaid[index].ShnEndDate)
+                            {
+                                Console.WriteLine("SHN Stay: Not Available"); //Display SHN Stay is not available if from vietnam or new zealand
+                            }
+                            Console.WriteLine("Payment Made: " + notEndedAndUnpaid[index].IsPaid); //Display if payment has been made or not
+                            Console.WriteLine();
+                        }
+                        //Exception handling
+                        try
+                        {
+                            Console.Write("Please Select A Record That You Would Like To Pay For: ");
+                            choice = Convert.ToInt32(Console.ReadLine());
+                        }
+                        catch (FormatException ex)
+                        {
+                            Console.WriteLine("Invalid option selected!");
+                            Console.Write("Exception details: "); //Invalid Option Messages
+                            Console.WriteLine(ex.Message);
+                        }
+                        if (choice >= 1 && choice <= notEndedAndUnpaid.Count) //Check if Choice selected by user is within range
+                        {
+                            cost = personList[i].CalculateSHNCharges(notEndedAndUnpaid[choice - 1]); //Calculate SHN Charges from Visitor/Resident Class. Calling Transportation cost in visitor class.
+                            while (true)
+                            {
+
+                                Console.Write("Would you like to pay " + cost.ToString("$0.00") + " from Record #" + choice + "? [Y/N]: ");
+                                string option = Console.ReadLine();
+                                if (option.ToUpper() == "Y") //If user wants to proceed with payment display the following message
+                                {
+                                    Console.WriteLine();
+                                    Console.WriteLine("Ok! Processing Payment...");
+                                    Task.Delay(1500).Wait();
+                                    Console.WriteLine("Payment Successfully Made!");
+                                    notEndedAndUnpaid[choice - 1].IsPaid = true; // Change boolean value of IsPaid to true
+                                    break;
+                                }
+                                else if (option.ToUpper() == "N") //If user wants to proceed without payment, display the following message
+                                {
+                                    Console.WriteLine();
+                                    Console.WriteLine("Proceeding without Payment...");
+                                    break;
+                                }
+                                else
+                                {
+                                    Console.WriteLine();
+                                    Console.WriteLine("Invalid Option... Please Select [Y]/[N]"); //Prompt user to click of Y or N if an invalid option is made
+                                    Console.WriteLine();
+                                }
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("Option Selected is out of range...");
+                        }
                     }
                 }
             }
