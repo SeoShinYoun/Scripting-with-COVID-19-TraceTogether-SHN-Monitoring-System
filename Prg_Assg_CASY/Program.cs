@@ -1057,20 +1057,28 @@ namespace Prg_Assg_CASY
                 Console.Write("Please Enter Your Passport Number: "); //Obtain Passport Number
                 string passportNo = Console.ReadLine().ToUpper(); //Modify PassportNo to all uppercases
                 char passportNoLastChar = passportNo[passportNo.Length - 1];
-                string passportSubstring = passportNo.Substring(1, passportNo.Length - 2);
-                if (passportNo.StartsWith("A") && (passportSubstring.Length == 7 || passportSubstring.Length == 8) && int.TryParse(passportSubstring, out _) && char.IsLetter(passportNoLastChar))
+                if (passportNo.Length == 9 || passportNo.Length == 10) //Check that Passport No have at least 8 or 9 characters as standardized from Person.csv
                 {
-                    Console.Write("Please Enter Your Nationality: "); // Obtain Nationality of Visior
-                    string nationality = Console.ReadLine();
-                    nationality = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(nationality); // Modify Nationality to Uppercase for first character and every character after spacing
-                    Visitor visitor = new Visitor(name, passportNo, nationality);  //Creating Visitor Object
-                    Console.WriteLine("Visitor Object Successfully Created...");
-                    pList.Add(visitor);
+                    string passportSubstring = passportNo.Substring(1, passportNo.Length - 2);
+                    //Check that PassportNumber Starts with Letter A, have 7-8 characters in between, characters in between are integers and last characters is a letter as standardized from Person.csv
+                    if (passportNo.StartsWith("A") && (passportSubstring.Length == 7 || passportSubstring.Length == 8) && int.TryParse(passportSubstring, out _) && char.IsLetter(passportNoLastChar))
+                    {
+                        Console.Write("Please Enter Your Nationality: "); // Obtain Nationality of Visior
+                        string nationality = Console.ReadLine();
+                        nationality = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(nationality); // Modify Nationality to Uppercase for first character and every character after spacing
+                        Visitor visitor = new Visitor(name, passportNo, nationality);  //Creating Visitor Object
+                        Console.WriteLine("Visitor Object Successfully Created...");
+                        pList.Add(visitor);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Passport Number Must Start with 'A', have a String Length of 7/8 Numeric Characters in Between and Must End with an Alphabetical Character...");
+                        Console.WriteLine("e.g. A1234567E");
+                    }
                 }
                 else
                 {
-                    Console.WriteLine("Passport Number Must Start with 'A', have a String Length of 7/8 Numeric Characters in Between and Must End with an Alphabetical Character...");
-                    Console.WriteLine("e.g. A1234567E");
+                    Console.WriteLine("Passport Number Must contain 9-10 Characters...");
                 }
             }
         }
