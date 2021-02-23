@@ -366,7 +366,7 @@ namespace Prg_Assg_CASY
                 sw.WriteLine(headings); //Write Headings to csv report
                 string data = null;
                 int countRecord = 0; //Count number of travel entry records with SHN registered during that date inputted by user, Default being 0
-                for (int i = 1; i < pList.Count; i++) //Loop through personList
+                for (int i = 0; i < pList.Count; i++) //Loop through personList
                 {
                     if (pList[i].TravelEntryList.Count != 0) //Check if Person's Travel list is not empty
                     {
@@ -1041,21 +1041,32 @@ namespace Prg_Assg_CASY
         {
             bool alreadyExist = false;
             Console.Write("Please Enter The Visitor's Name: "); //Obtain Visitor Name
-            string name = Console.ReadLine(); 
+            string name = Console.ReadLine();
+            while (string.IsNullOrEmpty(name)) //Validate if Name input is empty and prompt user again if so
+            {
+                Console.Write("Name can't be empty! Input Your Name Once More: ");
+                name = Console.ReadLine();
+            }
             name = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(name); //Modify Name to Uppercase for first character and every character after spacing
             foreach (Person p in pList)
             {
                 if (p.Name == name)
                 {
                     alreadyExist = true;
-                    Console.WriteLine("Person with Name, " + name + " already exists...");
+                    Console.WriteLine("Person with Name, " + name + " already exists..."); //Validate that Name is unique and does not already exist in Person List
                     break;
                 }
             }
             if (alreadyExist == false)
             {
                 Console.Write("Please Enter Your Passport Number: "); //Obtain Passport Number
-                string passportNo = Console.ReadLine().ToUpper(); //Modify PassportNo to all uppercases
+                string passportNo = Console.ReadLine(); //Modify PassportNo to all 
+                while (string.IsNullOrEmpty(passportNo)) //Validate if PassportNo input is empty and prompt user again if so
+                {
+                    Console.Write("Passport No. can't be empty! Input Your Passport No. Once More: ");
+                    passportNo = Console.ReadLine();
+                }
+                passportNo = passportNo.ToUpper();
                 char passportNoLastChar = passportNo[passportNo.Length - 1];
                 if (passportNo.Length == 9 || passportNo.Length == 10) //Check that Passport No have at least 8 or 9 characters as standardized from Person.csv
                 {
@@ -1063,8 +1074,13 @@ namespace Prg_Assg_CASY
                     //Check that PassportNumber Starts with Letter A, have 7-8 characters in between, characters in between are integers and last characters is a letter as standardized from Person.csv
                     if (passportNo.StartsWith("A") && (passportSubstring.Length == 7 || passportSubstring.Length == 8) && int.TryParse(passportSubstring, out _) && char.IsLetter(passportNoLastChar))
                     {
-                        Console.Write("Please Enter Your Nationality: "); // Obtain Nationality of Visior
+                        Console.Write("Please Enter Your Nationality: "); // Obtain Nationality of Visitor
                         string nationality = Console.ReadLine();
+                        while (string.IsNullOrEmpty(nationality))
+                        {
+                            Console.Write("Nationality can't be empty! Input Your Nationality Once More: ");  //Validate if Nationality input is empty and prompt user again if so
+                            nationality = Console.ReadLine();
+                        }
                         nationality = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(nationality); // Modify Nationality to Uppercase for first character and every character after spacing
                         Visitor visitor = new Visitor(name, passportNo, nationality);  //Creating Visitor Object
                         Console.WriteLine("Visitor Object Successfully Created...");
@@ -1089,7 +1105,7 @@ namespace Prg_Assg_CASY
         {
             Console.Write("Enter Name To Be Searched: "); 
             string searchedName = Console.ReadLine(); //Obtain name string
-            bool isFound = false;  //def
+            bool isFound = false;  //Set Default value of Successfully Searching for Person to be false
             for (int i = 0; i<personList.Count; i++)
             {
                 if (personList[i].Name.ToLower() == searchedName.ToLower())
@@ -1145,7 +1161,7 @@ namespace Prg_Assg_CASY
                                     continue;
                                 }
                                 TE.AssignSHNFacility(shnFacilityList[choice]);
-                                shnFacilityList[choice].FacilityVacancy = shnFacilityList[choice].FacilityVacancy - 1; //Reduce vacancy of SHN facility after faculty is booked by customers
+                                shnFacilityList[choice].FacilityVacancy = shnFacilityList[choice].FacilityVacancy - 1; //Reduce vacancy of SHN facility after facility is booked by customers
                                 break;
                             }
                             else
@@ -1291,7 +1307,7 @@ namespace Prg_Assg_CASY
 
         //Reading of CSV files         
         //Reading of Person.csv file using System.IO
-        static void IncludePerson(List<Person> pList, List<SHNFacility> shnList)
+        static void IncludePerson(List<Person> pList, List<SHNFacility> shnList) 
         {
             // reading person csv file after headings, from the second line onwards according to interpretation from csv file (without headings of attributes)
             string[] csvLines = File.ReadAllLines("Person.csv");
@@ -1300,52 +1316,49 @@ namespace Prg_Assg_CASY
                 string[] properties = csvLines[i].Split(',');
                 if (properties[0] == "resident")  // When the attribute under the heading "type" is a resident
                 {
-                    DateTime dateA = DateTime.ParseExact(properties[3], "dd/MM/yyyy", CultureInfo.InvariantCulture);
-                    Resident resident = new Resident(properties[1], properties[2], dateA);
-                    pList.Add(resident);
-                    if (properties[6] != null)
+                    DateTime dateA = DateTime.ParseExact(properties[3], "dd/MM/yyyy", CultureInfo.InvariantCulture); //Format Last Left Country Date into dd/MM/yyyy format
+                    Resident resident = new Resident(properties[1], properties[2], dateA); //Creation of resident object
+                    pList.Add(resident); //Include resident object in pList
+                    if (properties[6] != null) //check if token serial number is empty
                     {
-                        string date = properties[8];
+                        string date = properties[8]; //Store Token Expirty Date in date variable
                         DateTime expirydate;
-                        if (DateTime.TryParseExact(date, "dd-MMM-yy", CultureInfo.InvariantCulture,
+                        if (DateTime.TryParseExact(date, "dd-MMM-yy", CultureInfo.InvariantCulture, 
                         DateTimeStyles.None, out expirydate))
                         {
                             expirydate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
                         }
-                        /*DateTime dateB = DateTime.ParseExact(properties[8], "dd-MMM-yy", CultureInfo.InvariantCulture);*/
-                        resident.Token = new TraceTogetherToken(properties[6], properties[7], expirydate);
+                        resident.Token = new TraceTogetherToken(properties[6], properties[7], expirydate); //Create Trace Together Object for Resident
                     }
-                    if (string.IsNullOrEmpty(properties[9]) == false)
+                    if (string.IsNullOrEmpty(properties[9]) == false) //Check if TravelEntryLastCountry is empty or not from the Person.csv
                     {
                         DateTime travelEntryDate;
-                        travelEntryDate = FormatTravelDate(properties[11]);
-                        TravelEntry TE = new TravelEntry(properties[9], properties[10], travelEntryDate);
+                        travelEntryDate = FormatTravelDate(properties[11]); //Method to make date follow covention of date format
+                        TravelEntry TE = new TravelEntry(properties[9], properties[10], travelEntryDate); //Creation of TravelEntry Object
                         DateTime travelShnEndDate;
-                        travelShnEndDate = FormatTravelDate(properties[12]);
+                        travelShnEndDate = FormatTravelDate(properties[12]); 
                         TE.ShnEndDate = travelShnEndDate;
-                        ValidatePayment(properties[13]);
-                        resident.AddTravelEntry(TE);
-
-                        if (properties[13] != null)
+                        resident.AddTravelEntry(TE); //Adding of TravelEntry Object to TravelEntry List of Resident
+                        if (properties[13] != null) //Check if TravelIsPaid value is empty
                         {
                             string boolValue = properties[13];
-                            TE.IsPaid = ValidatePayment(boolValue);
+                            TE.IsPaid = ValidatePayment(boolValue);  //Method to check if Payment has been made and store true/false in IsPaid
                         }
-                        if (properties[14] != null)
+                        if (properties[14] != null) //Check if Facility Name is empty to Check if Person object has been assigned to a facility
                         {
-                            TE.AssignSHNFacility(SearchFacility(shnList, properties[14]));
+                            TE.AssignSHNFacility(SearchFacility(shnList, properties[14])); //Assigning SHN Facility if found, to Travel Entry with Search Facility Method to return SHNFacility Object
                         }
                     }
                 }
                 else if (properties[0] == "visitor")  // When the attribute under the heading "type" is a visitor
                 {
-                    Visitor visitor = new Visitor(properties[1], properties[4], properties[5]);
-                    TravelEntry TE = new TravelEntry();
+                    Visitor visitor = new Visitor(properties[1], properties[4], properties[5]); //Create Visitor Object with Name, Passport No and Nationality
+                    TravelEntry TE = new TravelEntry(); 
                     pList.Add(visitor);
-                    if (string.IsNullOrEmpty(properties[9]) == false)
+                    if (string.IsNullOrEmpty(properties[9]) == false) //Check if TravelEntry Last Country is empty
                     {
-                        TE.LastCountyOfEmbarkation = properties[9];
-                        TE.EntryMode = properties[10];
+                        TE.LastCountyOfEmbarkation = properties[9]; //Assign TravelEntryLastCountry to Last Country of Embarkation
+                        TE.EntryMode = properties[10]; //Store Travel Entry Mode in Entry Mode Property of Travel Entry
                         DateTime travelEntryDate;
                         DateTime travelShnEndDate;
                         travelEntryDate = FormatTravelDate(properties[11]);
@@ -1357,11 +1370,11 @@ namespace Prg_Assg_CASY
                     if (string.IsNullOrEmpty(properties[13]) == false)
                     {
                         string boolValue = properties[13];
-                        TE.IsPaid = ValidatePayment(boolValue);
+                        TE.IsPaid = ValidatePayment(boolValue); //Method to check if Payment has been made and store true/false in IsPaid
                     }
                     if (string.IsNullOrEmpty(properties[14]) == false)
                     {
-                        TE.AssignSHNFacility(SearchFacility(shnList, properties[14]));
+                        TE.AssignSHNFacility(SearchFacility(shnList, properties[14])); //Assigning SHN Facility if found, to Travel Entry with Search Facility Method to return SHNFacility Object
                     }
                 }
             }
@@ -1400,7 +1413,7 @@ namespace Prg_Assg_CASY
             for (int i = 1; i < csvLines.Length; i++)
             {
                 string[] properties = csvLines[i].Split(','); //splitting the different attributes into its own individual table 
-                string businessName = properties[0];
+                string businessName = properties[0]; 
                 string branchCode = properties[1];
                 int capacity = Convert.ToInt32(properties[2]);
                 BusinessLocation businessLocation = new BusinessLocation(businessName, branchCode, capacity);
@@ -1411,9 +1424,9 @@ namespace Prg_Assg_CASY
         {
             foreach (SHNFacility s in shnList)
             {
-                if (n == s.FacilityName)
+                if (n == s.FacilityName) //Search for matching of SHN Facility Name
                 {
-                    return s;
+                    return s; //Return SHN Facility 
                 }
             }
             return null;
