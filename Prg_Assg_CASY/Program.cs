@@ -1316,8 +1316,8 @@ namespace Prg_Assg_CASY
                 string[] properties = csvLines[i].Split(',');
                 if (properties[0] == "resident")  // When the attribute under the heading "type" is a resident
                 {
-                    DateTime dateA = DateTime.ParseExact(properties[3], "dd/MM/yyyy", CultureInfo.InvariantCulture); //Format Last Left Country Date into dd/MM/yyyy format
-                    Resident resident = new Resident(properties[1], properties[2], dateA); //Creation of resident object
+                    DateTime lastLeftCountryDate = DateTime.ParseExact(properties[3], "dd/MM/yyyy", CultureInfo.InvariantCulture); //Format Last Left Country Date into dd/MM/yyyy format
+                    Resident resident = new Resident(properties[1], properties[2], lastLeftCountryDate); //Creation of resident object
                     pList.Add(resident); //Include resident object in pList
                     if (properties[6] != null) //check if token serial number is empty
                     {
@@ -1433,5 +1433,4 @@ namespace Prg_Assg_CASY
         }
     }
 }
-
 // End of Program         
